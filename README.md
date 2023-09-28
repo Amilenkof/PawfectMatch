@@ -1,11 +1,13 @@
 <h1 align="left">Описание проекта</h1>
  <p><strong>
+
  ! Находится на стадии разработки !
 Групповой проект- телеграмм-бот, для поиска и подбора питомцев из приютов. 
 <h1 align="left">Сборка и запуск проекта</h1>
  <p><strong>1 . Склонируйте проект:</strong></p>
 <ul>
    <li>git clone git@github.com:Amilenkof/PawfectMatch.git</li>
+
 </ul>
 <p><strong>2 . Настройте базу данные PostgreSQL:
  <ul>
