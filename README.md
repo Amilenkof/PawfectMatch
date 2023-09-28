@@ -2,6 +2,7 @@
  <p><strong>
 
  ! Находится на стадии разработки !
+ 
 Групповой проект- телеграмм-бот, для поиска и подбора питомцев из приютов. 
 <h1 align="left">Сборка и запуск проекта</h1>
  <p><strong>1 . Склонируйте проект:</strong></p>
@@ -11,9 +12,10 @@
 </ul>
 <p><strong>2 . Настройте базу данные PostgreSQL:
  <ul>
-url=jdbc:postgresql://localhost:5432/PawfectMatch
-username=Bot
-password=Bot
+ <li>url=jdbc:postgresql://localhost:5432/PawfectMatch</li>
+<li>username=Bot</li>
+<li>password=Bot</li>
+
   </ul>
 
 
