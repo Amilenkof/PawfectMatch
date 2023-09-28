@@ -1,14 +1,14 @@
 <h1 align="left">Описание проекта</h1>
  <p><strong>
-Проект по созданию и хранению записей студентов и факультетов</p>
+Котики и собачки</p>
 <h1 align="left">Сборка и запуск проекта</h1>
  <p><strong>1 . Склонируйте проект:</strong></p>
 <ul>
-   <li>git clone git@github.com:BuyanovMax/School.git</li>
+   <li>11111</li>
 </ul>
 <p><strong>2 . Разверните Docker контейнер:</strong></p>
 <ul>
-   <li>docker run --name postgres -e POSTGRES_PASSWORD=[password] -p 5433:5432 -d postgres</li>
+   <li>22222</li>
 </ul>
 
 <h1 align="left">Стек Технологий:</h1>
