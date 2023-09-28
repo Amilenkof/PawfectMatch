@@ -1,20 +1,26 @@
 <h1 align="left">Описание проекта</h1>
  <p><strong>
-Котики и собачки</p>
+
+ ! Находится на стадии разработки !
+Групповой проект- телеграмм-бот, для поиска и подбора питомцев из приютов. 
 <h1 align="left">Сборка и запуск проекта</h1>
  <p><strong>1 . Склонируйте проект:</strong></p>
 <ul>
-   <li>11111</li>
+   <li>git clone git@github.com:Amilenkof/PawfectMatch.git</li>
+
 </ul>
-<p><strong>2 . Разверните Docker контейнер:</strong></p>
-<ul>
-   <li>22222</li>
-</ul>
+<p><strong>2 . Настройте базу данные PostgreSQL:
+ <ul>
+url=jdbc:postgresql://localhost:5432/PawfectMatch
+username=Bot
+password=Bot
+  </ul>
+
 
 <h1 align="left">Стек Технологий:</h1>
   <p><strong>Язык и Окружение</strong></p>
 <ul>
-   <li>Java 17</li>
+   <li>Java 20</li>
    <li>Maven</li>
    <li>Spting Boot</li>
    <li>Spring Web</li>
@@ -24,6 +30,7 @@
    <li>Swagger</li>
    <li>Lombok</li>
    <li>Liquibase</li>
+
 </ul>
   <p><strong>База данных</strong></p>
 <ul>
@@ -34,7 +41,11 @@
    <li>JUnit</li>
   <li>Mockito</li>
 </ul>
-<p><strong>Прочее</strong></p>
+<p><strong>Авторы:</strong></p>
 <ul>
-   <li>Docker</li>
+   <li>Aleksandr Milenkov</li>
+   <li>Buyanov Maksim</li>
+   <li>Belchik Denis</li>
+   <li>Panteley Dmitry</li>
+   <li>Simonaytene Elena</li>
 </ul>
