@@ -4,22 +4,26 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.response.SendResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.keyboards.KeyBoardService;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
+@Slf4j
 public class TelegramBotUpdatesListener implements UpdatesListener {
+    private final KeyBoardService keyBoardService;
 
-    private Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
+    private final TelegramBot telegramBot;
+    private final MessageConsumer messageConsumer;
 
-    @Autowired
-    private TelegramBot telegramBot;
+    public TelegramBotUpdatesListener(KeyBoardService keyBoardService, TelegramBot telegramBot, MessageConsumer messageConsumer) {
+        this.keyBoardService = keyBoardService;
+        this.telegramBot = telegramBot;
+        this.messageConsumer = messageConsumer;
+    }
 
     @PostConstruct
     public void init() {
@@ -29,18 +33,13 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     @Override
     public int process(List<Update> updates) {
         updates.forEach(update -> {
-            logger.info("Processing update: {}", update);
-            if (update.message().text().equals("/start")) {
-                SendMessage message = new SendMessage(update.message().chat().id(), "Привет");
-                SendResponse response = telegramBot.execute(message);
-                boolean ok = response.isOk();
-                if (ok) {
-                    System.out.println("ок");
-                }
-            }
-
-
+            log.info("Processing update: {}", update);
+            SendMessage message = messageConsumer.executeResponse(update);
+            telegramBot.execute(message);
         });
+
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
+
+
 }
