@@ -1,15 +1,20 @@
 databaseChangeLog:
   - include:
-      file: liquibase/table/recommendation-scripts.sql
+      file: liquibase/scripts/shelter-scripts.sql
   - include:
-      file: liquibase/table/animal-scripts.sql
+      file: liquibase/scripts/volunteer-scripts.sql
   - include:
-      file: liquibase/table/shelter-scripts.sql
+      file: liquibase/scripts/recommendation-scripts.sql
   - include:
-      file: liquibase/table/feedback-scripts.sql
+      file: liquibase/scripts/feedback-scripts.sql
   - include:
-      file: liquibase/table/volunteer-scripts.sql
+      file: liquibase/scripts/animal-scripts.sql
   - include:
-      file: liquibase/table/user-scripts.sql
+      file: liquibase/scripts/user-scripts.sql
   - include:
-      file: liquibase/table/not_reported-scripts.sql
+      file: liquibase/scripts/not_reported-scripts.sql
+  - include:
+      file: liquibase/scripts/report-scripts.sql
+
+
+

@@ -11,5 +11,5 @@ CREATE TABLE animal
     isLittle boolean not null,
     shelter_id bigint not null,
     status boolean not null,
-    FOREIGN KEY (shelter_id) REFERENCES shelter(id)
+    FOREIGN KEY (shelter_id) REFERENCES shelter (id)
 );

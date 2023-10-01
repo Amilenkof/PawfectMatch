@@ -2,7 +2,7 @@
 
 
 --changeset aMilenkov:1
-CREATE TABLE user
+CREATE TABLE users
 (
     id bigserial primary key,
     chat_id bigint not null,
