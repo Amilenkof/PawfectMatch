@@ -10,16 +10,21 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-/***///todo дописать доку сделать логирование
+/**
+ * Класс генерирует все необходимые клавиатуры для работы бота
+ */
 @Slf4j
 @Service
 public class KeyBoardService {
-//    private static final Map<String, SendMessage> commands = new HashMap<>();
+
 
     public KeyBoardService() {
 
     }
 
+    /**
+     * Метод формирует клавиатуру для главного меню
+     */
     public SendMessage mainMenuKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("Приют для кошек");
         KeyboardButton button2 = new KeyboardButton("Приют для собак");
@@ -27,6 +32,10 @@ public class KeyBoardService {
         SendMessage message = new SendMessage(update.message().chat().id(), "Привет, дружище, ты пришел за питомцем? Мы можем предложить тебе выбрать кошку или собаку, кого ты выберешь?");
         return message.replyMarkup(replyKeyboardMarkup);
     }
+
+    /**
+     * Метод формирует клавиатуру для меню приюта для собак
+     */
 
     public SendMessage dogShelterKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("Инфо о собачьем приюте");
@@ -41,6 +50,10 @@ public class KeyBoardService {
         return message.replyMarkup(replyKeyboardMarkup);
     }
 
+    /**
+     * Метод формирует клавиатуру для меню приюта для кошек
+     */
+
     public SendMessage catShelterKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("Инфо о кошечьем приюте");
         KeyboardButton button2 = new KeyboardButton("Как взять кошку");
@@ -53,6 +66,10 @@ public class KeyBoardService {
         SendMessage message = new SendMessage(update.message().chat().id(), "Приют для кошек, PawfectMatch, приветствует тебя, чем могу помочь?");
         return message.replyMarkup(replyKeyboardMarkup);
     }
+
+    /**
+     * Метод формирует клавиатуру для меню описания приюта для собак
+     */
 
     public SendMessage aboutDogShelterKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("О собачьем приюте");
@@ -69,6 +86,10 @@ public class KeyBoardService {
         return message.replyMarkup(replyKeyboardMarkup);
     }
 
+    /**
+     * Метод формирует клавиатуру для меню описания приюта для кошек
+     */
+
     public SendMessage aboutCatShelterKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("О кошачьем приюте");
         KeyboardButton button2 = new KeyboardButton("Расписание работы, адрес, схема проезда кошачьего приюта");
@@ -83,6 +104,10 @@ public class KeyBoardService {
         SendMessage message = new SendMessage(update.message().chat().id(), "Здесь можно посмотреть информацию о нашем приюте для кошек");
         return message.replyMarkup(replyKeyboardMarkup);
     }
+
+    /**
+     * Метод формирует клавиатуру для меню "как взять собаку"
+     */
 
     public SendMessage howTakeDogKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("Знакомство с собакой");
@@ -109,6 +134,10 @@ public class KeyBoardService {
         return message.replyMarkup(replyKeyboardMarkup);
     }
 
+    /**
+     * Метод формирует клавиатуру для меню "как взять кошку"
+     */
+
     public SendMessage howTakeCatKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("Знакомство с кошкой");
         KeyboardButton button2 = new KeyboardButton("Документы для усыновления кошки");
@@ -130,9 +159,13 @@ public class KeyBoardService {
         SendMessage message = new SendMessage(update.message().chat().id(), "Все что нужно знать о том, как взять собаку");
         return message.replyMarkup(replyKeyboardMarkup);
     }
-    public SendMessage callvolunteer(Update update){
+
+    /**
+     * Метод  реализоует логику вызова волонтера
+     */
+    public SendMessage callvolunteer(Update update) {
         //todo Логика которая зовет волонтера
-        return new SendMessage(update.message().chat().id(),"Волонтер уже тут");
+        return new SendMessage(update.message().chat().id(), "Волонтер уже тут");
     }
 
 }

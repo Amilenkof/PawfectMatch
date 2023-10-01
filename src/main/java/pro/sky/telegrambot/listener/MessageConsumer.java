@@ -17,7 +17,7 @@ public class MessageConsumer {
         this.keyBoardService = keyBoardService;
 
     }
-/**Метод читает команду и формирует на нее ответ
+/**Метод читает команду и формирует на нее ответ подкладывая нужную клавиатуру
  * Параметры = Update update
  * */
     public SendMessage executeResponse(Update update) {
@@ -46,8 +46,7 @@ public class MessageConsumer {
 
         }
         log.debug("Кейсы не выбраны, метод зашел в дефолтный блок");
-
-        return new SendMessage(update.message().chat().id(), "Не понял, повторите");
+        return new SendMessage(update.message().chat().id(), "Не понял, повторите");//todo возможно стоит изменить варианты ответа
     }
 }
 
