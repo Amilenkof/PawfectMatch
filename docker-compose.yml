@@ -1,7 +1,18 @@
 
   version: '3'
   services:
-    postgres:
+   paw:
+    build:
+        dockerfile: dockerfile.txt
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+
+
+
+   postgres:
       image: postgres
       environment:
         POSTGRES_DB: "PawfectMatch"
@@ -19,5 +30,5 @@
       driver_opts:
         type: none
         o: bind
-        device: /c/dataPawfectMatch
+        device: /c/datapawfectMatch
 
