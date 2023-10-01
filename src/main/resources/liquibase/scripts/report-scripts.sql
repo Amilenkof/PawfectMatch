@@ -10,6 +10,6 @@ CREATE TABLE report
     heath varchar(255) not null,
     behaviour varchar(255) not null,
     user_id bigint not null,
-    FOREIGN KEY (user_id) REFERENCES user(id)
+    FOREIGN KEY (user_id) REFERENCES users (id)
 
 );
