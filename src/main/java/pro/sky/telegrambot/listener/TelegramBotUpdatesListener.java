@@ -5,10 +5,9 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.response.SendResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pro.sky.telegrambot.keyboards.KeyBoardService;
+import pro.sky.telegrambot.service.keyboards.KeyBoardService;
 
 import javax.annotation.PostConstruct;
 import java.util.List;

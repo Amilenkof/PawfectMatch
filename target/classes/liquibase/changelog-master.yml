@@ -15,6 +15,8 @@ databaseChangeLog:
       file: liquibase/scripts/not_reported-scripts.sql
   - include:
       file: liquibase/scripts/report-scripts.sql
+  - include:
+      file: liquibase/scripts/question-scripts.sql
 
 
 

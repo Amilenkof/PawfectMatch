@@ -1,4 +1,4 @@
-package pro.sky.telegrambot.keyboards;
+package pro.sky.telegrambot.service.keyboards;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
@@ -6,9 +6,9 @@ import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.exceptions.VolunteerListIsEmpty;
+import pro.sky.telegrambot.model.Volunteer;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Класс генерирует все необходимые клавиатуры для работы бота
@@ -16,11 +16,18 @@ import java.util.Map;
 @Slf4j
 @Service
 public class KeyBoardService {
+//    private final VolunteerService volunteerService;
 
 
     public KeyBoardService() {
 
+
     }
+    //todo возможно стоит вот так собрать в мапу все клавиатуры
+//    @PostConstruct
+//    public void createKeyboards(){
+//        HashMap<String, SendMessage> keyboards = new HashMap<>();
+//    }
 
     /**
      * Метод формирует клавиатуру для главного меню
@@ -163,9 +170,10 @@ public class KeyBoardService {
     /**
      * Метод  реализоует логику вызова волонтера
      */
-    public SendMessage callvolunteer(Update update) {
-        //todo Логика которая зовет волонтера
-        return new SendMessage(update.message().chat().id(), "Волонтер уже тут");
+    public SendMessage callVolunteer(Update update) {
+
+        return null;
+
     }
 
 }
