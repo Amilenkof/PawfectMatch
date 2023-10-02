@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="PawfectMatch" target="19" />
+      <module name="PawfectMatch" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
