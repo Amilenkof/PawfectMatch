@@ -3,15 +3,11 @@
   services:
    paw:
     build:
-        dockerfile: dockerfile.txt
+        dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
       - postgres
-
-
-
-
    postgres:
       image: postgres
       environment:
@@ -31,4 +27,3 @@
         type: none
         o: bind
         device: /c/datapawfectMatch
-
