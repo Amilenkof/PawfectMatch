@@ -1,0 +1,29 @@
+package pro.sky.telegrambot.model;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Entity
+@Data
+@NoArgsConstructor
+
+public class Animal {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+
+        private String type;
+
+        private String name;
+
+        private boolean isSick;
+
+        private boolean isLittle;
+
+        private boolean status;
+
+        @OneToOne
+        private Shelter shelter;
+}
