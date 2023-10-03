@@ -40,8 +40,8 @@ public class MessageConsumer {
                 return keyBoardService.howTakeDogKeyboard(update);
             case ("Как взять кошку"):
                 return keyBoardService.howTakeCatKeyboard(update);
-            case ("Позвать волонтера"):
-               return keyBoardService.callVolunteer(update);
+//            case ("Позвать волонтера"):
+//               return keyBoardService.callVolunteer(update);
 
 
         }

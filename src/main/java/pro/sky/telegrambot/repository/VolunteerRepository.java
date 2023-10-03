@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import pro.sky.telegrambot.model.Recommendation;
 import pro.sky.telegrambot.model.Volunteer;
 
-
-public interface VolunteerRepository extends JpaRepository<Recommendation,String> {
+@Repository
+public interface VolunteerRepository extends JpaRepository<Volunteer,Long> {
 
 }

@@ -6,8 +6,6 @@ import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pro.sky.telegrambot.exceptions.VolunteerListIsEmpty;
-import pro.sky.telegrambot.model.Volunteer;
 
 
 /**
@@ -16,12 +14,13 @@ import pro.sky.telegrambot.model.Volunteer;
 @Slf4j
 @Service
 public class KeyBoardService {
-//    private final VolunteerService volunteerService;
+    private final VolunteerService volunteerService;
 
 
-    public KeyBoardService() {
+    public KeyBoardService(VolunteerService volunteerService) {
 
 
+        this.volunteerService = volunteerService;
     }
     //todo возможно стоит вот так собрать в мапу все клавиатуры
 //    @PostConstruct
@@ -166,14 +165,16 @@ public class KeyBoardService {
         SendMessage message = new SendMessage(update.message().chat().id(), "Все что нужно знать о том, как взять собаку");
         return message.replyMarkup(replyKeyboardMarkup);
     }
-
+//todo пишу - Миленьков А.
     /**
      * Метод  реализоует логику вызова волонтера
      */
-    public SendMessage callVolunteer(Update update) {
-
-        return null;
-
-    }
+//    public SendMessage callVolunteer(Update update) {
+//        KeyboardButton button1 = new KeyboardButton("Передать волонтеру контакты для связи");
+//        KeyboardButton button2 = new KeyboardButton("Отправить сообщение волонтеру");
+//        SendMessage message = new SendMessage(update.message().chat().id(), "блабла");
+//        return null;
+//
+//    }
 
 }
