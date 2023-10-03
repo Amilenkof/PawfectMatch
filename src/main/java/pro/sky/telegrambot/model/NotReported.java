@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "not_reported")
 public class NotReported {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "days_lost")
     private Integer daysLost;
