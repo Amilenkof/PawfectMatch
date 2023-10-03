@@ -61,7 +61,7 @@ public class KeyBoardService {
      */
 
     public SendMessage catShelterKeyboard(Update update) {
-        KeyboardButton button1 = new KeyboardButton("Инфо о кошечьем приюте");
+        KeyboardButton button1 = new KeyboardButton("Инфо о кошачьем приюте");
         KeyboardButton button2 = new KeyboardButton("Как взять кошку");
         KeyboardButton button3 = new KeyboardButton("Отчет о кошке");
         KeyboardButton button4 = new KeyboardButton("Позвать волонтера");
@@ -176,5 +176,17 @@ public class KeyBoardService {
 //        return null;
 //
 //    }
+
+
+    /**
+     * Метод формирует клавиатуру для меню назад
+     */
+    public SendMessage backMenuKeyboard(Update update) {
+        KeyboardButton button = new KeyboardButton("Вернуться в главное меню");
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button);
+        SendMessage message = new SendMessage(update.message().chat().id(),
+                "");
+        return message.replyMarkup(replyKeyboardMarkup);
+    }
 
 }

@@ -6,7 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.service.keyboards.KeyBoardService;
 
-/**Класс который принимает Update, по нему подбирает клавиатуру, которую нужно вернуть и формирует ответ для TelegrammListener */
+/**
+ * Класс который принимает Update, по нему подбирает клавиатуру,
+ * которую нужно вернуть и формирует ответ для TelegrammListener
+ * */
+
 @Service
 @Slf4j
 public class MessageConsumer {
@@ -42,6 +46,8 @@ public class MessageConsumer {
                 return keyBoardService.howTakeCatKeyboard(update);
 //            case ("Позвать волонтера"):
 //               return keyBoardService.callVolunteer(update);
+            case ("О кошачьем приюте"):
+                return keyBoardService.howTakeCatKeyboard(update);
 
 
         }
