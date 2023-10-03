@@ -38,8 +38,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         });
         updates.forEach(update -> {
             log.info("Processing update: {}", update);
-            SendMessage message = messageConsumer.executeResponse(update);
-            telegramBot.execute(message);
+            List<SendMessage> messages = messageConsumer.executeResponse(update);
+            messages.forEach(telegramBot::execute);
+            log.info("Sended {} messages",messages.size());
+
         });
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;

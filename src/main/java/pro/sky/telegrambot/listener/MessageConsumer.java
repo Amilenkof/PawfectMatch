@@ -6,10 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.service.keyboards.KeyBoardService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Класс который принимает Update, по нему подбирает клавиатуру,
  * которую нужно вернуть и формирует ответ для TelegrammListener
- * */
+ */
 
 @Service
 @Slf4j
@@ -21,38 +24,53 @@ public class MessageConsumer {
         this.keyBoardService = keyBoardService;
 
     }
-/**Метод читает команду и формирует на нее ответ подкладывая нужную клавиатуру
- * Параметры = Update update
- * */
-    public SendMessage executeResponse(Update update) {
+
+    /**
+     * Метод читает команду и формирует на нее ответ подкладывая нужную клавиатуру
+     * Параметры = Update update
+     */
+    public List<SendMessage> executeResponse(Update update) {
         log.debug("Вызван метод executeResponse в классе MessageConsumer");
         String command = update.message().text();
-        log.debug("Получена команда = {}",command);
+        log.debug("Получена команда = {}", command);
+        List<SendMessage> messageList = new ArrayList<>();
         switch (command) {
             case ("/start"):
             case ("Вернуться в главное меню"):
-                return keyBoardService.mainMenuKeyboard(update);
+                messageList.add(keyBoardService.mainMenuKeyboard(update));
+                return messageList;
             case ("Приют для собак"):
-                return keyBoardService.dogShelterKeyboard(update);
+                messageList.add(keyBoardService.dogShelterKeyboard(update));
+                return messageList;
             case ("Приют для кошек"):
-                return keyBoardService.catShelterKeyboard(update);
+                messageList.add(keyBoardService.catShelterKeyboard(update));
+                return messageList;
             case ("Инфо о собачьем приюте"):
-                return keyBoardService.aboutDogShelterKeyboard(update);
+                messageList.add(keyBoardService.aboutDogShelterKeyboard(update));
+                return messageList;
             case ("Инфо о кошачьем приюте"):
-                return keyBoardService.aboutCatShelterKeyboard(update);
+                messageList.add(keyBoardService.aboutCatShelterKeyboard(update));
+                return messageList;
+
             case ("Как взять собаку"):
-                return keyBoardService.howTakeDogKeyboard(update);
+                messageList.add(keyBoardService.howTakeDogKeyboard(update));
+                return messageList;
+
             case ("Как взять кошку"):
-                return keyBoardService.howTakeCatKeyboard(update);
+                messageList.add(keyBoardService.howTakeCatKeyboard(update));
+                return messageList;
+
 //            case ("Позвать волонтера"):
 //               return keyBoardService.callVolunteer(update);
-            case ("О кошачьем приюте"):
-                return keyBoardService.howTakeCatKeyboard(update);
+//            case ("О кошачьем приюте"):
+//
+//                return keyBoardService.howTakeCatKeyboard(update);
 
 
         }
         log.debug("Кейсы не выбраны, метод зашел в дефолтный блок");
-        return new SendMessage(update.message().chat().id(), "Не понял, повторите");//todo возможно стоит изменить варианты ответа
+        SendMessage messageDefault = new SendMessage(update.message().chat().id(), "Не понял, повторите");
+        return List.of(messageDefault);//todo возможно стоит изменить варианты ответа
     }
 }
 
