@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
-
 public class Animal {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
