@@ -3,9 +3,8 @@ package pro.sky.telegrambot.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.*;
 
 @Entity
 @Data

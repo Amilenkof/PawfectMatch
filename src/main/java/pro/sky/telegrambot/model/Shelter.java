@@ -3,11 +3,10 @@ package pro.sky.telegrambot.model;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import jakarta.persistence.*;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.*;
 import java.util.List;
-
+import jakarta.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
