@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
+import liquibase.statement.SequenceNextValueFunction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.exceptions.ShelterNotFoundException;
@@ -178,19 +179,20 @@ public class KeyBoardService {
 
     /**
      * Метод  реализоует логику вызова волонтера.
-     * Генерирует сообщения пользователю и волонтеру
+     * Генерирует сообщения пользователю и волонтеру<br>
+     * Params=Update update - данные пользователя,
+     * String AnimalType= тип животных в приюте,из которого будет вызван волонтер
+     Метод не выбрасывает ошибок, в случае обнаружения исключительных ситуаций, пользователю будет отправлен ответ
+     "Извините,сейчас нет доступных волонтеров"
      */
     public List<SendMessage> callVolunteer(Update update, String animalType) {
-        Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType(animalType);
-        Shelter shelter = optionalShelter
-                .orElseThrow(() -> new ShelterNotFoundException("Приют для этого типа животных не найден"));
-
-//        optionalShelter.isEmpty() ?  throw new  ShelterNotFoundException("Приют для этого типа животных не найден") :
-        Volunteer volunteer = volunteerService.callVolunteer(update, shelter).orElseThrow(() -> new VolunteerListIsEmpty("Cписок волонтеров пуст"));
-
-
-        SendMessage messageToVolonteer = new SendMessage(volunteer.getChatId(),"@"+update.message().chat().username() + " ожидает Вашего сообщения");//todo ответить пользователю что нет волонтеров
-
+        Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType(animalType);//Шелтеров не может не быть, тк мы забиваем кнопки только в меню где должен быть шелтер
+        Shelter shelter = optionalShelter.orElse(new Shelter());
+        Optional<Volunteer> optionalVolunteer = volunteerService.callVolunteer(update, shelter);// волонтеров может не быть в приюте, но ошибку бросать нельзя, ляжет все приложение
+        if (optionalVolunteer.isEmpty()) {
+            return List.of(new SendMessage(update.message().chat().id(), "Извините,сейчас нет доступных волонтеров"));// поэтому отправляю сообщение пользователю
+        }
+        SendMessage messageToVolonteer = new SendMessage(optionalVolunteer.get().getChatId(), "@" + update.message().chat().username() + " ожидает Вашего сообщения");
         SendMessage messageToUser = new SendMessage(update.message().chat().id(), "Ожидайте, с Вами свяжется волонтер");
         return List.of(messageToUser, messageToVolonteer);
 
