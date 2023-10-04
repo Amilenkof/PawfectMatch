@@ -6,6 +6,13 @@ import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.exceptions.ShelterNotFoundException;
+import pro.sky.telegrambot.exceptions.VolunteerListIsEmpty;
+import pro.sky.telegrambot.model.Shelter;
+import pro.sky.telegrambot.model.Volunteer;
+
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -15,12 +22,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class KeyBoardService {
     private final VolunteerService volunteerService;
+    private final ShelterService shelterService;
 
 
-    public KeyBoardService(VolunteerService volunteerService) {
+    public KeyBoardService(VolunteerService volunteerService, ShelterService shelterService) {
 
 
         this.volunteerService = volunteerService;
+        this.shelterService = shelterService;
     }
     //todo возможно стоит вот так собрать в мапу все клавиатуры
 //    @PostConstruct
@@ -47,7 +56,7 @@ public class KeyBoardService {
         KeyboardButton button1 = new KeyboardButton("Инфо о собачьем приюте");
         KeyboardButton button2 = new KeyboardButton("Как взять собаку");
         KeyboardButton button3 = new KeyboardButton("Отчет о собаке");
-        KeyboardButton button4 = new KeyboardButton("Позвать волонтера");
+        KeyboardButton button4 = new KeyboardButton("Позвать волонтера-Собачий приют");
         KeyboardButton button5 = new KeyboardButton("Вернуться в главное меню");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);
         replyKeyboardMarkup.addRow(button3, button4);
@@ -64,7 +73,7 @@ public class KeyBoardService {
         KeyboardButton button1 = new KeyboardButton("Инфо о кошачьем приюте");
         KeyboardButton button2 = new KeyboardButton("Как взять кошку");
         KeyboardButton button3 = new KeyboardButton("Отчет о кошке");
-        KeyboardButton button4 = new KeyboardButton("Позвать волонтера");
+        KeyboardButton button4 = new KeyboardButton("Позвать волонтера-Кошачий приют");
         KeyboardButton button5 = new KeyboardButton("Вернуться в главное меню");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);
         replyKeyboardMarkup.addRow(button3, button4);
@@ -82,7 +91,7 @@ public class KeyBoardService {
         KeyboardButton button2 = new KeyboardButton("Как проехать к приюту для собак");
         KeyboardButton button3 = new KeyboardButton("Контактные данные охраны приюта для собак");
         KeyboardButton button4 = new KeyboardButton("Техника безопасности на территории приюта для собак");
-        KeyboardButton button5 = new KeyboardButton("Позвать волонтера");
+        KeyboardButton button5 = new KeyboardButton("Позвать волонтера-Собачий приют");
         KeyboardButton button6 = new KeyboardButton("Вернуться в главное меню");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1);
         replyKeyboardMarkup.addRow(button2, button3, button4);
@@ -101,7 +110,7 @@ public class KeyBoardService {
         KeyboardButton button2 = new KeyboardButton("Расписание работы, адрес, схема проезда кошачьего приюта");
         KeyboardButton button3 = new KeyboardButton("Контактные данные охраны приюта для кошек");
         KeyboardButton button4 = new KeyboardButton("Техника безопасности на территории приюта для кошек");
-        KeyboardButton button5 = new KeyboardButton("Позвать волонтера");
+        KeyboardButton button5 = new KeyboardButton("Позвать волонтера-Кошачий приют");
         KeyboardButton button6 = new KeyboardButton("Вернуться в главное меню");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1);
         replyKeyboardMarkup.addRow(button2, button3, button4);
@@ -126,7 +135,7 @@ public class KeyBoardService {
         KeyboardButton button8 = new KeyboardButton("Обратиться к кинологу");
         KeyboardButton button9 = new KeyboardButton("Причины для отказа усыновления пса");
         KeyboardButton button10 = new KeyboardButton("Оставить контакты для связи");
-        KeyboardButton button11 = new KeyboardButton("Позвать волонтера");
+        KeyboardButton button11 = new KeyboardButton("Позвать волонтера-Собачий приют");
         KeyboardButton button12 = new KeyboardButton("Вернуться в главное меню");
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);
@@ -153,7 +162,7 @@ public class KeyBoardService {
         KeyboardButton button6 = new KeyboardButton("Готовим дом для кошки-инвалида");
         KeyboardButton button7 = new KeyboardButton("Причины для отказа усыновления кошки");
         KeyboardButton button8 = new KeyboardButton("Оставить контакты для связи");
-        KeyboardButton button9 = new KeyboardButton("Позвать волонтера");
+        KeyboardButton button9 = new KeyboardButton("Позвать волонтера-Кошачий приют");
         KeyboardButton button12 = new KeyboardButton("Вернуться в главное меню");
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);
@@ -165,17 +174,25 @@ public class KeyBoardService {
         SendMessage message = new SendMessage(update.message().chat().id(), "Все что нужно знать о том, как взять собаку");
         return message.replyMarkup(replyKeyboardMarkup);
     }
-//todo пишу - Миленьков А.
+//todo пишу - Миленьков А. вынести в новый сервис AnswerComandService
+
     /**
-     * Метод  реализоует логику вызова волонтера
+     * Метод  реализоует логику вызова волонтера.
+     * Генерирует сообщения пользователю и волонтеру
      */
-//    public SendMessage callVolunteer(Update update) {
-//        KeyboardButton button1 = new KeyboardButton("Передать волонтеру контакты для связи");
-//        KeyboardButton button2 = new KeyboardButton("Отправить сообщение волонтеру");
-//        SendMessage message = new SendMessage(update.message().chat().id(), "блабла");
-//        return null;
-//
-//    }
+    public List<SendMessage> callVolunteer(Update update, String animalType) {
+        Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType(animalType);
+        Shelter shelter = optionalShelter
+                .orElseThrow(() -> new ShelterNotFoundException("Приют для этого типа животных не найден"));
+        Volunteer volunteer = volunteerService.callVolunteer(update, shelter).orElseThrow(() -> new VolunteerListIsEmpty("Cписок волонтеров пуст"));
+        //todo нужно отправлять волонтеру ссылку в сообщении
+
+        SendMessage messageToVolonteer = new SendMessage(volunteer.getChatId(),update.message().chat().username() + " ожидает Вашего сообщения");//todo ответить пользователю что нет волонтеров
+
+        SendMessage messageToUser = new SendMessage(update.message().chat().id(), "Ожидайте, с Вами свяжется волонтер");
+        return List.of(messageToUser, messageToVolonteer);
+
+    }
 
 
     /**

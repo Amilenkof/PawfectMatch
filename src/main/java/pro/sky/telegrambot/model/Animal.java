@@ -23,6 +23,6 @@ public class Animal {
 
         private boolean status;
 
-        @OneToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         private Shelter shelter;
 }

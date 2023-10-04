@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.service.keyboards.KeyBoardService;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class MessageConsumer {
      * Параметры = Update update
      */
     public List<SendMessage> executeResponse(Update update) {
+
         log.debug("Вызван метод executeResponse в классе MessageConsumer");
         String command = update.message().text();
         log.debug("Получена команда = {}", command);
@@ -59,6 +61,10 @@ public class MessageConsumer {
             case ("Как взять кошку"):
                 messageList.add(keyBoardService.howTakeCatKeyboard(update));
                 return messageList;
+            case("Позвать волонтера-Кошачий приют"):
+                return keyBoardService.callVolunteer(update, "cat");
+            case("Позвать волонтера-Собачий приют"):
+                return keyBoardService.callVolunteer(update, "dog");
 
 //            case ("Позвать волонтера"):
 //               return keyBoardService.callVolunteer(update);

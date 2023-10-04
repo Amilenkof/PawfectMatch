@@ -1,9 +1,10 @@
 package pro.sky.telegrambot.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.util.List;
 
@@ -31,7 +32,14 @@ public class Shelter {
     private String safety;
 
     @OneToMany(mappedBy = "shelter")
+    @LazyCollection(LazyCollectionOption. EXTRA)
     private List<Volunteer> volunteer;
+    @Setter
+    private  String AnimalType;
 
 
+
+    public int getVolunteerCount(){
+       return volunteer.size();
+    }
 }

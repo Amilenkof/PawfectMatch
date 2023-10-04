@@ -12,3 +12,8 @@ CREATE TABLE shelter
     timing varchar(255) not null,
     contacts_security varchar(255) not null,
     safety text not null);
+
+--changeset aMilenkov:2
+ALTER TABLE shelter
+    ADD COLUMN animal_type varchar(100) not null default 'Any Animal';
+

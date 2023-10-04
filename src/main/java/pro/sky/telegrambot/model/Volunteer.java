@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 
 @Entity
@@ -21,7 +22,9 @@ public class Volunteer {
     private String lastName;
     @Column(name = "chat_id")
     private Long chatId;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Shelter shelter;
+
+
 
 }
