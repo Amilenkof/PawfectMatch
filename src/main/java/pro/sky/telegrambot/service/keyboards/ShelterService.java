@@ -16,12 +16,14 @@ public class ShelterService {
         this.shelterRepository = shelterRepository;
     }
 
-//    public List<Shelter> find(){
-//        return shelterRepository.findAll();
-//    }
+
     @Transactional(readOnly = true)
     public Optional <Shelter> findShelterByAnimalType(String animalType){
         return shelterRepository.findShelterByAnimalType(animalType);
+    }
+
+    public Shelter createShelter (Shelter shelter) {
+        return shelterRepository.save(shelter);
     }
 
 }

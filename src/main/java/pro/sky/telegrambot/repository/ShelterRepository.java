@@ -13,4 +13,6 @@ public interface ShelterRepository extends JpaRepository<Shelter,Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM shelter WHERE animal_type=?")
     Optional<Shelter> findShelterByAnimalType(String animaltype);
+
+
 }
