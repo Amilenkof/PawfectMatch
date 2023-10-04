@@ -1,4 +1,4 @@
-package pro.sky.telegrambot.service.keyboards;
+package pro.sky.telegrambot.service;
 
 import com.pengrad.telegrambot.model.Update;
 import lombok.extern.slf4j.Slf4j;

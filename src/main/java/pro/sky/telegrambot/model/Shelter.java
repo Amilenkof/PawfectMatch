@@ -6,7 +6,9 @@ import org.hibernate.annotations.LazyCollectionOption;
 import jakarta.persistence.*;
 
 import java.util.List;
+
 import jakarta.persistence.*;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -21,7 +23,7 @@ public class Shelter {
 
     private String address;
 
-    private byte[] map;
+    private String map;
 
     private String timing;
 
@@ -31,14 +33,21 @@ public class Shelter {
     private String safety;
 
     @OneToMany(mappedBy = "shelter")
-    @LazyCollection(LazyCollectionOption. EXTRA)
     private List<Volunteer> volunteer;
     @Setter
-    private  String AnimalType;
+    private String AnimalType;
 
+    public Shelter(String description, String address, String map, String timing, String contractsSecurity, String safety, String animalType) {
+        this.description = description;
+        this.address = address;
+        this.map = map;
+        this.timing = timing;
+        this.contractsSecurity = contractsSecurity;
+        this.safety = safety;
+        AnimalType = animalType;
+    }
 
-
-    public int getVolunteerCount(){
-       return volunteer.size();
+    public int getVolunteerCount() {
+        return volunteer.size();
     }
 }

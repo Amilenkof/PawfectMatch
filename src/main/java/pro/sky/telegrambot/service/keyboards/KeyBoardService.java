@@ -4,13 +4,12 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
-import liquibase.statement.SequenceNextValueFunction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pro.sky.telegrambot.exceptions.ShelterNotFoundException;
-import pro.sky.telegrambot.exceptions.VolunteerListIsEmpty;
 import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.model.Volunteer;
+import pro.sky.telegrambot.service.ShelterService;
+import pro.sky.telegrambot.service.VolunteerService;
 
 import java.util.List;
 import java.util.Optional;

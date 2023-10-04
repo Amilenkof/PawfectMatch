@@ -17,8 +17,8 @@ databaseChangeLog:
       file: liquibase/scripts/report-scripts.sql
   - include:
       file: liquibase/scripts/question-scripts.sql
-  - include:
-      file: liquibase/scripts/init-shelter-scripts.sql
+#  - include:
+#      file: liquibase/scripts/init-shelter-scripts.sql
 
 
 

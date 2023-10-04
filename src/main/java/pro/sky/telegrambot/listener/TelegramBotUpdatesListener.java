@@ -2,24 +2,17 @@ package pro.sky.telegrambot.listener;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
-import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import jakarta.persistence.*;
 
-import org.hibernate.Session;
-import org.hibernate.SessionBuilder;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import pro.sky.telegrambot.service.keyboards.KeyBoardService;
-import pro.sky.telegrambot.service.keyboards.ShelterService;
+import pro.sky.telegrambot.service.ShelterService;
 
 
-import java.beans.Transient;
 import java.util.List;
 
 @Service
