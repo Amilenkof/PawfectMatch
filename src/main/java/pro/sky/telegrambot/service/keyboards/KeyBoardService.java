@@ -184,10 +184,12 @@ public class KeyBoardService {
         Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType(animalType);
         Shelter shelter = optionalShelter
                 .orElseThrow(() -> new ShelterNotFoundException("Приют для этого типа животных не найден"));
-        Volunteer volunteer = volunteerService.callVolunteer(update, shelter).orElseThrow(() -> new VolunteerListIsEmpty("Cписок волонтеров пуст"));
-        //todo нужно отправлять волонтеру ссылку в сообщении
 
-        SendMessage messageToVolonteer = new SendMessage(volunteer.getChatId(),update.message().chat().username() + " ожидает Вашего сообщения");//todo ответить пользователю что нет волонтеров
+//        optionalShelter.isEmpty() ?  throw new  ShelterNotFoundException("Приют для этого типа животных не найден") :
+        Volunteer volunteer = volunteerService.callVolunteer(update, shelter).orElseThrow(() -> new VolunteerListIsEmpty("Cписок волонтеров пуст"));
+
+
+        SendMessage messageToVolonteer = new SendMessage(volunteer.getChatId(),"@"+update.message().chat().username() + " ожидает Вашего сообщения");//todo ответить пользователю что нет волонтеров
 
         SendMessage messageToUser = new SendMessage(update.message().chat().id(), "Ожидайте, с Вами свяжется волонтер");
         return List.of(messageToUser, messageToVolonteer);
