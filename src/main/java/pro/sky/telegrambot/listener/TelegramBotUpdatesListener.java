@@ -3,7 +3,9 @@ package pro.sky.telegrambot.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.AbstractSendRequest;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.response.SendResponse;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,16 +24,14 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final KeyBoardService keyBoardService;
 
     private final TelegramBot telegramBot;
-    private final MessageConsumer messageConsumer;
+    private final MessageSupplier messageSupplier;
     private final ShelterService service;
-//    @Autowired
-//   private SessionFactory sessionFactory;
-//
 
-    public TelegramBotUpdatesListener(KeyBoardService keyBoardService, TelegramBot telegramBot, MessageConsumer messageConsumer, ShelterService service) {
+
+    public TelegramBotUpdatesListener(KeyBoardService keyBoardService, TelegramBot telegramBot, MessageSupplier messageSupplier, ShelterService service) {
         this.keyBoardService = keyBoardService;
         this.telegramBot = telegramBot;
-        this.messageConsumer = messageConsumer;
+        this.messageSupplier = messageSupplier;
         this.service = service;
     }
 
@@ -43,18 +43,12 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     @Override
 
     public int process(List<Update> updates) {
-//        updates.forEach(update -> {
-//            PhotoSize[] photo = update.message().photo();
-//        });
+
         updates.forEach(update -> {
-
-
             log.info("Processing update: {}", update);
-            List<SendMessage> messages = messageConsumer.executeResponse(update);
-
+            List<AbstractSendRequest<?>> messages = messageSupplier.executeResponse(update);
             messages.forEach(m-> log.info("message = {}",m.toString()));
             messages.forEach(telegramBot::execute);
-
         });
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
