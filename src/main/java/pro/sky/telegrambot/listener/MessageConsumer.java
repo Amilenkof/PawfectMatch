@@ -28,7 +28,7 @@ public class MessageConsumer {
 
     /**
      * Метод читает команду и формирует на нее ответ подкладывая нужную клавиатуру
-     * Параметры = Update update
+     * PARAMS = Update update
      */
     public List<SendMessage> executeResponse(Update update) {
 
@@ -62,7 +62,7 @@ public class MessageConsumer {
                 messageList.add(keyBoardService.howTakeCatKeyboard(update));
                 return messageList;
             case("Позвать волонтера-Кошачий приют"):
-                return keyBoardService.callVolunteer(update, "cat");
+                return keyBoardService.callVolunteer(update, "cat");//todo нужно ли предусматривать расширение в будущем , когда несколько приютов будут с одним типом животных?
             case("Позвать волонтера-Собачий приют"):
                 return keyBoardService.callVolunteer(update, "dog");
 

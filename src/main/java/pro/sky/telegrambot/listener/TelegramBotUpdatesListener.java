@@ -55,7 +55,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             messages.forEach(m-> log.info("message = {}",m.toString()));
 
             messages.forEach(telegramBot::execute);
-            log.info("Sended {} messages",messages.size());
+//            log.info("Sended {} messages",messages.size());
 
 
 

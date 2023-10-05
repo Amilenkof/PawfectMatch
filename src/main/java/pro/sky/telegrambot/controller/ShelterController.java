@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pro.sky.telegrambot.model.DTO.ShelterDTOIN;
 import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.service.ShelterService;
-
+//todo Как класс будет закончен сделать swagger документацию на api
 @RestController
 @RequestMapping("/shelter")
 @Slf4j
@@ -20,9 +20,12 @@ public class ShelterController {
         this.shelterService = shelterService;
     }
 
+
+/**Метод для создания приютов через web интерфейс
+ {@link   org.springframework.data.repository.CrudRepository.save()}*/
     @PostMapping
     public ResponseEntity<Shelter> createShelter(@RequestBody ShelterDTOIN shelterDTOIN ){
-        log.info("Вызван метод ShelterController.createShelter , получен shelterDTOIN ={}");
+        log.info("Вызван метод ShelterController.createShelter , получен shelterDTOIN ={}",shelterDTOIN);
         return ResponseEntity.ok(shelterService.createShelter(shelterDTOIN));
 }
 
