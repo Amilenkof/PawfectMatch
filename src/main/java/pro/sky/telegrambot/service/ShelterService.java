@@ -40,8 +40,8 @@ public class ShelterService {
         log.debug("В БД записывается,  entity={}",shelterDTOIN);
         return shelterRepository.save(entity);
     }
-    public Shelter createShelter (String description,String address,String map,String timing,String contactsSecurity,String safety,String animalType) {
-        Shelter entity = new Shelter(description, address, map, timing, contactsSecurity, safety, animalType);
+    public Shelter createShelter (String description,String address,String timing,String contactsSecurity,String safety,String animalType) {
+        Shelter entity = new Shelter(description, address,  timing, contactsSecurity, safety, animalType);
         log.debug("В БД записывается, entity={}",entity);
         return shelterRepository.save(entity);
     }

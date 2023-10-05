@@ -25,7 +25,6 @@ public class ShelterMapper {
     public Shelter toEntity (ShelterDTOIN dtoIn) {
       return   new Shelter(dtoIn.description(),
                 dtoIn.address(),
-                dtoIn.map(),
                 dtoIn.timing(),
                 dtoIn.contactsSecurity(),
                 dtoIn.safety(),

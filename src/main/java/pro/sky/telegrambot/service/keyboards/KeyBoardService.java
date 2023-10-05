@@ -3,6 +3,7 @@ package pro.sky.telegrambot.service.keyboards;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
+import com.pengrad.telegrambot.request.AbstractSendRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -184,7 +185,7 @@ public class KeyBoardService {
      Метод не выбрасывает ошибок, в случае обнаружения исключительных ситуаций, пользователю будет отправлен ответ
      "Извините,сейчас нет доступных волонтеров"
      */
-    public List<SendMessage> callVolunteer(Update update, String animalType) {
+    public List<AbstractSendRequest<?>> callVolunteer(Update update, String animalType) {
         Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType(animalType);//Шелтеров не может не быть, тк мы забиваем кнопки только в меню где должен быть шелтер
         Shelter shelter = optionalShelter.orElse(new Shelter());
         Optional<Volunteer> optionalVolunteer = volunteerService.callVolunteer(update, shelter);// волонтеров может не быть в приюте, но ошибку бросать нельзя, ляжет все приложение

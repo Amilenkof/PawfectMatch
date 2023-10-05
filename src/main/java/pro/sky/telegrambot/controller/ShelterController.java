@@ -8,6 +8,7 @@ import pro.sky.telegrambot.model.DTO.ShelterDTOIN;
 import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.service.ShelterService;
 //todo Как класс будет закончен сделать swagger документацию на api
+//todo Написать что Animaltype всегда в lowercase- а лучше сделать чтобы само переводилось
 @RestController
 @RequestMapping("/shelter")
 @Slf4j
@@ -31,26 +32,17 @@ public class ShelterController {
     @GetMapping
     public ResponseEntity<Shelter> createShelter(@RequestParam String description,
                                                  @RequestParam String address,
-                                                 @RequestParam String map,
                                                  @RequestParam String timing,
                                                  @RequestParam String contactsSecurity,
                                                  @RequestParam String safety,
                                                  @RequestParam String animalType){
         log.info("Вызван метод ShelterController.createShelter String description ={}," +
                  "String address ={}," +
-                 "String map ={}," +
                  "String timing ={}," +
                  "String contactsSecurity ={}," +
-                 "String animalType ={}", description, address, map, timing, contactsSecurity, safety, animalType);
+                 "String animalType ={}", description, address, timing, contactsSecurity, safety, animalType);
 
-        return ResponseEntity.ok(shelterService.createShelter(description, address, map, timing, contactsSecurity, safety, animalType));
+        return ResponseEntity.ok(shelterService.createShelter(description, address, timing, contactsSecurity, safety, animalType));
     }
 
 }
-//public record ShelterDTOIN(String description,
-//                           String adress,
-//                           String map,
-//                           String timing,
-//                           String contactsSercurity,
-//                           String safety,
-//                           String animalType) {

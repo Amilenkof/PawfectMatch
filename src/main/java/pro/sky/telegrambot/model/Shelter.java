@@ -32,8 +32,6 @@ public class Shelter {
 
     private String address;
 
-    private String map;
-
     private String timing;
 
     @Column(name = "contacts_security")
@@ -48,10 +46,9 @@ public class Shelter {
 
 
 /**Конструктор для сервиса ShelterMapper*/
-    public Shelter(String description, String address, String map, String timing, String contractsSecurity, String safety, String animalType) {
+    public Shelter(String description, String address, String timing, String contractsSecurity, String safety, String animalType) {
         this.description = description;
         this.address = address;
-        this.map = map;
         this.timing = timing;
         this.contractsSecurity = contractsSecurity;
         this.safety = safety;
