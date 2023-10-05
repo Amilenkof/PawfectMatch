@@ -1,10 +1,10 @@
 package pro.sky.telegrambot.model.DTO;
 
 public record ShelterDTOIN(String description,
-                           String adress,
+                           String address,
                            String map,
                            String timing,
-                           String contactsSercurity,
+                           String contactsSecurity,
                            String safety,
                            String animalType) {
 }

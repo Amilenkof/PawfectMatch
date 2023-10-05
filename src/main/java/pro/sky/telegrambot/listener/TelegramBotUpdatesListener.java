@@ -47,24 +47,14 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 //            PhotoSize[] photo = update.message().photo();
 //        });
         updates.forEach(update -> {
-//            Session session = sessionFactory.openSession();
+
 
             log.info("Processing update: {}", update);
             List<SendMessage> messages = messageConsumer.executeResponse(update);
 
             messages.forEach(m-> log.info("message = {}",m.toString()));
-
             messages.forEach(telegramBot::execute);
-//            log.info("Sended {} messages",messages.size());
 
-
-
-
-//            String s = service.find().toString();
-//            SendMessage message = new SendMessage(update.message().chat().id(), s);
-//            telegramBot.execute(message);
-
-//            session.close();
         });
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;

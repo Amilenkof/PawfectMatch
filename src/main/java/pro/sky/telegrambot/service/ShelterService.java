@@ -36,9 +36,13 @@ public class ShelterService {
      * RETURN =Shelter entity
      */
     public Shelter createShelter (ShelterDTOIN shelterDTOIN) {
-        log.debug("Вызван метод ShelterService.findShelterByAnimalType, shelterDTOIN={}",shelterDTOIN);
         Shelter entity = shelterMapper.toEntity(shelterDTOIN);
-        log.debug("entity={}",shelterDTOIN);
+        log.debug("В БД записывается,  entity={}",shelterDTOIN);
+        return shelterRepository.save(entity);
+    }
+    public Shelter createShelter (String description,String address,String map,String timing,String contactsSecurity,String safety,String animalType) {
+        Shelter entity = new Shelter(description, address, map, timing, contactsSecurity, safety, animalType);
+        log.debug("В БД записывается, entity={}",entity);
         return shelterRepository.save(entity);
     }
 

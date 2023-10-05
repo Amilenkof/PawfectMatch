@@ -24,10 +24,10 @@ public class ShelterMapper {
 
     public Shelter toEntity (ShelterDTOIN dtoIn) {
       return   new Shelter(dtoIn.description(),
-                dtoIn.adress(),
+                dtoIn.address(),
                 dtoIn.map(),
                 dtoIn.timing(),
-                dtoIn.contactsSercurity(),
+                dtoIn.contactsSecurity(),
                 dtoIn.safety(),
                 dtoIn.animalType());
 
