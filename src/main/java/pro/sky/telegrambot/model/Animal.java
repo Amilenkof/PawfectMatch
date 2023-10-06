@@ -3,8 +3,8 @@ package pro.sky.telegrambot.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 
+import jakarta.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
@@ -23,6 +23,6 @@ public class Animal {
 
         private boolean status;
 
-        @OneToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         private Shelter shelter;
 }

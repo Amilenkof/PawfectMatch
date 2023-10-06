@@ -1,12 +1,23 @@
 package pro.sky.telegrambot.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.util.List;
 
+import jakarta.persistence.*;
+/**Класс предстваляет собой сущность ПРИЮТА для животных в java
+ * Поля:
+ * description - описание приюта
+ * map - схема проезда
+ * timing время работы
+ * contractsSecurity - контакты охраны
+ * safety - техника безопасности на территории приюта
+ * volunteer список волонтеров в этом приюте
+ * AnimalType - вид животных которые содержатся в приюте
+ * */
 @Entity
 @Data
 @NoArgsConstructor
@@ -21,8 +32,6 @@ public class Shelter {
 
     private String address;
 
-    private byte[] map;
-
     private String timing;
 
     @Column(name = "contacts_security")
@@ -32,6 +41,19 @@ public class Shelter {
 
     @OneToMany(mappedBy = "shelter")
     private List<Volunteer> volunteer;
+    @Setter
+    private String AnimalType;
+
+
+/**Конструктор для сервиса ShelterMapper*/
+    public Shelter(String description, String address, String timing, String contractsSecurity, String safety, String animalType) {
+        this.description = description;
+        this.address = address;
+        this.timing = timing;
+        this.contractsSecurity = contractsSecurity;
+        this.safety = safety;
+        AnimalType = animalType;
+    }
 
 
 }
