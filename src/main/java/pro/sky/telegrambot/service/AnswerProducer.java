@@ -43,6 +43,7 @@ public class AnswerProducer {
         byte[] data = optionalSchema.get().getData();
         log.debug("Все ок,направляем схему клиенту");
         return new SendPhoto(chatId, data);
+
     }
 
 }
