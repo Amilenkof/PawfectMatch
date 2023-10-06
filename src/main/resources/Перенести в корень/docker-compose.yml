@@ -1,0 +1,28 @@
+  version: '3'
+  services:
+    paw:
+      build:
+        dockerfile: Dockerfile
+      ports:
+        - "8080:8080"
+      depends_on:
+        - postgres
+    postgres:
+      image: postgres
+      environment:
+        POSTGRES_DB: "PawfectMatch"
+        POSTGRES_USER: "Bot"
+        POSTGRES_PASSWORD: "Bot"
+      ports:
+        - 8001:5432
+      volumes:
+        - type: volume
+          source: postgres_data
+          target: /var/lib/postgresql/data
+  volumes:
+    postgres_data:
+      driver: local
+      driver_opts:
+        type: none
+        o: bind
+        device: /c/datapawfectMatch
