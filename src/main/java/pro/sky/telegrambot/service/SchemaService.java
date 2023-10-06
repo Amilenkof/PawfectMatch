@@ -46,19 +46,23 @@ public class SchemaService {
      * билдит сущность, сохраняет ее в БД
      */
     public Schema addSchema(MultipartFile file, Long shelterId) throws IOException {
+        log.debug("Вызван метод SchemaService.addSchema, file, shelterId={}",shelterId);
         Optional<Shelter> optionalShelter = shelterRepository.findById(shelterId);
         if (optionalShelter.isEmpty()) {
+            log.debug("Не найден указанный приют");
             throw new ShelterNotFoundException("Не удается загрузить схема проезда к приюту, тк указанный приют не найден");
         }
         Path pathToFile = Path.of(path, shelterId + "." + getExtensions((file.getOriginalFilename())));
         log.debug("pathToFile={}", pathToFile);
         Files.createDirectories(pathToFile.getParent());
         Files.deleteIfExists(pathToFile);
-        try (BufferedInputStream is = new BufferedInputStream(file.getInputStream(), 8000);
-             BufferedOutputStream os = new BufferedOutputStream(Files.newOutputStream(pathToFile, CREATE_NEW), 8000)) {
-            is.transferTo(os);
+        try (BufferedInputStream is = new BufferedInputStream(file.getInputStream(), 1024);
+             BufferedOutputStream os = new BufferedOutputStream(Files.newOutputStream(pathToFile, CREATE_NEW), 1024)) {
+            long l = is.transferTo(os);
+            log.debug("Было загружено {} байт",l);
         }
         Schema schema = schemaRepository.findSchemaByShelter_Id(shelterId).orElse(new Schema());
+        log.debug("Получена с БД schema={}(hashcode)",schema.hashCode());
         schema = new Schema().builder()
                 .filePath(pathToFile.toString())
                 .fileSize(file.getSize())
@@ -66,7 +70,8 @@ public class SchemaService {
                 .data(file.getBytes())
                 .mediaType(file.getContentType())
                 .build();
-        return schema;
+        log.debug("В итоге сформирована schema={}(hashcode)",schema.hashCode());
+        return schemaRepository.save(schema);
 
 
     }

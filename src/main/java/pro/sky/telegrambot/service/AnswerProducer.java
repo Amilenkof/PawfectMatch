@@ -29,20 +29,20 @@ public class AnswerProducer {
 
 /**Метод*///todo
     public AbstractSendRequest<?> getSchema(Update update, String animalType) {
+        log.debug("Вызван метод AnswerProducer.getSchema, update={},animalType={}",update,animalType);
         Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType(animalType);
         Long chatId = update.message().chat().id();
-        if (optionalShelter.isEmpty()) return new SendMessage(chatId, "Извините, схема проезда не найдена");
+        if (optionalShelter.isEmpty()) {
+            log.debug("Приют не найден, клиенту будет направлен wrongMessage");
+            return new SendMessage(chatId, "Извините, схема проезда не найдена");}
         Shelter shelter = optionalShelter.get();
         Optional<Schema> optionalSchema = schemaService.findByShelter_id(shelter.getId());
-        if (optionalSchema.isEmpty()) return new SendMessage(chatId, "Извините, схема проезда не найдена");
+        if (optionalSchema.isEmpty()){
+            log.debug("Схема проезда не найдена, клиенту будет направлен wrongMessage");
+            return new SendMessage(chatId, "Извините, схема проезда не найдена");}
         byte[] data = optionalSchema.get().getData();
+        log.debug("Все ок,направляем схему клиенту");
         return new SendPhoto(chatId, data);
     }
 
 }
-// case ("Как проехать к приюту для собак"):
-//                Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType("cat");
-//                if (optionalShelter.isEmpty()){
-//                    messageList.add(new SendMessage(update.message().chat().id(), "Извините, схема проезда не найдена"));
-//                }
-//                return schemaRepository.findById()//todo

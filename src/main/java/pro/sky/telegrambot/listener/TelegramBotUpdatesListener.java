@@ -49,6 +49,13 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             List<AbstractSendRequest<?>> messages = messageSupplier.executeResponse(update);
             messages.forEach(m-> log.info("message = {}",m.toString()));
             messages.forEach(telegramBot::execute);
+
+//            messages.get(1).
+            if (messages.size() > 0) {
+                log.info("Метод TelegramBotUpdatesListener.process отправил клиенту {} сообщение/я", messages.size());
+            } else {
+                log.info("Метод TelegramBotUpdatesListener.process отправил 0 сообщений");
+            }
         });
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;

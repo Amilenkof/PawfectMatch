@@ -108,7 +108,7 @@ public class KeyBoardService {
 
     public SendMessage aboutCatShelterKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("О кошачьем приюте");
-        KeyboardButton button2 = new KeyboardButton("Расписание работы, адрес, схема проезда кошачьего приюта");
+        KeyboardButton button2 = new KeyboardButton("Как проехать к приюту для кошек");
         KeyboardButton button3 = new KeyboardButton("Контактные данные охраны приюта для кошек");
         KeyboardButton button4 = new KeyboardButton("Техника безопасности на территории приюта для кошек");
         KeyboardButton button5 = new KeyboardButton("Позвать волонтера-Кошачий приют");

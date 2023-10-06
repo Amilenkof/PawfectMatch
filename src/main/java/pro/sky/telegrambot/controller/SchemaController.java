@@ -39,7 +39,7 @@ public class SchemaController {
         if (file.getSize()>1024*1000*2){
             return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
         }
-        log.debug("Вызван метод SchemaController.addSchema, file={},shelterId={}",file,shelterId);
+        log.debug("Вызван метод SchemaController.addSchema,file,shelterId={}",shelterId);
         try {
              schema = schemaService.addSchema(file, shelterId);
         }catch (IOException e){

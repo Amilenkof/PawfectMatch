@@ -72,7 +72,8 @@ public class MessageSupplier {
             case ("Как проехать к приюту для собак"):
               messageList.add(answerProducer.getSchema(update, "dog"));
             case ("Как проехать к приюту для кошек"):
-                messageList.add(answerProducer.getSchema(update, "cat"));
+                AbstractSendRequest<?> cat = answerProducer.getSchema(update, "cat");
+                messageList.add(cat);
 
 
         }
