@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.request.AbstractSendRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.configuration.AnimalTypes;
 import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.repository.SchemaRepository;
 import pro.sky.telegrambot.service.AnswerProducer;
@@ -27,6 +28,11 @@ public class MessageSupplier {
 
     private final AnswerProducer answerProducer;
 
+    private final String ANIMAL_CAT = "cat";
+    private final String ANIMAL_DOG = "dog";
+    private String currentAnimal = "";
+
+
     public MessageSupplier(KeyBoardService keyBoardService, AnswerProducer answerProducer) {
         this.keyBoardService = keyBoardService;
         this.answerProducer = answerProducer;
@@ -36,52 +42,69 @@ public class MessageSupplier {
      * Метод читает команду и формирует на нее ответ подкладывая нужную клавиатуру
      * PARAMS = Update update
      */
-    public List<AbstractSendRequest<?>> executeResponse(Update update) {
+    public List<AbstractSendRequest<? extends AbstractSendRequest<?>>> executeResponse(Update update) {
 
         log.debug("Вызван метод executeResponse в классе MessageConsumer");
         String command = update.message().text();
         log.debug("Получена команда = {}", command);
         List<AbstractSendRequest<?>> messageList = new ArrayList<>();
         switch (command) {
-            case ("/start"):
-            case ("Вернуться в главное меню"):
+            case ("/start"), ("Вернуться в главное меню") -> {
                 messageList.add(keyBoardService.mainMenuKeyboard(update));
                 return messageList;
-            case ("Приют для собак"):
+            }
+            case ("Приют для собак") -> {
+                currentAnimal = ANIMAL_DOG;
                 messageList.add(keyBoardService.dogShelterKeyboard(update));
                 return messageList;
-            case ("Приют для кошек"):
+            }
+            case ("Приют для кошек") -> {
+                currentAnimal = ANIMAL_CAT;
                 messageList.add(keyBoardService.catShelterKeyboard(update));
                 return messageList;
-            case ("Инфо о собачьем приюте"):
-                messageList.add(keyBoardService.aboutDogShelterKeyboard(update));
+            }
+            case ("Как взять животное") -> {
+                if (currentAnimal.equals(ANIMAL_DOG))
+                    messageList.add(keyBoardService.howTakeDogKeyboard(update));
+                else messageList.add(keyBoardService.howTakeCatKeyboard(update));
                 return messageList;
-            case ("Инфо о кошачьем приюте"):
-                messageList.add(keyBoardService.aboutCatShelterKeyboard(update));
+            }
+            case ("Позвать волонтера") -> {
+                return keyBoardService.callVolunteer(update, currentAnimal);
+            }
+            case ("Как проехать к приюту") -> {
+                messageList.add(answerProducer.getSchema(update, currentAnimal));
                 return messageList;
-            case ("Как взять собаку"):
-                messageList.add(keyBoardService.howTakeDogKeyboard(update));
+            }
+            case ("Инфо о приюте") -> {
+                messageList.add(answerProducer.getInfoAboutShelter(update, currentAnimal));
                 return messageList;
-            case ("Как взять кошку"):
-                messageList.add(keyBoardService.howTakeCatKeyboard(update));
+            }
+            case ("О приюте") -> {
+                if (currentAnimal.equals(ANIMAL_DOG))
+                    messageList.add(keyBoardService.aboutCatShelterKeyboard(update));
+                else messageList.add(keyBoardService.aboutDogShelterKeyboard(update));
                 return messageList;
-            case("Позвать волонтера-Кошачий приют"):
-                return keyBoardService.callVolunteer(update, "cat");//todo нужно ли предусматривать расширение в будущем , когда несколько приютов будут с одним типом животных?
-            case("Позвать волонтера-Собачий приют"):
-                return keyBoardService.callVolunteer(update, "dog");
-            case ("Как проехать к приюту для собак"):
-              messageList.add(answerProducer.getSchema(update, "dog"));
-            case ("Как проехать к приюту для кошек"):
-                AbstractSendRequest<?> cat = answerProducer.getSchema(update, "cat");
-                messageList.add(cat);
-
-
+            }
+            case ("Контактные данные охраны приюта") -> {
+                messageList.add(answerProducer.getContactsSecurityShelter(update, currentAnimal));
+                return messageList;
+            }
+            case ("Техника безопасности на территории приюта") -> {
+                messageList.add(answerProducer.getSafetyByShelter(update, currentAnimal));
+                return messageList;
+            }
         }
+
+        SendMessage recommendation = answerProducer.findRecommendation(update, command, currentAnimal);
+
         log.debug("Кейсы не выбраны, метод зашел в дефолтный блок");
-        SendMessage messageDefault = new SendMessage(update.message().chat().id(), "Не понял, повторите");
-        return List.of(messageDefault);//todo возможно стоит изменить варианты ответа
+        return List.of(recommendation);//todo возможно стоит изменить варианты ответа
     }
+
+
 }
+
 
 
 

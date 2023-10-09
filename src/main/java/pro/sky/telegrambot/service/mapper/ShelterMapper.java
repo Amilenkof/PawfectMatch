@@ -28,7 +28,7 @@ public class ShelterMapper {
                 dtoIn.timing(),
                 dtoIn.contactsSecurity(),
                 dtoIn.safety(),
-                dtoIn.animalType());
+                dtoIn.animalType().toLowerCase());
 
     }
 }
