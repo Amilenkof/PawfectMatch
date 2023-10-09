@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 
 @Entity
 @Data
@@ -23,7 +25,6 @@ public class Volunteer {
     private Long chatId;
     @ManyToOne
     private Shelter shelter;
-
 
 
 }

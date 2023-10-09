@@ -36,7 +36,7 @@ public class MessageSupplier {
      * Метод читает команду и формирует на нее ответ подкладывая нужную клавиатуру
      * PARAMS = Update update
      */
-    public List<AbstractSendRequest<?>> executeResponse(Update update) {
+    public List<AbstractSendRequest<? extends AbstractSendRequest<?>>> executeResponse(Update update) {
 
         log.debug("Вызван метод executeResponse в классе MessageConsumer");
         String command = update.message().text();
@@ -70,10 +70,12 @@ public class MessageSupplier {
             case("Позвать волонтера-Собачий приют"):
                 return keyBoardService.callVolunteer(update, "dog");
             case ("Как проехать к приюту для собак"):
-              messageList.add(answerProducer.getSchema(update, "dog"));
+                messageList.add(answerProducer.getSchema(update, "dog"));
+                return messageList;
             case ("Как проехать к приюту для кошек"):
-                AbstractSendRequest<?> cat = answerProducer.getSchema(update, "cat");
-                messageList.add(cat);
+                 messageList.add(answerProducer.getSchema(update, "cat"));
+                return messageList;
+
 
 
         }

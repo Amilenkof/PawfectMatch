@@ -4,13 +4,13 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.AbstractSendRequest;
-import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.response.SendResponse;
+import com.pengrad.telegrambot.request.SendPhoto;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import pro.sky.telegrambot.service.SchemaService;
 import pro.sky.telegrambot.service.keyboards.KeyBoardService;
 import pro.sky.telegrambot.service.ShelterService;
 
@@ -20,19 +20,21 @@ import java.util.List;
 @Service
 @Slf4j
 @EnableTransactionManagement
-public class TelegramBotUpdatesListener implements UpdatesListener {
+public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implements UpdatesListener {
     private final KeyBoardService keyBoardService;
 
     private final TelegramBot telegramBot;
     private final MessageSupplier messageSupplier;
     private final ShelterService service;
+    private final SchemaService schemaService;
 
 
-    public TelegramBotUpdatesListener(KeyBoardService keyBoardService, TelegramBot telegramBot, MessageSupplier messageSupplier, ShelterService service) {
+    public TelegramBotUpdatesListener(KeyBoardService keyBoardService, TelegramBot telegramBot, MessageSupplier messageSupplier, ShelterService service, SchemaService schemaService) {
         this.keyBoardService = keyBoardService;
         this.telegramBot = telegramBot;
         this.messageSupplier = messageSupplier;
         this.service = service;
+        this.schemaService = schemaService;
     }
 
     @PostConstruct
@@ -46,11 +48,21 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
         updates.forEach(update -> {
             log.info("Processing update: {}", update);
-            List<AbstractSendRequest<?>> messages = messageSupplier.executeResponse(update);
+            var messages = messageSupplier.executeResponse(update);
             messages.forEach(m-> log.info("message = {}",m.toString()));
             messages.forEach(telegramBot::execute);
 
-//            messages.get(1).
+
+            AbstractSendRequest<?> abstractSendRequest = messages.get(0);
+            boolean multipart = abstractSendRequest.isMultipart();
+            System.out.println(multipart);
+//
+//
+//            byte[] data = schemaService.findByShelter_id(1L).get().getData();
+//            AbstractSendRequest<SendPhoto> cat = new SendPhoto(update.message().chat().id(), data);
+//            System.out.println("cat.isMultipart() = " + cat.isMultipart());
+//            telegramBot.execute(cat);
+
             if (messages.size() > 0) {
                 log.info("Метод TelegramBotUpdatesListener.process отправил клиенту {} сообщение/я", messages.size());
             } else {
