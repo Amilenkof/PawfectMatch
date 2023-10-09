@@ -20,4 +20,11 @@ public class Recommendation {
     @Getter
 
     private String text;
+    private String animalType;
+
+    public Recommendation(String title, String text, String animalType) {
+        this.title = title;
+        this.text = text;
+        this.animalType = animalType;
+    }
 }

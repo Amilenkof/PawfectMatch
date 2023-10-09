@@ -6,5 +6,6 @@ CREATE TABLE recommendation
 (
     id    bigserial primary key,
     title varchar(100) not null,
-    text  varchar(255) not null
+    text  text not null,
+    animal_type varchar(100) not null
 );

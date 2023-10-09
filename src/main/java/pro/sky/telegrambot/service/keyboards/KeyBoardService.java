@@ -54,10 +54,10 @@ public class KeyBoardService {
      */
 
     public SendMessage dogShelterKeyboard(Update update) {
-        KeyboardButton button1 = new KeyboardButton("Инфо о собачьем приюте");
-        KeyboardButton button2 = new KeyboardButton("Как взять собаку");
+        KeyboardButton button1 = new KeyboardButton("О приюте");
+        KeyboardButton button2 = new KeyboardButton("Как взять животное");
         KeyboardButton button3 = new KeyboardButton("Отчет о собаке");
-        KeyboardButton button4 = new KeyboardButton("Позвать волонтера-Собачий приют");
+        KeyboardButton button4 = new KeyboardButton("Позвать волонтера");
         KeyboardButton button5 = new KeyboardButton("Вернуться в главное меню");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);
         replyKeyboardMarkup.addRow(button3, button4);
@@ -71,10 +71,10 @@ public class KeyBoardService {
      */
 
     public SendMessage catShelterKeyboard(Update update) {
-        KeyboardButton button1 = new KeyboardButton("Инфо о кошачьем приюте");
-        KeyboardButton button2 = new KeyboardButton("Как взять кошку");
+        KeyboardButton button1 = new KeyboardButton("О приюте");
+        KeyboardButton button2 = new KeyboardButton("Как взять животное");
         KeyboardButton button3 = new KeyboardButton("Отчет о кошке");
-        KeyboardButton button4 = new KeyboardButton("Позвать волонтера-Кошачий приют");
+        KeyboardButton button4 = new KeyboardButton("Позвать волонтера");
         KeyboardButton button5 = new KeyboardButton("Вернуться в главное меню");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);
         replyKeyboardMarkup.addRow(button3, button4);
@@ -88,11 +88,11 @@ public class KeyBoardService {
      */
 
     public SendMessage aboutDogShelterKeyboard(Update update) {
-        KeyboardButton button1 = new KeyboardButton("О собачьем приюте");
-        KeyboardButton button2 = new KeyboardButton("Как проехать к приюту для собак");
-        KeyboardButton button3 = new KeyboardButton("Контактные данные охраны приюта для собак");
-        KeyboardButton button4 = new KeyboardButton("Техника безопасности на территории приюта для собак");
-        KeyboardButton button5 = new KeyboardButton("Позвать волонтера-Собачий приют");
+        KeyboardButton button1 = new KeyboardButton("Инфо о приюте");
+        KeyboardButton button2 = new KeyboardButton("Как проехать к приюту");
+        KeyboardButton button3 = new KeyboardButton("Контактные данные охраны приюта");
+        KeyboardButton button4 = new KeyboardButton("Техника безопасности на территории приюта");
+        KeyboardButton button5 = new KeyboardButton("Позвать волонтера");
         KeyboardButton button6 = new KeyboardButton("Вернуться в главное меню");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1);
         replyKeyboardMarkup.addRow(button2, button3, button4);
@@ -107,11 +107,11 @@ public class KeyBoardService {
      */
 
     public SendMessage aboutCatShelterKeyboard(Update update) {
-        KeyboardButton button1 = new KeyboardButton("О кошачьем приюте");
-        KeyboardButton button2 = new KeyboardButton("Как проехать к приюту для кошек");
-        KeyboardButton button3 = new KeyboardButton("Контактные данные охраны приюта для кошек");
-        KeyboardButton button4 = new KeyboardButton("Техника безопасности на территории приюта для кошек");
-        KeyboardButton button5 = new KeyboardButton("Позвать волонтера-Кошачий приют");
+        KeyboardButton button1 = new KeyboardButton("Инфо о приюте");
+        KeyboardButton button2 = new KeyboardButton("Как проехать к приюту");
+        KeyboardButton button3 = new KeyboardButton("Контактные данные охраны приюта ");
+        KeyboardButton button4 = new KeyboardButton("Техника безопасности на территории приюта");
+        KeyboardButton button5 = new KeyboardButton("Позвать волонтера");
         KeyboardButton button6 = new KeyboardButton("Вернуться в главное меню");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1);
         replyKeyboardMarkup.addRow(button2, button3, button4);
@@ -126,7 +126,7 @@ public class KeyBoardService {
      */
 
     public SendMessage howTakeDogKeyboard(Update update) {
-        KeyboardButton button1 = new KeyboardButton("Знакомство с собакой");
+        KeyboardButton button1 = new KeyboardButton("Знакомство с животным");
         KeyboardButton button2 = new KeyboardButton("Документы для усыновления собаки");
         KeyboardButton button3 = new KeyboardButton("Транспортировка собаки");
         KeyboardButton button4 = new KeyboardButton("Готовим дом для взрослой собаки");//todo вынести в отдельную клавиатуру дом для щенка и дом для взрослой собаки?
@@ -134,9 +134,9 @@ public class KeyBoardService {
         KeyboardButton button6 = new KeyboardButton("Готовим дом для собаки-инвалида");
         KeyboardButton button7 = new KeyboardButton("Советы кинолога");
         KeyboardButton button8 = new KeyboardButton("Обратиться к кинологу");
-        KeyboardButton button9 = new KeyboardButton("Причины для отказа усыновления пса");
+        KeyboardButton button9 = new KeyboardButton("Причины для отказа усыновления");
         KeyboardButton button10 = new KeyboardButton("Оставить контакты для связи");
-        KeyboardButton button11 = new KeyboardButton("Позвать волонтера-Собачий приют");
+        KeyboardButton button11 = new KeyboardButton("Позвать волонтера");
         KeyboardButton button12 = new KeyboardButton("Вернуться в главное меню");
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);
@@ -155,15 +155,15 @@ public class KeyBoardService {
      */
 
     public SendMessage howTakeCatKeyboard(Update update) {
-        KeyboardButton button1 = new KeyboardButton("Знакомство с кошкой");
-        KeyboardButton button2 = new KeyboardButton("Документы для усыновления кошки");
+        KeyboardButton button1 = new KeyboardButton("Знакомство с животным");
+        KeyboardButton button2 = new KeyboardButton("Документы для усыновления");
         KeyboardButton button3 = new KeyboardButton("Транспортировка кошки");
-        KeyboardButton button4 = new KeyboardButton("Готовим дом для взрослого кота/кошки");//todo вынести в отдельную клавиатуру дом для кота и котенка?
+        KeyboardButton button4 = new KeyboardButton("Готовим дом для взрослой кошки");//todo вынести в отдельную клавиатуру дом для кота и котенка?
         KeyboardButton button5 = new KeyboardButton("Готовим дом для котенка");
         KeyboardButton button6 = new KeyboardButton("Готовим дом для кошки-инвалида");
-        KeyboardButton button7 = new KeyboardButton("Причины для отказа усыновления кошки");
+        KeyboardButton button7 = new KeyboardButton("Причины для отказа усыновления");
         KeyboardButton button8 = new KeyboardButton("Оставить контакты для связи");
-        KeyboardButton button9 = new KeyboardButton("Позвать волонтера-Кошачий приют");
+        KeyboardButton button9 = new KeyboardButton("Позвать волонтера");
         KeyboardButton button12 = new KeyboardButton("Вернуться в главное меню");
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);
@@ -172,7 +172,7 @@ public class KeyBoardService {
         replyKeyboardMarkup.addRow(button7, button8);
         replyKeyboardMarkup.addRow(button9);
         replyKeyboardMarkup.addRow(button12);
-        SendMessage message = new SendMessage(update.message().chat().id(), "Все что нужно знать о том, как взять собаку");
+        SendMessage message = new SendMessage(update.message().chat().id(), "Все что нужно знать о том, как взять кошку");
         return message.replyMarkup(replyKeyboardMarkup);
     }
 //todo пишу - Миленьков А. вынести в новый сервис AnswerComandService
@@ -195,10 +195,9 @@ public class KeyBoardService {
         SendMessage messageToVolonteer = new SendMessage(optionalVolunteer.get().getChatId(), "@" + update.message().chat().username() + " ожидает Вашего сообщения");
         SendMessage messageToUser = new SendMessage(update.message().chat().id(), "Ожидайте, с Вами свяжется волонтер");
         return List.of(messageToUser, messageToVolonteer);
-
     }
 
-
+//todo
     /**
      * Метод формирует клавиатуру для меню назад
      */

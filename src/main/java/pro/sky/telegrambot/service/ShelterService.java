@@ -41,7 +41,7 @@ public class ShelterService {
         return shelterRepository.save(entity);
     }
     public Shelter createShelter (String description,String address,String timing,String contactsSecurity,String safety,String animalType) {
-        Shelter entity = new Shelter(description, address,  timing, contactsSecurity, safety, animalType);
+        Shelter entity = new Shelter(description, address,  timing, contactsSecurity, safety, animalType.toLowerCase());
         log.debug("В БД записывается, entity={}",entity);
         return shelterRepository.save(entity);
     }
