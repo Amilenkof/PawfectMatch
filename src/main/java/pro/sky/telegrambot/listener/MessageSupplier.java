@@ -76,8 +76,14 @@ public class MessageSupplier {
                 messageList.add(answerProducer.getSchema(update, currentAnimal));
                 return messageList;
             }
-            case ("О приюте") -> {
+            case ("Инфо о приюте") -> {
                 messageList.add(answerProducer.getInfoAboutShelter(update, currentAnimal));
+                return messageList;
+            }
+            case ("О приюте") -> {
+                if (currentAnimal.equals(ANIMAL_DOG))
+                    messageList.add(keyBoardService.aboutCatShelterKeyboard(update));
+                else messageList.add(keyBoardService.aboutDogShelterKeyboard(update));
                 return messageList;
             }
             case ("Контактные данные охраны приюта") -> {
@@ -89,6 +95,7 @@ public class MessageSupplier {
                 return messageList;
             }
         }
+
         SendMessage recommendation = answerProducer.findRecommendation(update, command, currentAnimal);
 
         log.debug("Кейсы не выбраны, метод зашел в дефолтный блок");

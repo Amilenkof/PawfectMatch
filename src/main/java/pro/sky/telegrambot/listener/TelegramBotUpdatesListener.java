@@ -56,13 +56,6 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
             AbstractSendRequest<?> abstractSendRequest = messages.get(0);
             boolean multipart = abstractSendRequest.isMultipart();
             System.out.println(multipart);
-//
-//
-//            byte[] data = schemaService.findByShelter_id(1L).get().getData();
-//            AbstractSendRequest<SendPhoto> cat = new SendPhoto(update.message().chat().id(), data);
-//            System.out.println("cat.isMultipart() = " + cat.isMultipart());
-//            telegramBot.execute(cat);
-
             if (messages.size() > 0) {
                 log.info("Метод TelegramBotUpdatesListener.process отправил клиенту {} сообщение/я", messages.size());
             } else {
