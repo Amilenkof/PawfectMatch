@@ -72,6 +72,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         }
         Shelter shelter = shelterService.findShelterByAnimalType(animalType).get();
         Optional<Schema> optionalSchema = schemaService.findByShelter_id(shelter.getId());
+        if (optionalSchema.isEmpty()) return new SendMessage(chatId, "Извините, схема проезда не найдена");
         byte[] data = optionalSchema.get().getData();
         log.debug("Все ок,направляем схему клиенту");
         return new SendPhoto(chatId, data);
