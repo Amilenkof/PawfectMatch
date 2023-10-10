@@ -52,10 +52,6 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
             messages.forEach(m-> log.info("message = {}",m.toString()));
             messages.forEach(telegramBot::execute);
 
-
-            AbstractSendRequest<?> abstractSendRequest = messages.get(0);
-            boolean multipart = abstractSendRequest.isMultipart();
-            System.out.println(multipart);
             if (messages.size() > 0) {
                 log.info("Метод TelegramBotUpdatesListener.process отправил клиенту {} сообщение/я", messages.size());
             } else {

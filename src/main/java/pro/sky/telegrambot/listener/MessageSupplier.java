@@ -5,16 +5,11 @@ import com.pengrad.telegrambot.request.AbstractSendRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pro.sky.telegrambot.configuration.AnimalTypes;
-import pro.sky.telegrambot.model.Shelter;
-import pro.sky.telegrambot.repository.SchemaRepository;
 import pro.sky.telegrambot.service.AnswerProducer;
-import pro.sky.telegrambot.service.ShelterService;
 import pro.sky.telegrambot.service.keyboards.KeyBoardService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Класс который принимает Update, по нему подбирает клавиатуру,
@@ -22,7 +17,7 @@ import java.util.Optional;
  */
 
 @Service
-@Slf4j
+@Slf4j //todo не работает в этом классе
 public class MessageSupplier {
     private final KeyBoardService keyBoardService;
 
@@ -31,6 +26,7 @@ public class MessageSupplier {
     private final String ANIMAL_CAT = "cat";
     private final String ANIMAL_DOG = "dog";
     private String currentAnimal = "";
+    private boolean isFeedback;
 
 
     public MessageSupplier(KeyBoardService keyBoardService, AnswerProducer answerProducer) {
@@ -94,10 +90,19 @@ public class MessageSupplier {
                 messageList.add(answerProducer.getSafetyByShelter(update, currentAnimal));
                 return messageList;
             }
+            case ("Оставить контакты для связи") -> {
+                isFeedback = true;
+                System.out.println("isFeedback = " + isFeedback);
+                log.debug("isFeedback = {}", isFeedback);
+                messageList.add(answerProducer.sendFeedbackForm(update));
+                return messageList;
+            }
         }
-
+        if (isFeedback) {
+            isFeedback = false;
+            return List.of(answerProducer.addFeedback(update));
+        }
         SendMessage recommendation = answerProducer.findRecommendation(update, command, currentAnimal);
-
         log.debug("Кейсы не выбраны, метод зашел в дефолтный блок");
         return List.of(recommendation);//todo возможно стоит изменить варианты ответа
     }

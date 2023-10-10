@@ -1,7 +1,38 @@
 package pro.sky.telegrambot;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Runner {
     public static void main(String[] args) {
-        String s = "<div style=\"position:relative;overflow:hidden;\"><a href=\"https://yandex.ru/maps/org/tinkoff/88978754366/?utm_medium=mapframe&utm_source=maps\" style=\"color:#eee;font-size:12px;position:absolute;top:0px;\">Тинькофф</a><a href=\"https://yandex.ru/maps/51/samara/category/atm/184105402/?utm_medium=mapframe&utm_source=maps\" style=\"color:#eee;font-size:12px;position:absolute;top:14px;\">Банкомат в Самаре</a><iframe src=\"https://yandex.ru/map-widget/v1/?indoorLevel=1&ll=50.123424%2C53.187195&mode=poi&poi%5Bpoint%5D=50.126232%2C53.186729&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D88978754366&z=16.88\" width=\"560\" height=\"400\" frameborder=\"1\" allowfullscreen=\"true\" style=\"position:relative;\"></iframe></div>";
-    }
-}
+
+//        Pattern pattern = Pattern.compile("^(.*?),(.*?),(.*?),(.*?)$");
+//        String s = "Иванов,Иван,mail@mail.ru,+79271234567";
+//        Matcher matcher = pattern.matcher(s);
+//        String group1 = matcher.group(1);
+//        String group2 = matcher.group(2);
+//        String group3 = matcher.group(3);
+//        String group4 = matcher.group(4);
+//
+//        System.out.println("group1 = " + group1);
+//        System.out.println("group2 = " + group2);
+//        System.out.println("group3 = " + group3);
+//        System.out.println("group4 = " + group4);
+
+        String message = "Иванов,Иван,mail@mail.ru,+79271234567";
+        String regex = "^(.*?),(.*?),(.*?),(.*?)$";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(message);
+
+        if (matcher.find()) {
+            String lastName = matcher.group(1);
+            String firstName = matcher.group(2);
+            String email = matcher.group(3);
+            String phoneNumber = matcher.group(4);
+
+            System.out.println("Last Name: " + lastName);
+            System.out.println("First Name: " + firstName);
+            System.out.println("Email: " + email);
+            System.out.println("Phone Number: " + phoneNumber);
+    }}}

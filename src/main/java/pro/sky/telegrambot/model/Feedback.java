@@ -23,4 +23,11 @@ public class Feedback {
     private String lastName;
 
     private String phone;
+
+    public Feedback(String firstName, String email, String lastName, String phone) {
+        this.firstName = firstName;
+        this.email = email;
+        this.lastName = lastName;
+        this.phone = phone;
+    }
 }

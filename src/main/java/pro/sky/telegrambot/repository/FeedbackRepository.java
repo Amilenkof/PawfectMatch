@@ -6,4 +6,6 @@ import pro.sky.telegrambot.model.Feedback;
 
 @Repository
 public interface FeedbackRepository extends JpaRepository <Feedback,Long> {
+
+
 }
