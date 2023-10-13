@@ -5,14 +5,19 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.AbstractSendRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.model.Feedback;
 import pro.sky.telegrambot.model.Report;
 import pro.sky.telegrambot.model.Schema;
 import pro.sky.telegrambot.model.Shelter;
+import pro.sky.telegrambot.repository.SchemaRepository;
 
-import java.util.List;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 
 /**
@@ -26,6 +31,8 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     private final RecommendationService recommendationService;
     private final FeedbackService feedbackService;
     private final ReportService reportService;
+    @Autowired
+    SchemaRepository repository;
 
     public AnswerProducer(SchemaService schemaService, ShelterService shelterService, RecommendationService recommendationService, FeedbackService feedbackService, ReportService reportService) {
         this.schemaService = schemaService;
@@ -178,16 +185,25 @@ public class AnswerProducer<T extends AbstractSendRequest> {
 
     /**
      * Метод отправляет клиенту форму для отправки отчета о животном для дальнейшей связи с ним
-     * @param  Update update -данные от пользователя
-     * @return  AbstractSendRequest<? extends AbstractSendRequest<?>>
+     *
+     * @param Update update -данные от пользователя
+     * @return AbstractSendRequest<? extends AbstractSendRequest < ?>>
      */
     public AbstractSendRequest<? extends AbstractSendRequest<?>> sendReportForm(Update update) {
         log.debug("Вызван метод AnswerProducer.sendReportForm");
         Report testReport = reportService.getTestReport();
-//        byte[] photo = testReport.getPhoto();
-        byte[] data = schemaService.findByShelter_id(1L).get().getData();//todo
+        byte[] photo = testReport.getPhoto();//верный код
+
+
+
+//        byte[] data = schemaService.findByShelter_id(1L).get().getData();//todo временная заглушка,пока картинку дергаем из схем проезда- тк туда легко добавить
         String reportCaption = String.format("Просим прислать отчет о Вашем питомце как в форме ниже: \n1-%s\n2-%s\n3-%s", testReport.getFood(), testReport.getHealth(), testReport.getBehaviour());
-        SendPhoto sendPhoto = new SendPhoto(update.message().chat().id(), data).caption(reportCaption);
+        SendPhoto sendPhoto = new SendPhoto(update.message().chat().id(), photo).caption(reportCaption);
         return sendPhoto;
     }
+
 }
+
+
+
+
