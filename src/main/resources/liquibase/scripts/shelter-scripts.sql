@@ -14,4 +14,15 @@ CREATE TABLE shelter
     animal_type       varchar(100) not null
 );
 
+--changeset aMilenkov:2
+INSERT INTO shelter (description, address, timing, contacts_security, safety, animal_type)
+VALUES ('Test',
+        'Test',
+        'Test',
+        'Test',
+        'Test',
+        'Test');
+
+
+
 

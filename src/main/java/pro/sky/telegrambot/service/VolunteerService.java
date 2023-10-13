@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pro.sky.telegrambot.exceptions.VolunteerListIsEmpty;
-import pro.sky.telegrambot.model.Question;
 import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.model.Volunteer;
 import pro.sky.telegrambot.repository.ShelterRepository;
@@ -24,7 +23,7 @@ public class VolunteerService {
         this.volunteerRepository = volunteerRepository;
         this.shelterRepository = shelterRepository;
     }
-//todo пишу - Миленьков А.
+
 
     /**
      * Метод получает волонтера из БД

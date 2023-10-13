@@ -13,3 +13,11 @@ CREATE TABLE animal
     status     boolean     not null,
     FOREIGN KEY (shelter_id) REFERENCES shelter (id)
 );
+--changeset aMilenkov:2
+INSERT INTO animal (type, name, is_sick, is_little, shelter_id, status)
+VALUES ('TestType',
+        'TestName',
+        'false',
+        'false',
+        1,
+        'false');

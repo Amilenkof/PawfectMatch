@@ -11,3 +11,10 @@ CREATE TABLE volunteer
     shelter_id bigint       not null,
     FOREIGN KEY (shelter_id) REFERENCES shelter (id)
 );
+--changeset aMilenkov:2
+INSERT INTO volunteer (first_name, last_name, chat_id, shelter_id)
+VALUES ('Test',
+        'Test',
+        1,
+        1);
+

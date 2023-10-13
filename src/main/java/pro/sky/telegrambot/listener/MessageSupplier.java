@@ -1,5 +1,6 @@
 package pro.sky.telegrambot.listener;
 
+import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.AbstractSendRequest;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -44,6 +45,11 @@ public class MessageSupplier {
         String command = update.message().text();
         log.debug("Получена команда = {}", command);
         List<AbstractSendRequest<?>> messageList = new ArrayList<>();
+        PhotoSize[] photo = update.message().photo();
+        if (photo != null) {
+            //todo пишем логику получения репортов от клиента
+        }
+
         switch (command) {
             case ("/start"), ("Вернуться в главное меню") -> {
                 messageList.add(keyBoardService.mainMenuKeyboard(update));
@@ -82,6 +88,10 @@ public class MessageSupplier {
                 else messageList.add(keyBoardService.aboutDogShelterKeyboard(update));
                 return messageList;
             }
+            case ("Отправить отчет") -> {
+                messageList.add(answerProducer.sendReportForm(update));
+                return messageList;
+            }
             case ("Контактные данные охраны приюта") -> {
                 messageList.add(answerProducer.getContactsSecurityShelter(update, currentAnimal));
                 return messageList;
@@ -97,6 +107,7 @@ public class MessageSupplier {
                 messageList.add(answerProducer.sendFeedbackForm(update));
                 return messageList;
             }
+
         }
         if (isFeedback) {
             isFeedback = false;

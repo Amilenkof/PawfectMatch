@@ -20,7 +20,7 @@ public class ShelterMapper {
 /**Метод преобразует dtoIn сущность в Entity
  * Params SHELTER DTOIn
  * RETURN SHELTER shelter
- * {@See не заполняет поля Long Id,List<Volunteer> volunteer;}*/
+ * {@See не заполняет поля Long Id, Users user;;}*/
 
     public Shelter toEntity (ShelterDTOIN dtoIn) {
       return   new Shelter(dtoIn.description(),

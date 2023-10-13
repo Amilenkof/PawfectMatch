@@ -14,3 +14,12 @@ CREATE TABLE users
     animal_id        bigint       not null,
     FOREIGN KEY (animal_id) REFERENCES animal (id)
 );
+--changeset aMilenkov:2
+INSERT INTO users (chat_id, first_name, last_name, email, phone,duration_counter, animal_id)
+VALUES (1,
+        'TestName',
+        'TestLastName',
+        'TestEmail',
+        'TestPhone',
+        1,
+        1);

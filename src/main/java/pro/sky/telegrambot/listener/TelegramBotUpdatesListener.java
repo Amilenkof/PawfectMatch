@@ -49,8 +49,9 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
         updates.forEach(update -> {
             log.info("Processing update: {}", update);
             var messages = messageSupplier.executeResponse(update);
-            messages.forEach(m-> log.info("message = {}",m.toString()));
-            messages.forEach(telegramBot::execute);
+            messages.stream()
+                    .peek(m -> log.info("message = {}", m.toString()))
+                    .forEach(telegramBot::execute);
 
             if (messages.size() > 0) {
                 log.info("Метод TelegramBotUpdatesListener.process отправил клиенту {} сообщение/я", messages.size());

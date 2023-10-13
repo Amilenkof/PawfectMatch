@@ -32,11 +32,7 @@ public class KeyBoardService {
         this.volunteerService = volunteerService;
         this.shelterService = shelterService;
     }
-    //todo возможно стоит вот так собрать в мапу все клавиатуры
-//    @PostConstruct
-//    public void createKeyboards(){
-//        HashMap<String, SendMessage> keyboards = new HashMap<>();
-//    }
+
 
     /**
      * Метод формирует клавиатуру для главного меню
@@ -56,7 +52,7 @@ public class KeyBoardService {
     public SendMessage dogShelterKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("О приюте");
         KeyboardButton button2 = new KeyboardButton("Как взять животное");
-        KeyboardButton button3 = new KeyboardButton("Отчет о собаке");
+        KeyboardButton button3 = new KeyboardButton("Отправить отчет");
         KeyboardButton button4 = new KeyboardButton("Позвать волонтера");
         KeyboardButton button5 = new KeyboardButton("Вернуться в главное меню");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);
@@ -73,7 +69,7 @@ public class KeyBoardService {
     public SendMessage catShelterKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("О приюте");
         KeyboardButton button2 = new KeyboardButton("Как взять животное");
-        KeyboardButton button3 = new KeyboardButton("Отчет о кошке");
+        KeyboardButton button3 = new KeyboardButton("Отправить отчет");
         KeyboardButton button4 = new KeyboardButton("Позвать волонтера");
         KeyboardButton button5 = new KeyboardButton("Вернуться в главное меню");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);

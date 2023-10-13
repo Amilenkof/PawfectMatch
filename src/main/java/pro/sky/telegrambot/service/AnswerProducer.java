@@ -8,10 +8,11 @@ import com.pengrad.telegrambot.request.SendPhoto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.model.Feedback;
+import pro.sky.telegrambot.model.Report;
 import pro.sky.telegrambot.model.Schema;
 import pro.sky.telegrambot.model.Shelter;
-import pro.sky.telegrambot.repository.FeedbackRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,12 +25,14 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     private final ShelterService shelterService;
     private final RecommendationService recommendationService;
     private final FeedbackService feedbackService;
+    private final ReportService reportService;
 
-    public AnswerProducer(SchemaService schemaService, ShelterService shelterService, RecommendationService recommendationService, FeedbackService feedbackService) {
+    public AnswerProducer(SchemaService schemaService, ShelterService shelterService, RecommendationService recommendationService, FeedbackService feedbackService, ReportService reportService) {
         this.schemaService = schemaService;
         this.shelterService = shelterService;
         this.recommendationService = recommendationService;
         this.feedbackService = feedbackService;
+        this.reportService = reportService;
     }
 
 
@@ -39,7 +42,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
      * Return = boolean
      */
     public boolean checkShelter(String animalType) {
-        log.debug("Вызван метод AnswerProducer.checkShelter , animalType={}",animalType);
+        log.debug("Вызван метод AnswerProducer.checkShelter , animalType={}", animalType);
         Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType(animalType);
         if (optionalShelter.isEmpty()) {
             log.debug("Приют не найден, клиенту будет направлен wrongMessage");
@@ -53,7 +56,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
      * Return = boolean
      */
     public boolean checkSchema(String animalType) {
-        log.debug("Вызван метод AnswerProducer.checkSchema , animalType={}",animalType);
+        log.debug("Вызван метод AnswerProducer.checkSchema , animalType={}", animalType);
         Shelter shelter = shelterService.findShelterByAnimalType(animalType).get();
         Optional<Schema> optionalSchema = schemaService.findByShelter_id(shelter.getId());
         if (optionalSchema.isEmpty()) {
@@ -69,7 +72,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
      * Return = SendPhoto- если схема найдена, возвращаем схему
      */
     public AbstractSendRequest<? extends AbstractSendRequest<?>> getSchema(Update update, String animalType) {
-        log.debug("Вызван метод AnswerProducer.getSchema,animalType={}",  animalType);
+        log.debug("Вызван метод AnswerProducer.getSchema,animalType={}", animalType);
         Long chatId = update.message().chat().id();
         if (checkShelter(animalType) || checkSchema(animalType)) {//todo не нравится, проверки есть и потом приходится опять то же самое делать
             return new SendMessage(chatId, "Извините, схема проезда не найдена");
@@ -104,7 +107,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
      * Return = SendMessage -c описанием приюта если он найден, или стандарная фраза, что приют не найден(вместо Exception)
      */
     public SendMessage getContactsSecurityShelter(Update update, String animalType) {
-        log.debug("Вызван метод AnswerProducer.getContactsSecurityShelter, animalType={}",  animalType);
+        log.debug("Вызван метод AnswerProducer.getContactsSecurityShelter, animalType={}", animalType);
         Long chatId = update.message().chat().id();
         if (checkShelter(animalType)) {
             return new SendMessage(chatId, "Извините, указанный приют не найден");
@@ -150,22 +153,41 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         Long chatId = update.message().chat().id();
         return new SendMessage(chatId, "Пожалуйста пришлите Ваши контакты в форме:Иванов,Иван,mail@mail.ru,+79271234567");
     }
-/**Метод формирует ответ пользователю на попытку оставить обратную связь
- * @param Update
- * @return  new SendMessage*/
+
+    /**
+     * Метод формирует ответ пользователю на попытку оставить обратную связь
+     *
+     * @param Update
+     * @return new SendMessage
+     */
 
     public SendMessage addFeedback(Update update) {
         log.debug("Вызван метод AnswerProducer.addFeedback");
         Long chatId = update.message().chat().id();
         SendMessage wrongMessage = new SendMessage(chatId, "Не удалось добавить сообщение, попробуйте еще раз," +
-                                                      " обратите внимание на пробелы и запятые в указанной форме");
+                                                           " обратите внимание на пробелы и запятые в указанной форме");
         Optional<Feedback> feedback = Optional.empty();
         try {
-           feedback = feedbackService.addFeedback(update.message().text());
-        }catch (IllegalStateException | IndexOutOfBoundsException e){
+            feedback = feedbackService.addFeedback(update.message().text());
+        } catch (IllegalStateException | IndexOutOfBoundsException e) {
             return wrongMessage;
         }
         return feedback.isEmpty() ? wrongMessage :
                 new SendMessage(chatId, "Ваше сообщение передано волонтерам, ожидайте ответа");
+    }
+
+    /**
+     * Метод отправляет клиенту форму для отправки отчета о животном для дальнейшей связи с ним
+     * @param  Update update -данные от пользователя
+     * @return  AbstractSendRequest<? extends AbstractSendRequest<?>>
+     */
+    public AbstractSendRequest<? extends AbstractSendRequest<?>> sendReportForm(Update update) {
+        log.debug("Вызван метод AnswerProducer.sendReportForm");
+        Report testReport = reportService.getTestReport();
+//        byte[] photo = testReport.getPhoto();
+        byte[] data = schemaService.findByShelter_id(1L).get().getData();//todo
+        String reportCaption = String.format("Просим прислать отчет о Вашем питомце как в форме ниже: \n1-%s\n2-%s\n3-%s", testReport.getFood(), testReport.getHealth(), testReport.getBehaviour());
+        SendPhoto sendPhoto = new SendPhoto(update.message().chat().id(), data).caption(reportCaption);
+        return sendPhoto;
     }
 }

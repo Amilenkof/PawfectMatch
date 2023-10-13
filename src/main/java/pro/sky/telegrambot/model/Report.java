@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
+import lombok.RequiredArgsConstructor;
 
 
 @Entity
@@ -14,6 +15,7 @@ import jakarta.persistence.*;
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
     private byte[] photo;
@@ -25,4 +27,6 @@ public class Report {
     private String behaviour;
     @OneToOne
     private Users user;
+
+
 }
