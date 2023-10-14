@@ -7,6 +7,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.exceptions.UsersNotFoundException;
 import pro.sky.telegrambot.model.Feedback;
@@ -186,13 +187,12 @@ public class AnswerProducer<T extends AbstractSendRequest> {
      * @param Update update -данные от пользователя
      * @return AbstractSendRequest<? extends AbstractSendRequest < ?>>
      */
-    public AbstractSendRequest<? extends AbstractSendRequest<?>> sendReportForm(Update update) {
+    public SendPhoto sendReportForm(Update update) {
         log.debug("Вызван метод AnswerProducer.sendReportForm");
         Report testReport = reportService.getTestReport();
         byte[] photo = testReport.getPhoto();
         String reportCaption = String.format("Просим прислать отчет о Вашем питомце как в форме ниже: \n1-%s\n2-%s\n3-%s\n \n  Отправьте ваш отчет следующим сообщением", testReport.getFood(), testReport.getHealth(), testReport.getBehaviour());
-        SendPhoto sendPhoto = new SendPhoto(update.message().chat().id(), photo).caption(reportCaption);
-        return sendPhoto;
+        return new SendPhoto(update.message().chat().id(), photo).caption(reportCaption);
     }
 
     /**
@@ -208,8 +208,8 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         Optional<Report> report = null;
         try {
             report = reportService.addReport(update);
-        } catch (UsersNotFoundException e) {
-            log.error("Не удалось найти указанного пользователя");
+        } catch (UsersNotFoundException | DataIntegrityViolationException e) {
+            log.error("Возникла ошибка при добавлении отчета клиента");
             return wrongMessage;
         }
         if (report.isPresent()) {

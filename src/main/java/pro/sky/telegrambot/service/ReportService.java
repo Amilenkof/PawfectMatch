@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,7 +58,7 @@ public class ReportService {
         } catch (IOException e) {
             throw new RuntimeException("Ошибка чтения файла, проверьте путь = " + defaultReportPicture);
         }
-        Report report = new Report(1L, getbytes, "Мясо, корм для собак VidalSosun,овощи", "Животное чувствует себя хорошо", "Животное полно сил и энергии", null);
+        Report report = new Report(1L, getbytes, "Мясо, корм для собак VidalSosun,овощи", "Животное чувствует себя хорошо", "Животное полно сил и энергии", LocalDateTime.now(), null);
         addReportToDB(report);
     }
 
@@ -84,7 +86,7 @@ public class ReportService {
      * @return Report если в базе есть тестовый отчет, если нет(по какимто причинам- отправляем пустой Report)
      */
     public Report getTestReport() {
-        return reportRepository.findById(1L).orElse(new Report());
+        return reportRepository.findById(1L).get();
     }
 
     /**
@@ -107,7 +109,7 @@ public class ReportService {
                 String food = matcher.group(1);
                 String health = matcher.group(2);
                 String behavior = matcher.group(3);
-                Report report = new Report(getPhoto(update), food, health, behavior, users);
+                Report report = new Report(getPhoto(update), food, health, behavior,LocalDateTime.now(), users);
                 addReportToDB(report);
                 return Optional.of(report);
             }
@@ -140,4 +142,5 @@ public class ReportService {
         GetFile getFile = new GetFile(photoSize.fileId());
         return telegramBot.getFileContent(telegramBot.execute(getFile).file());
     }
+
 }

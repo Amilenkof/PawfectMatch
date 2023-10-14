@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 @Entity
 @Data
@@ -25,14 +28,16 @@ public class Report {
     private String health;
 
     private String behaviour;
+    private LocalDateTime dateReport;
     @OneToOne
     private Users user;
 
-    public Report(byte[] photo, String food, String health, String behaviour, Users user) {
+    public Report(byte[] photo, String food, String health, String behaviour,LocalDateTime dateReport, Users user) {
         this.photo = photo;
         this.food = food;
         this.health = health;
         this.behaviour = behaviour;
+        this.dateReport = dateReport;
         this.user = user;
     }
 }
