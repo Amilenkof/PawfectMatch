@@ -6,17 +6,16 @@ import com.pengrad.telegrambot.request.AbstractSendRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.exceptions.MessageInReportUncorrectException;
+import pro.sky.telegrambot.exceptions.PhotoInReportNotFoundException;
 import pro.sky.telegrambot.exceptions.UsersNotFoundException;
 import pro.sky.telegrambot.model.Feedback;
 import pro.sky.telegrambot.model.Report;
 import pro.sky.telegrambot.model.Schema;
 import pro.sky.telegrambot.model.Shelter;
-import pro.sky.telegrambot.repository.SchemaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,6 +29,12 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     private final RecommendationService recommendationService;
     private final FeedbackService feedbackService;
     private final ReportService reportService;
+    private final String MESSAGE_UNCORRECT_CAUSE = "Пожалуйста,заполните отчет в соответствии с формой.В отчете должны быть указаны:\n рацион питания, " +
+                                                   "\nобщее самочувствие,\nизменение в поведении. \nКаждый пункт с новой строки, вся" +
+                                                   " информация в комментарии к фото питомца";
+    private final String PHOTO_UNCORRECT_CAUSE = "Пожалуйста,заполните отчет в соответствии с формой.Не забудьте прикрепить " +
+                                                 "фото питомца";
+    private final String WRONG_REPORT = "Не удается зарегистрировать Ваш отчет, обратитесь к волонтеру через меню \"Позвать Волонтера\"";
 
 
     public AnswerProducer(SchemaService schemaService, ShelterService shelterService, RecommendationService recommendationService, FeedbackService feedbackService, ReportService reportService) {
@@ -191,7 +196,11 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         log.debug("Вызван метод AnswerProducer.sendReportForm");
         Report testReport = reportService.getTestReport();
         byte[] photo = testReport.getPhoto();
-        String reportCaption = String.format("Просим прислать отчет о Вашем питомце как в форме ниже: \n1-%s\n2-%s\n3-%s\n \n  Отправьте ваш отчет следующим сообщением", testReport.getFood(), testReport.getHealth(), testReport.getBehaviour());
+        String reportCaption = String.format("Просим прислать отчет о Вашем питомце как в форме ниже: \n%s\n%s\n%s\n \n" +
+                                             " Каждый пункт с новой строки, обязательно пришлите фотографию питомца",
+                testReport.getFood(),
+                testReport.getHealth(),
+                testReport.getBehaviour());
         return new SendPhoto(update.message().chat().id(), photo).caption(reportCaption);
     }
 
@@ -204,25 +213,23 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     public SendMessage addReport(Update update) {
         log.debug("Вызван метод AnswerProducer.addReport");
         Long chatId = update.message().chat().id();
-        SendMessage wrongMessage = new SendMessage(chatId, "Не удается зарегистрировать Ваш отчет, обратитесь к волонтеру через меню \"Позвать Волонтера\"");
-        Optional<Report> report = null;
+        if (update.message().photo() == null) {
+            return new SendMessage(chatId, PHOTO_UNCORRECT_CAUSE);
+        }
         try {
-            report = reportService.addReport(update);
+            reportService.addReport(update);
+            return new SendMessage(chatId, "Отчет получен");
         } catch (UsersNotFoundException | DataIntegrityViolationException e) {
             log.error("Возникла ошибка при добавлении отчета клиента");
-            return wrongMessage;
+            return new SendMessage(chatId, WRONG_REPORT);
+        } catch (MessageInReportUncorrectException e) {
+            return new SendMessage(chatId, MESSAGE_UNCORRECT_CAUSE);
         }
-        if (report.isPresent()) {
-            return new SendMessage(chatId, "Отчет получен");
-        }return wrongMessage;
+
+
     }
-/**Метод возвращает сообщение на не понятную сервису команду
- * @param update
- * @return List<SendMessage>*/
-    public SendMessage wrongAnswer(Update update) {
-        log.warn("Текстовая команда не распознана,клиенту будет направлен WrongMessage");
-        return  new SendMessage(update.message().chat().id(), "Не понял,дайте попробуем еще раз,вернитесь в главное меню");
-    }
+
+
 }
 
 

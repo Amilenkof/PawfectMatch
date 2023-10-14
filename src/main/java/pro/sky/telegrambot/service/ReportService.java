@@ -11,8 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.exceptions.MessageInReportUncorrectException;
+import pro.sky.telegrambot.exceptions.PhotoInReportNotFoundException;
 import pro.sky.telegrambot.exceptions.UsersNotFoundException;
-import pro.sky.telegrambot.listener.TelegramBotUpdatesListener;
 import pro.sky.telegrambot.model.Report;
 import pro.sky.telegrambot.model.Users;
 import pro.sky.telegrambot.repository.ReportRepository;
@@ -23,7 +24,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,7 +58,11 @@ public class ReportService {
         } catch (IOException e) {
             throw new RuntimeException("Ошибка чтения файла, проверьте путь = " + defaultReportPicture);
         }
-        Report report = new Report(1L, getbytes, "Мясо, корм для собак VidalSosun,овощи", "Животное чувствует себя хорошо", "Животное полно сил и энергии", LocalDateTime.now(), null);
+        Report report = new Report(1L, getbytes, "Опишите рацион питомца",
+                "Опишите самочувствие питомца",
+                "Опишите поведение питомца",
+                LocalDateTime.now(),
+                null);
         addReportToDB(report);
     }
 
@@ -94,27 +98,27 @@ public class ReportService {
      *
      * @param update
      * @return Optional<Report>
-     * @throws UsersNotFoundException если пользователь отправивший отчет отсутствует в БД
+     * @throws UsersNotFoundException если пользователь отправивший отчет отсутствует в БД,
+     *                                MessageInReportUncorrectException если пользователь передал не корректное сообщение
      */
 
-    public Optional<Report> addReport(Update update) {
+    public Report addReport(Update update) {
         log.debug("Вызван метод ReportService.addReport");
         Long chatId = update.message().chat().id();
         Optional<Users> optionalUser = usersService.findByChatId(chatId);
         Users users = optionalUser.orElseThrow(() -> new UsersNotFoundException("Пользователь с таким ChatID не обнаружен"));
         String text = update.message().caption();
-        if (text != null) {
-            Matcher matcher = pattern.matcher(text);
-            if (matcher.find()) {
-                String food = matcher.group(1);
-                String health = matcher.group(2);
-                String behavior = matcher.group(3);
-                Report report = new Report(getPhoto(update), food, health, behavior,LocalDateTime.now(), users);
-                addReportToDB(report);
-                return Optional.of(report);
-            }
+        if (text == null) throw new MessageInReportUncorrectException("В отчете отсутствует описание");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            String food = matcher.group(1);
+            String health = matcher.group(2);
+            String behavior = matcher.group(3);
+            Report report = new Report(getPhoto(update), food, health, behavior, LocalDateTime.now(), users);
+            addReportToDB(report);
+            return report;
         }
-        return Optional.empty();
+        throw new MessageInReportUncorrectException("Не удалось привести сообщение к виду регулярного выражения");
     }
 
     /**
@@ -134,6 +138,7 @@ public class ReportService {
      *
      * @param update
      * @return byte[]
+     * @throws PhotoInReportNotFoundException если не передана фотография животного в отчете
      */
     @SneakyThrows
     private byte[] getPhoto(Update update) {

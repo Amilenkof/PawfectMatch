@@ -55,8 +55,8 @@ public class SchemaController {
     /**
      * Есть есть попытка создать приют с типом животных, который уже заведен ранее этим методом ловим ошибку и возвращаем статус 406- NOT_ACCEPTABLE
      */
-    @ExceptionHandler(IOException.class)//todo Как заставить работать ? хочу вернуть строку в теле ответа
-    public ResponseEntity<String> handleException(HttpServletRequest request, IOException exception) {
+    @ExceptionHandler(ShelterNotFoundException.class)//todo Как заставить работать ? хочу вернуть строку в теле ответа
+    public ResponseEntity<String> handleException(HttpServletRequest request, ShelterNotFoundException exception) {
         return ResponseEntity.status(HttpStatusCode.valueOf(422)).build();
     }
 }
