@@ -5,19 +5,17 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.AbstractSendRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.exceptions.UsersNotFoundException;
 import pro.sky.telegrambot.model.Feedback;
 import pro.sky.telegrambot.model.Report;
 import pro.sky.telegrambot.model.Schema;
 import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.repository.SchemaRepository;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,8 +29,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     private final RecommendationService recommendationService;
     private final FeedbackService feedbackService;
     private final ReportService reportService;
-    @Autowired
-    SchemaRepository repository;
+
 
     public AnswerProducer(SchemaService schemaService, ShelterService shelterService, RecommendationService recommendationService, FeedbackService feedbackService, ReportService reportService) {
         this.schemaService = schemaService;
@@ -147,7 +144,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         log.debug("Вызван метод AnswerProducer.findRecommendation, animalType={}", animalType);
         Long chatId = update.message().chat().id();
         Optional<String> firstByTitle = recommendationService.getFirstByTitle(title, animalType);
-        return new SendMessage(chatId, firstByTitle.orElse("Не понял,дайте попробуем еще раз,вернитесь в главное меню"));
+        return new SendMessage(chatId, firstByTitle.orElse("Не понял,давайте попробуем еще раз,вернитесь в главное меню"));
     }
 
     /**
@@ -192,18 +189,40 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     public AbstractSendRequest<? extends AbstractSendRequest<?>> sendReportForm(Update update) {
         log.debug("Вызван метод AnswerProducer.sendReportForm");
         Report testReport = reportService.getTestReport();
-        byte[] photo = testReport.getPhoto();//верный код
-
-
-
-//        byte[] data = schemaService.findByShelter_id(1L).get().getData();//todo временная заглушка,пока картинку дергаем из схем проезда- тк туда легко добавить
-        String reportCaption = String.format("Просим прислать отчет о Вашем питомце как в форме ниже: \n1-%s\n2-%s\n3-%s", testReport.getFood(), testReport.getHealth(), testReport.getBehaviour());
+        byte[] photo = testReport.getPhoto();
+        String reportCaption = String.format("Просим прислать отчет о Вашем питомце как в форме ниже: \n1-%s\n2-%s\n3-%s\n \n  Отправьте ваш отчет следующим сообщением", testReport.getFood(), testReport.getHealth(), testReport.getBehaviour());
         SendPhoto sendPhoto = new SendPhoto(update.message().chat().id(), photo).caption(reportCaption);
         return sendPhoto;
     }
 
+    /**
+     * Метод получает сообщение клиента извлекает из него данные и создает в БД новый report- отчет о питомце
+     *
+     * @param update
+     * @return SendMessage
+     */
+    public SendMessage addReport(Update update) {
+        log.debug("Вызван метод AnswerProducer.addReport");
+        Long chatId = update.message().chat().id();
+        SendMessage wrongMessage = new SendMessage(chatId, "Не удается зарегистрировать Ваш отчет, обратитесь к волонтеру через меню \"Позвать Волонтера\"");
+        Optional<Report> report = null;
+        try {
+            report = reportService.addReport(update);
+        } catch (UsersNotFoundException e) {
+            log.error("Не удалось найти указанного пользователя");
+            return wrongMessage;
+        }
+        if (report.isPresent()) {
+            return new SendMessage(chatId, "Отчет получен");
+        }return wrongMessage;
+    }
+/**Метод возвращает сообщение на не понятную сервису команду
+ * @param update
+ * @return List<SendMessage>*/
+    public SendMessage wrongAnswer(Update update) {
+        log.warn("Текстовая команда не распознана,клиенту будет направлен WrongMessage");
+        return  new SendMessage(update.message().chat().id(), "Не понял,дайте попробуем еще раз,вернитесь в главное меню");
+    }
 }
-
-
 
 

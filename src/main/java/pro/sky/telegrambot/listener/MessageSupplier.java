@@ -1,6 +1,5 @@
 package pro.sky.telegrambot.listener;
 
-import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.AbstractSendRequest;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -18,7 +17,7 @@ import java.util.List;
  */
 
 @Service
-@Slf4j //todo не работает в этом классе
+@Slf4j
 public class MessageSupplier {
     private final KeyBoardService keyBoardService;
 
@@ -28,6 +27,7 @@ public class MessageSupplier {
     private final String ANIMAL_DOG = "dog";
     private String currentAnimal = "";
     private boolean isFeedback;
+    private boolean isReport;
 
 
     public MessageSupplier(KeyBoardService keyBoardService, AnswerProducer answerProducer) {
@@ -40,16 +40,37 @@ public class MessageSupplier {
      * PARAMS = Update update
      */
     public List<AbstractSendRequest<? extends AbstractSendRequest<?>>> executeResponse(Update update) {
-
         log.debug("Вызван метод executeResponse в классе MessageConsumer");
-        String command = update.message().text();
+        String command = update.message().text();//todo если переслать сообщение текст будет = null и приложуха ляжет..
         log.debug("Получена команда = {}", command);
-        List<AbstractSendRequest<?>> messageList = new ArrayList<>();
-        PhotoSize[] photo = update.message().photo();
-        if (photo != null) {
-            //todo пишем логику получения репортов от клиента
-        }
 
+//        if ((command != null || update.message().caption() != null) && !(isFeedback || isReport)) {
+//            return List.of(answerProducer.wrongAnswer(update));
+//        }
+        if (isFeedback) {
+            log.debug("Получен feedback");
+            isFeedback = false;
+            return List.of(answerProducer.addFeedback(update));
+        }
+        if (isReport) {
+            log.debug("Получен report");
+            isReport = false;
+            return List.of(answerProducer.addReport(update));
+        }
+        var answersForTextCommand = new ArrayList<>(messageForTextCommand(command, update));
+        if (!answersForTextCommand.isEmpty()){
+            return answersForTextCommand;
+        }
+        SendMessage recommendation = answerProducer.findRecommendation(update, command, currentAnimal);
+        log.debug("Кейсы не выбраны, метод зашел в дефолтный блок");
+        return List.of(recommendation);
+    }
+
+    public List<AbstractSendRequest<?>> messageForTextCommand(String command, Update update) {
+        if (command==null){
+            return new ArrayList<>();
+        }
+        List<AbstractSendRequest<?>> messageList = new ArrayList<>();
         switch (command) {
             case ("/start"), ("Вернуться в главное меню") -> {
                 messageList.add(keyBoardService.mainMenuKeyboard(update));
@@ -89,7 +110,9 @@ public class MessageSupplier {
                 return messageList;
             }
             case ("Отправить отчет") -> {
+                isReport = true;
                 messageList.add(answerProducer.sendReportForm(update));
+
                 return messageList;
             }
             case ("Контактные данные охраны приюта") -> {
@@ -109,13 +132,7 @@ public class MessageSupplier {
             }
 
         }
-        if (isFeedback) {
-            isFeedback = false;
-            return List.of(answerProducer.addFeedback(update));
-        }
-        SendMessage recommendation = answerProducer.findRecommendation(update, command, currentAnimal);
-        log.debug("Кейсы не выбраны, метод зашел в дефолтный блок");
-        return List.of(recommendation);//todo возможно стоит изменить варианты ответа
+        return messageList;
     }
 
 

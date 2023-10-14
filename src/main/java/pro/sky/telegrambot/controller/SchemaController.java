@@ -34,7 +34,7 @@ public class SchemaController {
  * 404- если переданный файл слишком большой
  * 422- если в процессе добавления в БД возникли проблемы
  * 200- если схема успешно добавлена в БД
- * 500- ошибка на стороне сервера*/
+ * 500- ошибка на стороне сервера*///PSQLException
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 
     public ResponseEntity<Schema> addSchema(@RequestBody MultipartFile file,

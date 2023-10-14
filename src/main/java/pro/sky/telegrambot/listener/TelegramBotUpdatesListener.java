@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.AbstractSendRequest;
 import com.pengrad.telegrambot.request.SendPhoto;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import java.util.List;
 @EnableTransactionManagement
 public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implements UpdatesListener {
     private final KeyBoardService keyBoardService;
-
+    @Getter
     private final TelegramBot telegramBot;
     private final MessageSupplier messageSupplier;
     private final ShelterService service;

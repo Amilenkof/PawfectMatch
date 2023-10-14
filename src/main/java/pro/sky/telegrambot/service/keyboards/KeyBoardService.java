@@ -178,8 +178,8 @@ public class KeyBoardService {
      * Генерирует сообщения пользователю и волонтеру<br>
      * Params=Update update - данные пользователя,
      * String AnimalType= тип животных в приюте,из которого будет вызван волонтер
-     Метод не выбрасывает ошибок, в случае обнаружения исключительных ситуаций, пользователю будет отправлен ответ
-     "Извините,сейчас нет доступных волонтеров"
+     * Метод не выбрасывает ошибок, в случае обнаружения исключительных ситуаций, пользователю будет отправлен ответ
+     * "Извините,сейчас нет доступных волонтеров"
      */
     public List<AbstractSendRequest<? extends AbstractSendRequest<?>>> callVolunteer(Update update, String animalType) {
         Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType(animalType);//Шелтеров не может не быть, тк мы забиваем кнопки только в меню где должен быть шелтер
@@ -194,6 +194,7 @@ public class KeyBoardService {
     }
 
 //todo
+
     /**
      * Метод формирует клавиатуру для меню назад
      */
@@ -204,5 +205,6 @@ public class KeyBoardService {
                 "");
         return message.replyMarkup(replyKeyboardMarkup);
     }
+
 
 }

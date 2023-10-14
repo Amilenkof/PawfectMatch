@@ -47,7 +47,7 @@ public class SchemaService {
      * билдит сущность, сохраняет ее в БД
      */
     public Schema addSchema(MultipartFile file, Long shelterId) throws IOException {
-        log.debug("Вызван метод SchemaService.addSchema, file, shelterId={}",shelterId);
+        log.debug("Вызван метод SchemaService.addSchema, file, shelterId={}", shelterId);
         Optional<Shelter> optionalShelter = shelterRepository.findById(shelterId);
         if (optionalShelter.isEmpty()) {
             log.debug("Не найден указанный приют");
@@ -60,10 +60,10 @@ public class SchemaService {
         try (BufferedInputStream is = new BufferedInputStream(file.getInputStream(), 1024);
              BufferedOutputStream os = new BufferedOutputStream(Files.newOutputStream(pathToFile, CREATE_NEW), 1024)) {
             long l = is.transferTo(os);
-            log.debug("Было загружено {} байт",l);
+            log.debug("Было загружено {} байт", l);
         }
         Schema schema = schemaRepository.findSchemaByShelter_Id(shelterId).orElse(new Schema());
-        log.debug("Получена с БД schema={}(hashcode)",schema.hashCode());
+        log.debug("Получена с БД schema={}(hashcode)", schema.hashCode());
         schema = new Schema().builder()
                 .filePath(pathToFile.toString())
                 .fileSize(file.getSize())
@@ -71,7 +71,7 @@ public class SchemaService {
                 .data(file.getBytes())
                 .mediaType(file.getContentType())
                 .build();
-        log.debug("В итоге сформирована schema={}(hashcode)",schema.hashCode());
+        log.debug("В итоге сформирована schema={}(hashcode)", schema.hashCode());
         return schemaRepository.save(schema);
 
 
@@ -86,16 +86,21 @@ public class SchemaService {
         return s.substring(s.lastIndexOf(".") + 1);
     }
 
-    /**Метод находит Schema в БД по ID
+    /**
+     * Метод находит Schema в БД по ID
      * Params Long id - id схемы проезда
-     * Return Optional<Schema>*/
+     * Return Optional<Schema>
+     */
     public Optional<Schema> findById(Long id) {
         return schemaRepository.findById(id);
     }
-    /**Метод находит Schema в БД по ShelterID
+
+    /**
+     * Метод находит Schema в БД по ShelterID
      * Params Long id - id приюта
-     * Return Optional<Schema>*/
-    public Optional<Schema> findByShelter_id(Long shelterId){
+     * Return Optional<Schema>
+     */
+    public Optional<Schema> findByShelter_id(Long shelterId) {
         return schemaRepository.findSchemaByShelter_Id(shelterId);
     }
 }

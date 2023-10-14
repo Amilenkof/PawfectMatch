@@ -28,5 +28,11 @@ public class Report {
     @OneToOne
     private Users user;
 
-
+    public Report(byte[] photo, String food, String health, String behaviour, Users user) {
+        this.photo = photo;
+        this.food = food;
+        this.health = health;
+        this.behaviour = behaviour;
+        this.user = user;
+    }
 }
