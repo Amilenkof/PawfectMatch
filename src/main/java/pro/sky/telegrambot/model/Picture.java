@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 /**Класс описывает картинку-схему проезда к приюту*/
 @Entity
 @Data
-@Table(name="map")
+//@Table(name="map")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Schema {
+public class Picture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

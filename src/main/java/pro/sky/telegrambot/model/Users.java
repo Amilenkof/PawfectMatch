@@ -1,10 +1,7 @@
 package pro.sky.telegrambot.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import jakarta.persistence.*;
-import lombok.ToString;
 
 
 @Entity
@@ -30,7 +27,17 @@ public class Users {
 
     @OneToOne
     private Animal animal;
+    @Setter
+    @Getter
     private Long daysLostCounter;//колво дней когда пользователь не присылал отчеты
 
-
+    public Users(String firstName, String lastName, String email, String phone, Integer durationCounter, Animal animal, Long daysLostCounter) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.durationCounter = durationCounter;
+        this.animal = animal;
+        this.daysLostCounter = daysLostCounter;
+    }
 }

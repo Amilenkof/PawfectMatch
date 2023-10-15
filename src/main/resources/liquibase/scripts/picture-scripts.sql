@@ -2,7 +2,7 @@
 
 
 --changeset aMilenkov:1
-CREATE TABLE map
+CREATE TABLE picture
 (
     id         bigserial primary key,
     data       bytea        not null,

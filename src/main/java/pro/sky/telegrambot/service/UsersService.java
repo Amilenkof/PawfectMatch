@@ -1,9 +1,10 @@
 package pro.sky.telegrambot.service;
 
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pro.sky.telegrambot.exceptions.AnimalNotFoundException;
 import pro.sky.telegrambot.model.Users;
 import pro.sky.telegrambot.repository.UsersRepository;
 
@@ -13,9 +14,13 @@ import java.util.Optional;
 @Slf4j
 public class UsersService {
     private final UsersRepository usersRepository;
+    private final AnimalService animalService;
+    @org.springframework.beans.factory.annotation.Value("${duration.counter}")
+    private  int DURATION_COUNTER;
 
-    public UsersService(UsersRepository usersRepository) {
+    public UsersService(UsersRepository usersRepository, AnimalService animalService) {
         this.usersRepository = usersRepository;
+        this.animalService = animalService;
     }
 
     /**
@@ -31,4 +36,7 @@ public class UsersService {
 
     }
 
+    public Users addUsers(Long chatId, String firstName, String lastName, String email, String phone, Long animalID) throws AnimalNotFoundException  {
+            return new Users(firstName, lastName, email, phone, DURATION_COUNTER,animalService.findById(animalID), 0L);
+    }
 }

@@ -8,7 +8,7 @@ import pro.sky.telegrambot.model.Volunteer;
 import pro.sky.telegrambot.service.VolunteerService;
 
 import java.util.List;
-/**Класс для преобразования dto в entity - и обратно */
+
 @Service
 @Slf4j
 public class ShelterMapper {
@@ -17,10 +17,7 @@ public class ShelterMapper {
     public ShelterMapper(VolunteerService volunteerService) {
         this.volunteerService = volunteerService;
     }
-/**Метод преобразует dtoIn сущность в Entity
- * Params SHELTER DTOIn
- * RETURN SHELTER shelter
- * {@See не заполняет поля Long Id, Users user;;}*/
+
 
     public Shelter toEntity (ShelterDTOIN dtoIn) {
       return   new Shelter(dtoIn.description(),

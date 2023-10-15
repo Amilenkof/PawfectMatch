@@ -60,8 +60,8 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
-//    @Scheduled(cron = "0 0/1 * * * *")//каждую минуту
-    @Scheduled(cron = "0 0 21 * *?")//21 00 каждый день
+    @Scheduled(cron = "0 0/1 * * * *")//каждую минуту
+//    @Scheduled(cron = "0 0 21 * *?")//21 00 каждый день
     public void scheduledResponse() {
         List<SendPhoto> sendPhotos = sсhedulerService.sendCurrentReports();
         sendPhotos.forEach(telegramBot::execute);

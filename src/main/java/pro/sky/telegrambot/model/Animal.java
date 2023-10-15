@@ -1,5 +1,6 @@
 package pro.sky.telegrambot.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import jakarta.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
+
 public class Animal {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +27,13 @@ public class Animal {
 
         @ManyToOne(fetch = FetchType.LAZY)
         private Shelter shelter;
+
+        public Animal(String type, String name, boolean isSick, boolean isLittle, boolean status, Shelter shelter) {
+                this.type = type;
+                this.name = name;
+                this.isSick = isSick;
+                this.isLittle = isLittle;
+                this.status = status;
+                this.shelter = shelter;
+        }
 }

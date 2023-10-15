@@ -21,7 +21,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class AnswerProducer<T extends AbstractSendRequest> {
-    private final SchemaService schemaService;
+    private final PictureService pictureService;
     private final ShelterService shelterService;
     private final RecommendationService recommendationService;
     private final FeedbackService feedbackService;
@@ -35,8 +35,8 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     private final String WRONG_REPORT = "Не удается зарегистрировать Ваш отчет, обратитесь к волонтеру через меню \"Позвать Волонтера\"";
 
 
-    public AnswerProducer(SchemaService schemaService, ShelterService shelterService, RecommendationService recommendationService, FeedbackService feedbackService, ReportService reportService, VolunteerService volunteerService) {
-        this.schemaService = schemaService;
+    public AnswerProducer(PictureService pictureService, ShelterService shelterService, RecommendationService recommendationService, FeedbackService feedbackService, ReportService reportService, VolunteerService volunteerService) {
+        this.pictureService = pictureService;
         this.shelterService = shelterService;
         this.recommendationService = recommendationService;
         this.feedbackService = feedbackService;
@@ -67,7 +67,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     public boolean checkSchema(String animalType) {
         log.debug("Вызван метод AnswerProducer.checkSchema , animalType={}", animalType);
         Shelter shelter = shelterService.findShelterByAnimalType(animalType).get();
-        Optional<Schema> optionalSchema = schemaService.findByShelter_id(shelter.getId());
+        Optional<Picture> optionalSchema = pictureService.findByShelter_id(shelter.getId());
         if (optionalSchema.isEmpty()) {
             log.debug("Схема проезда не найдена, клиенту будет направлен wrongMessage");
         }
@@ -87,7 +87,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
             return new SendMessage(chatId, "Извините, схема проезда не найдена");
         }
         Shelter shelter = shelterService.findShelterByAnimalType(animalType).get();
-        Optional<Schema> optionalSchema = schemaService.findByShelter_id(shelter.getId());
+        Optional<Picture> optionalSchema = pictureService.findByShelter_id(shelter.getId());
         byte[] data = optionalSchema.get().getData();
         log.debug("Все ок,направляем схему клиенту");
         return new SendPhoto(chatId, data);

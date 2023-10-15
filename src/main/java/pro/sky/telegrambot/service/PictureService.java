@@ -6,15 +6,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.telegrambot.exceptions.ShelterNotFoundException;
-import pro.sky.telegrambot.model.Schema;
+import pro.sky.telegrambot.model.Picture;
 import pro.sky.telegrambot.model.Shelter;
-import pro.sky.telegrambot.repository.SchemaRepository;
+import pro.sky.telegrambot.repository.PictureRepository;
 import pro.sky.telegrambot.repository.ShelterRepository;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
@@ -24,15 +23,15 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
  */
 @Service
 @Slf4j
-public class SchemaService {
-    private final SchemaRepository schemaRepository;
+public class PictureService {
+    private final PictureRepository pictureRepository;
     private final ShelterRepository shelterRepository;
     @Value("${path.to.schemas.folder}")
     private String path;
 
 
-    public SchemaService(SchemaRepository schemaRepository, ShelterRepository shelterRepository) {
-        this.schemaRepository = schemaRepository;
+    public PictureService(PictureRepository pictureRepository, ShelterRepository shelterRepository) {
+        this.pictureRepository = pictureRepository;
         this.shelterRepository = shelterRepository;
     }
 //todo дописать доку на этот метод добавить ссылки на ошибки
@@ -48,7 +47,7 @@ public class SchemaService {
      * билдит сущность, сохраняет ее в БД
      */
     @Transactional
-    public Schema addSchema(MultipartFile file, Long shelterId) throws IOException {
+    public Picture addSchema(MultipartFile file, Long shelterId) throws IOException {
         log.debug("Вызван метод SchemaService.addSchema, file, shelterId={}", shelterId);
         Optional<Shelter> optionalShelter = shelterRepository.findById(shelterId);
         if (optionalShelter.isEmpty()) {
@@ -64,17 +63,17 @@ public class SchemaService {
             long l = is.transferTo(os);
             log.debug("Было загружено {} байт", l);
         }
-        Schema schema = schemaRepository.findSchemaByShelter_Id(shelterId).orElse(new Schema());
-        log.debug("Получена с БД schema={}(hashcode)", schema.hashCode());
-        schema = new Schema().builder()
+        Picture picture = pictureRepository.findSchemaByShelter_Id(shelterId).orElse(new Picture());
+        log.debug("Получена с БД schema={}(hashcode)", picture.hashCode());
+        picture = new Picture().builder()
                 .filePath(pathToFile.toString())
                 .fileSize(file.getSize())
                 .shelter(optionalShelter.get())
                 .data(file.getBytes())
                 .mediaType(file.getContentType())
                 .build();
-        log.debug("В итоге сформирована schema={}(hashcode)", schema.hashCode());
-        return schemaRepository.save(schema);
+        log.debug("В итоге сформирована schema={}(hashcode)", picture.hashCode());
+        return pictureRepository.save(picture);
 
 
     }
@@ -95,8 +94,8 @@ public class SchemaService {
      * Return Optional<Schema>
      */
     @Transactional(readOnly = true)
-    public Optional<Schema> findById(Long id) {
-        return schemaRepository.findById(id);
+    public Optional<Picture> findById(Long id) {
+        return pictureRepository.findById(id);
     }
 
     /**
@@ -105,7 +104,7 @@ public class SchemaService {
      * Return Optional<Schema>
      */
     @Transactional(readOnly = true)
-    public Optional<Schema> findByShelter_id(Long shelterId) {
-        return schemaRepository.findSchemaByShelter_Id(shelterId);
+    public Optional<Picture> findByShelter_id(Long shelterId) {
+        return pictureRepository.findSchemaByShelter_Id(shelterId);
     }
 }

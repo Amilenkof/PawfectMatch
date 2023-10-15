@@ -12,6 +12,7 @@ CREATE TABLE users
     phone            varchar(100) not null,
     duration_counter int default 30,
     animal_id        bigint       not null,
+    days_lost_counter bigint not null default 0,
     FOREIGN KEY (animal_id) REFERENCES animal (id)
 );
 --changeset aMilenkov:2
