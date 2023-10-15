@@ -37,6 +37,6 @@ public class UsersService {
     }
 
     public Users addUsers(Long chatId, String firstName, String lastName, String email, String phone, Long animalID) throws AnimalNotFoundException  {
-            return new Users(firstName, lastName, email, phone, DURATION_COUNTER,animalService.findById(animalID), 0L);
+            return usersRepository.save(new Users(chatId,firstName, lastName, email, phone, DURATION_COUNTER,animalService.findById(animalID), 0L));
     }
 }

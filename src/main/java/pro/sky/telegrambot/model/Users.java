@@ -13,6 +13,7 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long ChatId;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
@@ -31,7 +32,8 @@ public class Users {
     @Getter
     private Long daysLostCounter;//колво дней когда пользователь не присылал отчеты
 
-    public Users(String firstName, String lastName, String email, String phone, Integer durationCounter, Animal animal, Long daysLostCounter) {
+    public Users(Long chatId, String firstName, String lastName, String email, String phone, Integer durationCounter, Animal animal, Long daysLostCounter) {
+        ChatId = chatId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

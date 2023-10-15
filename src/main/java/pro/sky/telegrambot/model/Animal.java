@@ -25,11 +25,11 @@ public class Animal {
 
         private boolean status;//true- в приюте, false -усыновлен
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.EAGER)
         private Shelter shelter;
 
         public Animal(String type, String name, boolean isSick, boolean isLittle, boolean status, Shelter shelter) {
-                this.type = type;
+                this.type = type.toLowerCase();
                 this.name = name;
                 this.isSick = isSick;
                 this.isLittle = isLittle;
