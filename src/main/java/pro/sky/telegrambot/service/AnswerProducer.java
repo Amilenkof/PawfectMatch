@@ -12,8 +12,10 @@ import pro.sky.telegrambot.exceptions.MessageInReportUncorrectException;
 import pro.sky.telegrambot.exceptions.UsersNotFoundException;
 import pro.sky.telegrambot.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Класс обрабатывает логику генерации ответов на комманды и передает ответы в MESSAGESUPPLIER
@@ -27,21 +29,25 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     private final FeedbackService feedbackService;
     private final ReportService reportService;
     private final VolunteerService volunteerService;
+    private final UsersService usersService;
+
     private final String MESSAGE_UNCORRECT_CAUSE = "Пожалуйста,заполните отчет в соответствии с формой.В отчете должны быть указаны:\n рацион питания, " +
                                                    "\nобщее самочувствие,\nизменение в поведении. \nКаждый пункт с новой строки, вся" +
                                                    " информация в комментарии к фото питомца";
     private final String PHOTO_UNCORRECT_CAUSE = "Пожалуйста,заполните отчет в соответствии с формой.Не забудьте прикрепить " +
                                                  "фото питомца";
     private final String WRONG_REPORT = "Не удается зарегистрировать Ваш отчет, обратитесь к волонтеру через меню \"Позвать Волонтера\"";
+    private final String LOST_REPORT_MESSAGE = "Дорогой, друг не забывай присылать отчеты о питомце каждый день, иначе волонтерам придется прийти и посмотреть как у него дела";
 
 
-    public AnswerProducer(PictureService pictureService, ShelterService shelterService, RecommendationService recommendationService, FeedbackService feedbackService, ReportService reportService, VolunteerService volunteerService) {
+    public AnswerProducer(PictureService pictureService, ShelterService shelterService, RecommendationService recommendationService, FeedbackService feedbackService, ReportService reportService, VolunteerService volunteerService, UsersService usersService) {
         this.pictureService = pictureService;
         this.shelterService = shelterService;
         this.recommendationService = recommendationService;
         this.feedbackService = feedbackService;
         this.reportService = reportService;
         this.volunteerService = volunteerService;
+        this.usersService = usersService;
     }
 
 
@@ -201,11 +207,15 @@ public class AnswerProducer<T extends AbstractSendRequest> {
                 testReport.getBehaviour());
         return sendReport(update.message().chat().id(), testReport, reportCaption);
     }
-/**Метод формирует SENDPHOTO
- * @param caption
- * @param report
- * @param chatId
- * @return new SendPhoto*/
+
+    /**
+     * Метод формирует SENDPHOTO
+     *
+     * @param caption
+     * @param report
+     * @param chatId
+     * @return new SendPhoto
+     */
     public SendPhoto sendReport(Long chatId, Report report, String caption) {
         return new SendPhoto(chatId, report.getPhoto()).caption(caption);
     }
@@ -234,8 +244,10 @@ public class AnswerProducer<T extends AbstractSendRequest> {
 
 
     }
+
     /**
      * Метод формирует список текущих репортов по приюту указанного типа
+     *
      * @param animalType - тип животных в приюте
      * @return List<SendPhoto>-возвращает пустой список если нет волонтеров
      */
@@ -255,6 +267,16 @@ public class AnswerProducer<T extends AbstractSendRequest> {
                         report,
                         report.getFood() + "\n" + report.getHealth() + "\n" + report.getBehaviour()))
                 .toList();
+    }
+
+    /**
+     * Метод формирует ответы должникам по отчетам о животных
+     */
+    public List<SendMessage> getListMessagesForReportLostUsers() {
+        List<Long> chatIDs = usersService.findAllByDaysLostCounterIsAfter().stream().map(Users::getChatId).toList();
+        List<SendMessage> responses = new ArrayList<>(chatIDs.size());
+        return chatIDs.stream().map(chatId -> new SendMessage(chatId, LOST_REPORT_MESSAGE)).collect(Collectors.toList());
+
     }
 
 }

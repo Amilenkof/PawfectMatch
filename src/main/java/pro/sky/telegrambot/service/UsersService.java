@@ -8,6 +8,7 @@ import pro.sky.telegrambot.exceptions.AnimalNotFoundException;
 import pro.sky.telegrambot.model.Users;
 import pro.sky.telegrambot.repository.UsersRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,8 +36,16 @@ public class UsersService {
         return usersRepository.findByChatId(chatId);
 
     }
-
+    /**Метод для создания пользователей
+     * использует констранту DURATION_COUNTER из application_properties- колво дней, которое нужно сдавать отчеты после усыновления питомца
+     * */
     public Users addUsers(Long chatId, String firstName, String lastName, String email, String phone, Long animalID) throws AnimalNotFoundException  {
             return usersRepository.save(new Users(chatId,firstName, lastName, email, phone, DURATION_COUNTER,animalService.findById(animalID), 0L));
     }
+
+    /**Возвращает список всех должников по отчетам(просрочка более 2 дней)*/
+    public List<Users> findAllByDaysLostCounterIsAfter (){
+       return usersRepository.findAllByDaysLostCounterIsAfter(2L);
+    }
+
 }

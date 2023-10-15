@@ -1,5 +1,6 @@
 package pro.sky.telegrambot.service.sheduler;
 
+import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,8 +25,7 @@ public class SсhedulerService {
     private final AnswerProducer<SendPhoto> answerProducer;
 
 
-
-    public SсhedulerService( AnswerProducer<SendPhoto> answerProducer) {
+    public SсhedulerService(AnswerProducer<SendPhoto> answerProducer) {
         this.answerProducer = answerProducer;
 
     }
@@ -40,15 +40,18 @@ public class SсhedulerService {
         var reportResponse = new ArrayList<SendPhoto>();
         reportResponse.addAll(answerProducer.getCurrentReports("cat"));
         reportResponse.addAll(answerProducer.getCurrentReports("dog"));
-        log.debug("К отправке волонтерам {} отчетов",reportResponse.size());
+        log.debug("К отправке волонтерам {} отчетов", reportResponse.size());
         return reportResponse;
     }
-
-
-
-
-
-
+    /**
+     * Метод формирует список всех сообщений для отправки должникам по отчетам
+     */
+    public List<SendMessage> sendMessagesLostReport() {
+        log.debug("Вызван метод по расписанию ShedulerService.sendMessagesLostReport");
+        List<SendMessage> messages = answerProducer.getListMessagesForReportLostUsers();
+        log.debug("К отправке  {} писем должникам по  отчетам", messages.size());
+        return messages;
+    }
 
 
 }

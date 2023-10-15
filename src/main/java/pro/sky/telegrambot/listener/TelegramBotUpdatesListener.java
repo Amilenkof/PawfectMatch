@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.AbstractSendRequest;
+import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
@@ -67,6 +68,12 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
         sendPhotos.forEach(telegramBot::execute);
         log.debug("Волонтерам направлено {} отчетов от пользователей", sendPhotos.size());
     }
-
+    @Scheduled(cron = "0 0/1 * * * *")//каждую минуту
+//    @Scheduled(cron = "0 0 21 * *?")//21 00 каждый день
+    public void scheduledLostReports() {
+        List<SendMessage> messageList = sсhedulerService.sendMessagesLostReport();
+        messageList.forEach(telegramBot::execute);
+        log.debug("Должникам направлено {} писем с напоминанием об отчетах", messageList.size());
+    }
 
 }

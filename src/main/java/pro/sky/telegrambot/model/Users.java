@@ -13,6 +13,7 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Getter
     private Long ChatId;
     @Column(name = "first_name")
     private String firstName;
