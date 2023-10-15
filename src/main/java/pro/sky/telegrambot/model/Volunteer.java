@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
 
 import java.util.Objects;
 
@@ -23,7 +24,7 @@ public class Volunteer {
     private String lastName;
     @Column(name = "chat_id")
     private Long chatId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Shelter shelter;
 
 

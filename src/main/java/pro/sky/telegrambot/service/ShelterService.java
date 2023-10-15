@@ -41,6 +41,7 @@ public class ShelterService {
      * @param shelterDTOIN
      * @return Shelter entity
      */
+    @Transactional
     public Shelter createShelter(ShelterDTOIN shelterDTOIN) {
         shelterRepository.findShelterByAnimalType(shelterDTOIN.animalType()).orElseThrow(() -> new ShelterForThisAnimalTypeAlreadyHaveException("Приют для данного типа животных уже есть"));
         Shelter entity = shelterMapper.toEntity(shelterDTOIN);
@@ -48,7 +49,7 @@ public class ShelterService {
         log.debug("В БД записывается,  entity={}", shelterDTOIN);
         return shelterRepository.save(entity);
     }
-
+    @Transactional
     public Shelter createShelter(String description, String address, String timing, String contactsSecurity, String safety, String animalType) {
         Shelter entity = new Shelter(description, address, timing, contactsSecurity, safety, animalType.toLowerCase());
         checkHaveShelter(entity);
@@ -62,7 +63,8 @@ public class ShelterService {
      * @param entity
      * @throws ShelterForThisAnimalTypeAlreadyHaveException()-если приют указанного типа животных уже есть в БД
      */
-    private void checkHaveShelter(Shelter entity) {
+    @Transactional()
+    public void checkHaveShelter(Shelter entity) {
         if (shelterRepository.findShelterByAnimalType(entity.getAnimalType()).isPresent()) {
             log.debug("Приют уже есть БД выбросится ошибка");
             throw new ShelterForThisAnimalTypeAlreadyHaveException("Приют для данного типа животных уже создан");

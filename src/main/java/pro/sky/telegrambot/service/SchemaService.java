@@ -3,6 +3,7 @@ package pro.sky.telegrambot.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.telegrambot.exceptions.ShelterNotFoundException;
 import pro.sky.telegrambot.model.Schema;
@@ -81,6 +82,7 @@ public class SchemaService {
      * Метод получает расширение файла
      * PARAMS= String s (название файла)
      */
+
     private String getExtensions(String s) {
         log.info("Вызван метод SchemaService.getExtensions");
         return s.substring(s.lastIndexOf(".") + 1);
@@ -91,6 +93,7 @@ public class SchemaService {
      * Params Long id - id схемы проезда
      * Return Optional<Schema>
      */
+    @Transactional(readOnly = true)
     public Optional<Schema> findById(Long id) {
         return schemaRepository.findById(id);
     }
@@ -100,6 +103,7 @@ public class SchemaService {
      * Params Long id - id приюта
      * Return Optional<Schema>
      */
+    @Transactional(readOnly = true)
     public Optional<Schema> findByShelter_id(Long shelterId) {
         return schemaRepository.findSchemaByShelter_Id(shelterId);
     }

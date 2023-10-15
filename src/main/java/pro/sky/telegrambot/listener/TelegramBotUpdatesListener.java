@@ -9,11 +9,11 @@ import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import pro.sky.telegrambot.service.SchemaService;
 import pro.sky.telegrambot.service.keyboards.KeyBoardService;
-import pro.sky.telegrambot.service.ShelterService;
+import pro.sky.telegrambot.service.sheduler.SсhedulerService;
 
 
 import java.util.List;
@@ -22,20 +22,16 @@ import java.util.List;
 @Slf4j
 @EnableTransactionManagement
 public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implements UpdatesListener {
-    private final KeyBoardService keyBoardService;
     @Getter
     private final TelegramBot telegramBot;
     private final MessageSupplier messageSupplier;
-    private final ShelterService service;
-    private final SchemaService schemaService;
+    private final SсhedulerService sсhedulerService;
 
 
-    public TelegramBotUpdatesListener(KeyBoardService keyBoardService, TelegramBot telegramBot, MessageSupplier messageSupplier, ShelterService service, SchemaService schemaService) {
-        this.keyBoardService = keyBoardService;
+    public TelegramBotUpdatesListener(TelegramBot telegramBot, MessageSupplier messageSupplier, SсhedulerService sсhedulerService) {
         this.telegramBot = telegramBot;
         this.messageSupplier = messageSupplier;
-        this.service = service;
-        this.schemaService = schemaService;
+        this.sсhedulerService = sсhedulerService;
     }
 
     @PostConstruct
@@ -62,6 +58,14 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
         });
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
+    }
+
+//    @Scheduled(cron = "0 0/1 * * * *")//каждую минуту
+    @Scheduled(cron = "0 0 21 * *?")//21 00 каждый день
+    public void scheduledResponse() {
+        List<SendPhoto> sendPhotos = sсhedulerService.sendCurrentReports();
+        sendPhotos.forEach(telegramBot::execute);
+        log.debug("Волонтерам направлено {} отчетов от пользователей", sendPhotos.size());
     }
 
 

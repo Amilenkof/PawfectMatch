@@ -9,13 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.exceptions.MessageInReportUncorrectException;
-import pro.sky.telegrambot.exceptions.PhotoInReportNotFoundException;
 import pro.sky.telegrambot.exceptions.UsersNotFoundException;
-import pro.sky.telegrambot.model.Feedback;
-import pro.sky.telegrambot.model.Report;
-import pro.sky.telegrambot.model.Schema;
-import pro.sky.telegrambot.model.Shelter;
+import pro.sky.telegrambot.model.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -29,6 +26,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     private final RecommendationService recommendationService;
     private final FeedbackService feedbackService;
     private final ReportService reportService;
+    private final VolunteerService volunteerService;
     private final String MESSAGE_UNCORRECT_CAUSE = "Пожалуйста,заполните отчет в соответствии с формой.В отчете должны быть указаны:\n рацион питания, " +
                                                    "\nобщее самочувствие,\nизменение в поведении. \nКаждый пункт с новой строки, вся" +
                                                    " информация в комментарии к фото питомца";
@@ -37,12 +35,13 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     private final String WRONG_REPORT = "Не удается зарегистрировать Ваш отчет, обратитесь к волонтеру через меню \"Позвать Волонтера\"";
 
 
-    public AnswerProducer(SchemaService schemaService, ShelterService shelterService, RecommendationService recommendationService, FeedbackService feedbackService, ReportService reportService) {
+    public AnswerProducer(SchemaService schemaService, ShelterService shelterService, RecommendationService recommendationService, FeedbackService feedbackService, ReportService reportService, VolunteerService volunteerService) {
         this.schemaService = schemaService;
         this.shelterService = shelterService;
         this.recommendationService = recommendationService;
         this.feedbackService = feedbackService;
         this.reportService = reportService;
+        this.volunteerService = volunteerService;
     }
 
 
@@ -195,13 +194,20 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     public SendPhoto sendReportForm(Update update) {
         log.debug("Вызван метод AnswerProducer.sendReportForm");
         Report testReport = reportService.getTestReport();
-        byte[] photo = testReport.getPhoto();
         String reportCaption = String.format("Просим прислать отчет о Вашем питомце как в форме ниже: \n%s\n%s\n%s\n \n" +
                                              " Каждый пункт с новой строки, обязательно пришлите фотографию питомца",
                 testReport.getFood(),
                 testReport.getHealth(),
                 testReport.getBehaviour());
-        return new SendPhoto(update.message().chat().id(), photo).caption(reportCaption);
+        return sendReport(update.message().chat().id(), testReport, reportCaption);
+    }
+/**Метод формирует SENDPHOTO
+ * @param caption
+ * @param report
+ * @param chatId
+ * @return new SendPhoto*/
+    public SendPhoto sendReport(Long chatId, Report report, String caption) {
+        return new SendPhoto(chatId, report.getPhoto()).caption(caption);
     }
 
     /**
@@ -228,7 +234,28 @@ public class AnswerProducer<T extends AbstractSendRequest> {
 
 
     }
-
+    /**
+     * Метод формирует список текущих репортов по приюту указанного типа
+     * @param animalType - тип животных в приюте
+     * @return List<SendPhoto>
+     */
+    public List<SendPhoto> getCurrentReports(String animalType) {
+        log.debug("Вызван метод SсhedulerService.sendReportsByAnimalType");
+        List<Report> reports = reportService.findAllTodayReports();
+        List<Volunteer> volunteers = volunteerService.findVolunteerByAnimalType(animalType);
+        if (volunteers.isEmpty())
+            return List.of();
+        return reports.stream()
+                .filter(report -> report.getId() != 1L)//пропускаем образец отчета,чтобы его никому не отправлять
+                .filter(report -> report.getUser().getAnimal().getType().equals(animalType))
+                .map(report -> sendReport(volunteers.stream()
+                                .findAny()
+                                .get()
+                                .getChatId(),
+                        report,
+                        report.getFood() + "\n" + report.getHealth() + "\n" + report.getBehaviour()))
+                .toList();
+    }
 
 }
 

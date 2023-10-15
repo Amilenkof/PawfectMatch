@@ -9,7 +9,9 @@ import pro.sky.telegrambot.model.Volunteer;
 import pro.sky.telegrambot.repository.ShelterRepository;
 import pro.sky.telegrambot.repository.VolunteerRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -33,5 +35,14 @@ public class VolunteerService {
         return volunteerRepository.findAll().stream()
                 .filter(volunteer -> volunteer.getShelter().getAnimalType().equals(shelter.getAnimalType()))
                 .findFirst();
+    }
+    /**Метод получает из БД список волонтеров по указанному типу животных
+     * @param animalType
+     * @return List<Volunteer>*/
+    @Transactional(readOnly = true)
+    public List<Volunteer> findVolunteerByAnimalType(String animalType){
+      return   volunteerRepository.findVolunteerByAnimalType().stream()
+                .filter(volunteer -> volunteer.getShelter().getAnimalType().equals(animalType))
+                .collect(Collectors.toList());
     }
 }

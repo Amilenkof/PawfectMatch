@@ -10,6 +10,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.exceptions.MessageInReportUncorrectException;
 import pro.sky.telegrambot.exceptions.PhotoInReportNotFoundException;
@@ -23,7 +24,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -147,5 +151,17 @@ public class ReportService {
         GetFile getFile = new GetFile(photoSize.fileId());
         return telegramBot.getFileContent(telegramBot.execute(getFile).file());
     }
+
+    /**
+     * Метод получает список отчетов о питомцах присланных сегодня
+     *
+     * @return list<Report>
+     */
+    @Transactional
+    public List<Report> findAllTodayReports() {
+        LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);//дата от начала текущих суток
+        return reportRepository.findReportByDateReportAfter(dateTime);
+    }
+
 
 }

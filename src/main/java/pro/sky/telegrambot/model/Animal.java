@@ -21,7 +21,7 @@ public class Animal {
 
         private boolean isLittle;
 
-        private boolean status;
+        private boolean status;//true- в приюте, false -усыновлен
 
         @ManyToOne(fetch = FetchType.LAZY)
         private Shelter shelter;

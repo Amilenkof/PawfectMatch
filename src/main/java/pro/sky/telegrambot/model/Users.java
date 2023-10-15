@@ -25,7 +25,7 @@ public class Users {
 
     private String phone;
 
-    @Column(name = "duration_counter")
+    @Column(name = "duration_counter")//сколько дней  нужно проверять отчеты о животном от этого пользователя
     private Integer durationCounter;
 
     @OneToOne
