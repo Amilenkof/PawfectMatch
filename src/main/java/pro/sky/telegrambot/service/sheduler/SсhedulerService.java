@@ -42,8 +42,11 @@ public class SсhedulerService {
         reportResponse.addAll(answerProducer.getCurrentReports("dog"));
         log.debug("К отправке волонтерам {} отчетов",reportResponse.size());
         return reportResponse;
-
     }
+
+
+
+
 
 
 

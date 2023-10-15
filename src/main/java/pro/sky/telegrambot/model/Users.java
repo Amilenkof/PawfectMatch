@@ -30,6 +30,7 @@ public class Users {
 
     @OneToOne
     private Animal animal;
+    private Long daysLostCounter;//колво дней когда пользователь не присылал отчеты
 
 
 }

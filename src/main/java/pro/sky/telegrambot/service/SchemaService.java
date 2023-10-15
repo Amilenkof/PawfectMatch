@@ -47,6 +47,7 @@ public class SchemaService {
      * (ID приюта+ расширение), ищет схему для заданного приюта, если такого нет выбрасывает ShelterNotFoundException,
      * билдит сущность, сохраняет ее в БД
      */
+    @Transactional
     public Schema addSchema(MultipartFile file, Long shelterId) throws IOException {
         log.debug("Вызван метод SchemaService.addSchema, file, shelterId={}", shelterId);
         Optional<Shelter> optionalShelter = shelterRepository.findById(shelterId);

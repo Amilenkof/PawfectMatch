@@ -237,7 +237,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     /**
      * Метод формирует список текущих репортов по приюту указанного типа
      * @param animalType - тип животных в приюте
-     * @return List<SendPhoto>
+     * @return List<SendPhoto>-возвращает пустой список если нет волонтеров
      */
     public List<SendPhoto> getCurrentReports(String animalType) {
         log.debug("Вызван метод SсhedulerService.sendReportsByAnimalType");
