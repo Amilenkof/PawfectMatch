@@ -43,16 +43,18 @@ public class MessageSupplier {
      * PARAMS = Update update
      */
     public List<AbstractSendRequest<? extends AbstractSendRequest<?>>> executeResponse(Update update) {
+
         log.debug("Вызван метод executeResponse в классе MessageConsumer");
+        if (update.callbackQuery()!=null){
+           return List.of(callBackHandler.handle(update));
+
+        }
         String command = update.message().text();//todo если переслать сообщение текст будет = null и приложуха ляжет..
         log.debug("Получена команда = {}", command);
 
 //        if ((command != null || update.message().caption() != null) && !(isFeedback || isReport)) {
 //            return List.of(answerProducer.wrongAnswer(update));
 //        }
-        if (update.callbackQuery()!=null){
-            callBackHandler.handle(update);
-        }
 
         if (isFeedback) {
             log.debug("Получен feedback");
@@ -78,6 +80,7 @@ public class MessageSupplier {
             return new ArrayList<>();
         }
         List<AbstractSendRequest<?>> messageList = new ArrayList<>();
+
         switch (command) {
             case ("/start"), ("Вернуться в главное меню") -> {
                 messageList.add(keyBoardService.mainMenuKeyboard(update));
