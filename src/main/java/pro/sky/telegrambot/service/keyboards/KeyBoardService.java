@@ -1,6 +1,8 @@
 package pro.sky.telegrambot.service.keyboards;
 
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.AbstractSendRequest;
@@ -43,6 +45,19 @@ public class KeyBoardService {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);
         SendMessage message = new SendMessage(update.message().chat().id(), "Привет, дружище, ты пришел за питомцем? Мы можем предложить тебе выбрать кошку или собаку, кого ты выберешь?");
         return message.replyMarkup(replyKeyboardMarkup);
+    }
+    /**
+     * Метод формирует клавиатуру для принятия решения волонтером по отчету
+     */
+    public InlineKeyboardMarkup reportDecision() {
+       return new InlineKeyboardMarkup(
+                new InlineKeyboardButton("Принять отчет").callbackData("Принять отчет"),
+                new InlineKeyboardButton("Вернуть отчет").callbackData("Вернуть отчет"));
+//        KeyboardButton button1 = new KeyboardButton("Принять отчет");
+//        KeyboardButton button2 = new KeyboardButton("Отправить на доработку");
+//        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);
+
+
     }
 
     /**

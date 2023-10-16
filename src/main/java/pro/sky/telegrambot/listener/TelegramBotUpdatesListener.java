@@ -8,6 +8,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,6 +19,7 @@ import pro.sky.telegrambot.service.sheduler.SсhedulerService;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -61,14 +63,22 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
+
+    @SneakyThrows
     @Scheduled(cron = "0 0/1 * * * *")//каждую минуту
 //    @Scheduled(cron = "0 0 21 * *?")//21 00 каждый день
-    public void scheduledResponse() {
-        List<SendPhoto> sendPhotos = sсhedulerService.sendCurrentReports();
-        sendPhotos.forEach(telegramBot::execute);
-        log.debug("Волонтерам направлено {} отчетов от пользователей", sendPhotos.size());
+    public void sendAllReportsToVolunteer() {
+        if (sсhedulerService.getCurrentReports().size() > 0) {
+            log.debug("Вызван TelegramBotUpdatesListener.sendAllReportsToVolunteer отправляем отчеты");
+            sсhedulerService.getNextReport().ifPresent(telegramBot::execute);
+        }
     }
-    @Scheduled(cron = "0 0/1 * * * *")//каждую минуту
+
+
+    /**
+     * метод по рассписанию отправляет должникам по отчетам напоминание отправить отчеты
+     */
+//    @Scheduled(cron = "0 0/1 * * * *")//каждую минуту// todo Включить  как будет все готово - надоел
 //    @Scheduled(cron = "0 0 21 * *?")//21 00 каждый день
     public void scheduledLostReports() {
         List<SendMessage> messageList = sсhedulerService.sendMessagesLostReport();

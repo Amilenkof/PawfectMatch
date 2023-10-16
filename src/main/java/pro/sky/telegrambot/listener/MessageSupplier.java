@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.service.AnswerProducer;
+import pro.sky.telegrambot.service.CallBackHandler;
 import pro.sky.telegrambot.service.keyboards.KeyBoardService;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class MessageSupplier {
     private final KeyBoardService keyBoardService;
 
     private final AnswerProducer answerProducer;
+    private final CallBackHandler callBackHandler;
 
     private final String ANIMAL_CAT = "cat";
     private final String ANIMAL_DOG = "dog";
@@ -30,9 +32,10 @@ public class MessageSupplier {
     private boolean isReport;
 
 
-    public MessageSupplier(KeyBoardService keyBoardService, AnswerProducer answerProducer) {
+    public MessageSupplier(KeyBoardService keyBoardService, AnswerProducer answerProducer, CallBackHandler callBackHandler) {
         this.keyBoardService = keyBoardService;
         this.answerProducer = answerProducer;
+        this.callBackHandler = callBackHandler;
     }
 
     /**
@@ -47,6 +50,10 @@ public class MessageSupplier {
 //        if ((command != null || update.message().caption() != null) && !(isFeedback || isReport)) {
 //            return List.of(answerProducer.wrongAnswer(update));
 //        }
+        if (update.callbackQuery()!=null){
+            callBackHandler.handle(update);
+        }
+
         if (isFeedback) {
             log.debug("Получен feedback");
             isFeedback = false;
