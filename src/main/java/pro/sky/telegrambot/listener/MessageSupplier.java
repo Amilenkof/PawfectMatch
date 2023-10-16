@@ -39,22 +39,18 @@ public class MessageSupplier {
     }
 
     /**
-     * Метод читает команду и формирует на нее ответ подкладывая нужную клавиатуру
+     * Метод читает команду и определяет ее тип делегирует генерацию ответа сервисам
      * PARAMS = Update update
      */
     public List<AbstractSendRequest<? extends AbstractSendRequest<?>>> executeResponse(Update update) {
 
         log.debug("Вызван метод executeResponse в классе MessageConsumer");
-        if (update.callbackQuery()!=null){
-           return List.of(callBackHandler.handle(update));
+        if (update.callbackQuery() != null) {
+            return List.of(callBackHandler.handle(update));
 
         }
         String command = update.message().text();//todo если переслать сообщение текст будет = null и приложуха ляжет..
         log.debug("Получена команда = {}", command);
-
-//        if ((command != null || update.message().caption() != null) && !(isFeedback || isReport)) {
-//            return List.of(answerProducer.wrongAnswer(update));
-//        }
 
         if (isFeedback) {
             log.debug("Получен feedback");
@@ -67,7 +63,7 @@ public class MessageSupplier {
             return List.of(answerProducer.addReport(update));
         }
         var answersForTextCommand = new ArrayList<>(messageForTextCommand(command, update));
-        if (!answersForTextCommand.isEmpty()){
+        if (!answersForTextCommand.isEmpty()) {
             return answersForTextCommand;
         }
         SendMessage recommendation = answerProducer.findRecommendation(update, command, currentAnimal);
@@ -75,8 +71,12 @@ public class MessageSupplier {
         return List.of(recommendation);
     }
 
+
+    /**
+     * Метод обрабатывает текстовые команды полученные в боте
+     */
     public List<AbstractSendRequest<?>> messageForTextCommand(String command, Update update) {
-        if (command==null){
+        if (command == null) {
             return new ArrayList<>();
         }
         List<AbstractSendRequest<?>> messageList = new ArrayList<>();
@@ -103,7 +103,7 @@ public class MessageSupplier {
                 return messageList;
             }
             case ("Позвать волонтера") -> {
-                return keyBoardService.callVolunteer(update, currentAnimal);
+                return answerProducer.callVolunteer(update, currentAnimal);
             }
             case ("Как проехать к приюту") -> {
                 messageList.add(answerProducer.getSchema(update, currentAnimal));

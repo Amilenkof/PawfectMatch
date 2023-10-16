@@ -8,6 +8,8 @@ import pro.sky.telegrambot.model.Report;
 import pro.sky.telegrambot.model.Users;
 import pro.sky.telegrambot.service.sheduler.SсhedulerService;
 
+
+/**Класс реализует логику ответов на нажатие кнопок волонтером при проверке отчетов пользователей*/
 @Service
 @Slf4j
 public class CallBackHandler {
@@ -18,6 +20,13 @@ public class CallBackHandler {
     private final SсhedulerService sсhedulerService;
 
 
+/**Метод получает перехваченный ответ от волонтера, если отчет хороший, отправляет сообщение пользователю,
+ *  обнуляет счетчик дней просрочек по отчетам, и убавляет колво отчетов которые нужно еще отправить до полного усыновления животного
+ *  если счетчик с отчетами равен нулю , то подтверждает усыновление формируя сообщение
+ *  если отчет плохой формирует сообщение об этом
+ * @param update
+ * @return SendMessage
+ *  */
     public SendMessage handle(Update update) {
         String data = update.callbackQuery().data();
         Report report = sсhedulerService.getLastReport();

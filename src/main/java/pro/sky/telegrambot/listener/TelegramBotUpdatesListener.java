@@ -63,9 +63,12 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
+    /**
+     * Метод запрашивает у ShedulerService  Report в виде SENDPHOTO и направляет волонтеру его на проверку
+     */
 
     @Scheduled(cron = "0 0/1 * * * *")//каждую минуту
-//    @Scheduled(cron = "0 0 21 * *?")//21 00 каждый день
+//@Scheduled(cron = "* 21 * * *")
     public void sendReportToVolunteer() {
         sсhedulerService.getCurrentReportToSend().ifPresent(report -> {
             telegramBot.execute((SendPhoto) report);
@@ -78,8 +81,9 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
     /**
      * метод по рассписанию отправляет должникам по отчетам напоминание отправить отчеты
      */
-//    @Scheduled(cron = "0 0/1 * * * *")//каждую минуту// todo Включить  как будет все готово - надоел
-//    @Scheduled(cron = "0 0 21 * *?")//21 00 каждый день
+
+//    @Scheduled(cron = "* 21 * * *")
+    @Scheduled(cron = "0 0/1 * * * *")//каждую минуту
     public void scheduledLostReports() {
         List<SendMessage> messageList = sсhedulerService.sendMessagesLostReport();
         messageList.forEach(telegramBot::execute);

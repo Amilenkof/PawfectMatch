@@ -52,6 +52,27 @@ public class AnswerProducer<T extends AbstractSendRequest> {
 
 
     /**
+     * Метод  реализоует логику вызова волонтера.
+     * Генерирует сообщения пользователю и волонтеру<br>
+     * Params=Update update - данные пользователя,
+     * String AnimalType= тип животных в приюте,из которого будет вызван волонтер
+     * Метод не выбрасывает ошибок, в случае обнаружения исключительных ситуаций, пользователю будет отправлен ответ
+     * "Извините,сейчас нет доступных волонтеров"
+     */
+    public List<AbstractSendRequest<? extends AbstractSendRequest<?>>> callVolunteer(Update update, String animalType) {
+        Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType(animalType);
+        Shelter shelter = optionalShelter.orElse(new Shelter());
+        Optional<Volunteer> optionalVolunteer = volunteerService.callVolunteer(update, shelter);
+        if (optionalVolunteer.isEmpty()) {
+            return List.of(new SendMessage(update.message().chat().id(), "Извините,сейчас нет доступных волонтеров"));
+        }
+        SendMessage messageToVolonteer = new SendMessage(optionalVolunteer.get().getChatId(), "@" + update.message().chat().username() + " ожидает Вашего сообщения");
+        SendMessage messageToUser = new SendMessage(update.message().chat().id(), "Ожидайте, с Вами свяжется волонтер");
+        return List.of(messageToUser, messageToVolonteer);
+    }
+
+
+    /**
      * Метод проверяет если ли приют по указанному типу животных
      * Params = String animalType- вид животного
      * Return = boolean
@@ -64,6 +85,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         }
         return optionalShelter.isEmpty();
     }
+
 
     /**
      * Метод проверяет если ли схема для приюта по указанному типу животных
@@ -79,6 +101,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         }
         return optionalSchema.isEmpty();
     }
+
 
     /**
      * Метод генерирует ответ на запрос схемы проезда
@@ -97,8 +120,8 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         byte[] data = optionalSchema.get().getData();
         log.debug("Все ок,направляем схему клиенту");
         return new SendPhoto(chatId, data);
-
     }
+
 
     /**
      * Метод получает описание приюта,формирует сообщение для отправки пользователю
@@ -116,6 +139,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         return new SendMessage(chatId, description);
     }
 
+
     /**
      * Метод получает контактные данные охраны приюта,формирует сообщение для отправки пользователю
      * Params = Update update -данные полученные от пользователя , String AnimalType- тип приюта для которого нужно вернуть схему
@@ -130,6 +154,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         Shelter shelter = shelterService.findShelterByAnimalType(animalType).get();
         return new SendMessage(chatId, shelter.getContractsSecurity());
     }
+
 
     /**
      * Метод получает информацию о технике безопастности на терририи приюта,формирует сообщение для отправки пользователю
@@ -146,6 +171,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         return new SendMessage(chatId, shelter.getSafety());
     }
 
+
     /**
      * Метод получает рекомендации по обращению с животными из БД.Столбец title в таблице recommendations, должен соотвествовать командам в телеграмм
      * Params = Update update -данные полученные от пользователя, String title- название команды или название рекоммендации в БД
@@ -158,6 +184,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         return new SendMessage(chatId, firstByTitle.orElse("Не понял,давайте попробуем еще раз,вернитесь в главное меню"));
     }
 
+
     /**
      * Метод отправляет клиенту форму сообщения для дальнейшей связи с ним
      * Params = Update update -данные от пользователя
@@ -168,6 +195,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         Long chatId = update.message().chat().id();
         return new SendMessage(chatId, "Пожалуйста пришлите Ваши контакты в форме:Иванов,Иван,mail@mail.ru,+79271234567");
     }
+
 
     /**
      * Метод формирует ответ пользователю на попытку оставить обратную связь
@@ -191,6 +219,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
                 new SendMessage(chatId, "Ваше сообщение передано волонтерам, ожидайте ответа");
     }
 
+
     /**
      * Метод отправляет клиенту форму для отправки отчета о животном для дальнейшей связи с ним
      *
@@ -208,6 +237,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         return sendReport(update.message().chat().id(), testReport, reportCaption);
     }
 
+
     /**
      * Метод формирует SENDPHOTO
      *
@@ -219,6 +249,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     public SendPhoto sendReport(Long chatId, Report report, String caption) {
         return new SendPhoto(chatId, report.getPhoto()).caption(caption);
     }
+
 
     /**
      * Метод получает сообщение клиента извлекает из него данные и создает в БД новый report- отчет о питомце
@@ -241,40 +272,14 @@ public class AnswerProducer<T extends AbstractSendRequest> {
         } catch (MessageInReportUncorrectException e) {
             return new SendMessage(chatId, MESSAGE_UNCORRECT_CAUSE);
         }
-
-
     }
 
-//    /**
-//     * Метод формирует список текущих репортов по приюту указанного типа
-//     *
-//     * @param animalType - тип животных в приюте
-//     * @return List<SendPhoto>-возвращает пустой список если нет волонтеров
-//     */
-//    public List<SendPhoto> getCurrentReports(String animalType) {
-//        log.debug("Вызван метод SсhedulerService.sendReportsByAnimalType");
-//        List<Report> reports = reportService.findAllTodayReports();
-//        List<Volunteer> volunteers = volunteerService.findVolunteerByAnimalType(animalType);
-//        if (volunteers.isEmpty())
-//            return List.of();
-//        return reports.stream()
-//                .filter(report -> report.getId() != 1L)//пропускаем образец отчета,чтобы его никому не отправлять
-//                .filter(report -> report.getUser().getAnimal().getType().equals(animalType))
-//                .map(report -> sendReport(volunteers.stream()
-//                                .findAny()
-//                                .get()
-//                                .getChatId(),
-//                        report,
-//                        report.getFood() + "\n" + report.getHealth() + "\n" + report.getBehaviour()))
-//                .toList();
-//    }
 
     /**
      * Метод формирует ответы должникам по отчетам о животных
      */
     public List<SendMessage> getListMessagesForReportLostUsers() {
         List<Long> chatIDs = usersService.findAllByDaysLostCounterIsAfter().stream().map(Users::getChatId).toList();
-        List<SendMessage> responses = new ArrayList<>(chatIDs.size());
         return chatIDs.stream().map(chatId -> new SendMessage(chatId, LOST_REPORT_MESSAGE)).collect(Collectors.toList());
 
     }

@@ -9,7 +9,7 @@ import pro.sky.telegrambot.model.Volunteer;
 import java.util.List;
 
 @Repository
-public interface VolunteerRepository extends JpaRepository<Volunteer,Long> {
+public interface VolunteerRepository extends JpaRepository<Volunteer, Long> {
 
 
     @Query(nativeQuery = true, value = "SELECT * FROM volunteer")

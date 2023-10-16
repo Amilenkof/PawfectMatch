@@ -13,15 +13,13 @@ import java.util.regex.Pattern;
 @Service
 public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
-
     private final String regex = "^(.*?),(.*?),(.*?),(.*?)$";
-
     private final Pattern pattern = Pattern.compile(regex);
-
-
     public FeedbackService(FeedbackRepository feedbackRepository) {
         this.feedbackRepository = feedbackRepository;
     }
+
+
 
 /**Метод получает строку от клиента, обрабатывает ее, если она соответствует шаблону, помещает в БД задание связаться с пользователем
  * Params String message- сообщение пользователя

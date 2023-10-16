@@ -29,8 +29,6 @@ public class KeyBoardService {
 
 
     public KeyBoardService(VolunteerService volunteerService, ShelterService shelterService) {
-
-
         this.volunteerService = volunteerService;
         this.shelterService = shelterService;
     }
@@ -46,6 +44,8 @@ public class KeyBoardService {
         SendMessage message = new SendMessage(update.message().chat().id(), "Привет, дружище, ты пришел за питомцем? Мы можем предложить тебе выбрать кошку или собаку, кого ты выберешь?");
         return message.replyMarkup(replyKeyboardMarkup);
     }
+
+
     /**
      * Метод формирует клавиатуру для принятия решения волонтером по отчету
      */
@@ -53,17 +53,12 @@ public class KeyBoardService {
        return new InlineKeyboardMarkup(
                 new InlineKeyboardButton("Принять отчет").callbackData("Принять отчет"),
                 new InlineKeyboardButton("Вернуть отчет").callbackData("Вернуть отчет"));
-//        KeyboardButton button1 = new KeyboardButton("Принять отчет");
-//        KeyboardButton button2 = new KeyboardButton("Отправить на доработку");
-//        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button1, button2);
-
-
     }
+
 
     /**
      * Метод формирует клавиатуру для меню приюта для собак
      */
-
     public SendMessage dogShelterKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("О приюте");
         KeyboardButton button2 = new KeyboardButton("Как взять животное");
@@ -77,10 +72,10 @@ public class KeyBoardService {
         return message.replyMarkup(replyKeyboardMarkup);
     }
 
+
     /**
      * Метод формирует клавиатуру для меню приюта для кошек
      */
-
     public SendMessage catShelterKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("О приюте");
         KeyboardButton button2 = new KeyboardButton("Как взять животное");
@@ -94,10 +89,10 @@ public class KeyBoardService {
         return message.replyMarkup(replyKeyboardMarkup);
     }
 
+
     /**
      * Метод формирует клавиатуру для меню описания приюта для собак
      */
-
     public SendMessage aboutDogShelterKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("Инфо о приюте");
         KeyboardButton button2 = new KeyboardButton("Как проехать к приюту");
@@ -113,10 +108,10 @@ public class KeyBoardService {
         return message.replyMarkup(replyKeyboardMarkup);
     }
 
+
     /**
      * Метод формирует клавиатуру для меню описания приюта для кошек
      */
-
     public SendMessage aboutCatShelterKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("Инфо о приюте");
         KeyboardButton button2 = new KeyboardButton("Как проехать к приюту");
@@ -132,10 +127,10 @@ public class KeyBoardService {
         return message.replyMarkup(replyKeyboardMarkup);
     }
 
+
     /**
      * Метод формирует клавиатуру для меню "как взять собаку"
      */
-
     public SendMessage howTakeDogKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("Знакомство с животным");
         KeyboardButton button2 = new KeyboardButton("Документы для усыновления собаки");
@@ -161,10 +156,10 @@ public class KeyBoardService {
         return message.replyMarkup(replyKeyboardMarkup);
     }
 
+
     /**
      * Метод формирует клавиатуру для меню "как взять кошку"
      */
-
     public SendMessage howTakeCatKeyboard(Update update) {
         KeyboardButton button1 = new KeyboardButton("Знакомство с животным");
         KeyboardButton button2 = new KeyboardButton("Документы для усыновления");
@@ -186,40 +181,10 @@ public class KeyBoardService {
         SendMessage message = new SendMessage(update.message().chat().id(), "Все что нужно знать о том, как взять кошку");
         return message.replyMarkup(replyKeyboardMarkup);
     }
-//todo пишу - Миленьков А. вынести в новый сервис AnswerComandService
 
-    /**
-     * Метод  реализоует логику вызова волонтера.
-     * Генерирует сообщения пользователю и волонтеру<br>
-     * Params=Update update - данные пользователя,
-     * String AnimalType= тип животных в приюте,из которого будет вызван волонтер
-     * Метод не выбрасывает ошибок, в случае обнаружения исключительных ситуаций, пользователю будет отправлен ответ
-     * "Извините,сейчас нет доступных волонтеров"
-     */
-    public List<AbstractSendRequest<? extends AbstractSendRequest<?>>> callVolunteer(Update update, String animalType) {
-        Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType(animalType);//Шелтеров не может не быть, тк мы забиваем кнопки только в меню где должен быть шелтер
-        Shelter shelter = optionalShelter.orElse(new Shelter());
-        Optional<Volunteer> optionalVolunteer = volunteerService.callVolunteer(update, shelter);// волонтеров может не быть в приюте, но ошибку бросать нельзя, ляжет все приложение
-        if (optionalVolunteer.isEmpty()) {
-            return List.of(new SendMessage(update.message().chat().id(), "Извините,сейчас нет доступных волонтеров"));// поэтому отправляю сообщение пользователю
-        }
-        SendMessage messageToVolonteer = new SendMessage(optionalVolunteer.get().getChatId(), "@" + update.message().chat().username() + " ожидает Вашего сообщения");
-        SendMessage messageToUser = new SendMessage(update.message().chat().id(), "Ожидайте, с Вами свяжется волонтер");
-        return List.of(messageToUser, messageToVolonteer);
-    }
 
-//todo
 
-    /**
-     * Метод формирует клавиатуру для меню назад
-     */
-    public SendMessage backMenuKeyboard(Update update) {
-        KeyboardButton button = new KeyboardButton("Вернуться в главное меню");
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(button);
-        SendMessage message = new SendMessage(update.message().chat().id(),
-                "");
-        return message.replyMarkup(replyKeyboardMarkup);
-    }
+
 
 
 }

@@ -36,6 +36,8 @@ public class VolunteerService {
                 .filter(volunteer -> volunteer.getShelter().getAnimalType().equals(shelter.getAnimalType()))
                 .findFirst();
     }
+
+
     /**Метод получает из БД список волонтеров по указанному типу животных
      * @param animalType
      * @return List<Volunteer>*/
@@ -45,6 +47,8 @@ public class VolunteerService {
                 .filter(volunteer -> volunteer.getShelter().getAnimalType().equals(animalType))
                 .collect(Collectors.toList());
     }
+
+
     public Optional<Volunteer> findVolunteer(String animalType){
         return findVolunteerByAnimalType(animalType).stream().findAny();
     }

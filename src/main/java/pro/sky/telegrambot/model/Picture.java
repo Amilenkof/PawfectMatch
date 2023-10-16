@@ -8,10 +8,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-/**Класс описывает картинку-схему проезда к приюту*/
+/**
+ * Класс описывает картинку-схему проезда к приюту
+ */
 @Entity
 @Data
-//@Table(name="map")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

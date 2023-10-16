@@ -24,6 +24,7 @@ public class UsersService {
         this.animalService = animalService;
     }
 
+
     /**
      * Метод ищет Users по ChatId в БД
      *
@@ -36,6 +37,8 @@ public class UsersService {
         return usersRepository.findByChatId(chatId);
 
     }
+
+
     /**Метод для создания пользователей
      * использует констранту DURATION_COUNTER из application_properties- колво дней, которое нужно сдавать отчеты после усыновления питомца
      * */
@@ -43,9 +46,15 @@ public class UsersService {
             return usersRepository.save(new Users(chatId,firstName, lastName, email, phone, DURATION_COUNTER,animalService.findById(animalID), 0L));
     }
 
-    /**Возвращает список всех должников по отчетам(просрочка более 2 дней)*/
+
+    /**Метод сначало получает выборку всех пользоватлей, увеличивает им задержку по отчетам на 1 день,
+     * После делает выборку по людям у которых просрочка по отчетам более 2 дней
+     * Возвращает список всех должников по отчетам*/
     public List<Users> findAllByDaysLostCounterIsAfter (){
-       return usersRepository.findAllByDaysLostCounterIsAfter(2L);
+        List<Users> allUsers = usersRepository.findAllByDaysLostCounterIsAfter(0L);
+        allUsers.forEach(user -> user.setDaysLostCounter(user.getDaysLostCounter() + 1));
+        List<Users> userWithLostForReports = usersRepository.findAllByDaysLostCounterIsAfter(2L);
+        return userWithLostForReports;
     }
 
 }

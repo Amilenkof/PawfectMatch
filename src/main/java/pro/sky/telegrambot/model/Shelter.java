@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
-/**Класс предстваляет собой сущность ПРИЮТА для животных в java
+/**
+ * Класс предстваляет собой сущность ПРИЮТА для животных в java
  * Поля:
  * description - описание приюта
  * map - схема проезда
@@ -14,7 +15,7 @@ import java.util.List;
  * safety - техника безопасности на территории приюта
  * volunteer список волонтеров в этом приюте
  * AnimalType - вид животных которые содержатся в приюте
- * */
+ */
 @Entity
 @Data
 @NoArgsConstructor
@@ -43,7 +44,9 @@ public class Shelter {
     private String animalType;
 
 
-/**Конструктор для сервиса ShelterMapper*/
+    /**
+     * Конструктор для сервиса ShelterMapper
+     */
     public Shelter(String description, String address, String timing, String contractsSecurity, String safety, String animalType) {
         this.description = description;
         this.address = address;

@@ -83,6 +83,7 @@ public class SсhedulerService {
     public List<SendMessage> sendMessagesLostReport() {
         log.debug("Вызван метод по расписанию ShedulerService.sendMessagesLostReport");
         List<SendMessage> messages = answerProducer.getListMessagesForReportLostUsers();
+
         log.debug("К отправке  {} писем должникам по  отчетам", messages.size());
         return messages;
     }

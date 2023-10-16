@@ -6,34 +6,35 @@ import lombok.NoArgsConstructor;
 
 
 import jakarta.persistence.*;
+
 @Entity
 @Data
 @NoArgsConstructor
 
 public class Animal {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        private String type;
+    private String type;
 
-        private String name;
+    private String name;
 
-        private boolean isSick;
+    private boolean isSick;
 
-        private boolean isLittle;
+    private boolean isLittle;
 
-        private boolean status;//true- в приюте, false -усыновлен
+    private boolean status;//true- в приюте, false -усыновлен
 
-        @ManyToOne(fetch = FetchType.EAGER)
-        private Shelter shelter;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Shelter shelter;
 
-        public Animal(String type, String name, boolean isSick, boolean isLittle, boolean status, Shelter shelter) {
-                this.type = type.toLowerCase();
-                this.name = name;
-                this.isSick = isSick;
-                this.isLittle = isLittle;
-                this.status = status;
-                this.shelter = shelter;
-        }
+    public Animal(String type, String name, boolean isSick, boolean isLittle, boolean status, Shelter shelter) {
+        this.type = type.toLowerCase();
+        this.name = name;
+        this.isSick = isSick;
+        this.isLittle = isLittle;
+        this.status = status;
+        this.shelter = shelter;
+    }
 }

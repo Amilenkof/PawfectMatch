@@ -9,7 +9,7 @@ import java.lang.annotation.Native;
 import java.util.Optional;
 
 @Repository
-public interface ShelterRepository extends JpaRepository<Shelter,Long> {
+public interface ShelterRepository extends JpaRepository<Shelter, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM shelter WHERE animal_type=?")
     Optional<Shelter> findShelterByAnimalType(String animaltype);

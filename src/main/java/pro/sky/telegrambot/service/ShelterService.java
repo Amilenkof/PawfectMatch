@@ -22,6 +22,7 @@ public class ShelterService {
         this.shelterMapper = shelterMapper;
     }
 
+
     /**
      * Метод получает из БД shelter по animalType
      * Внутри содержит native SQL QUERY:
@@ -34,6 +35,7 @@ public class ShelterService {
         log.debug("Вызван метод ShelterService.findShelterByAnimalType, animalType={}", animalType);
         return shelterRepository.findShelterByAnimalType(animalType);
     }
+
 
     /**
      * Метод получает dtoin с помощью ShelterMapper переводит обьект в Shelter и с помощью метода CRUDREPOSITORY.SAVE() сохраняет в БД
@@ -56,6 +58,7 @@ public class ShelterService {
         log.debug("В БД записывается, entity={}", entity);
         return shelterRepository.save(entity);
     }
+
 
     /**
      * Метод проверяет есть ли в БД приют который, мы пытаемся создать, если есть выбрасывает ошибку ShelterForThisAnimalTypeAlreadyHave

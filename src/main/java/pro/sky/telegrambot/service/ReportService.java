@@ -51,6 +51,7 @@ public class ReportService {
         this.telegramBot = telegramBot;
     }
 
+
     /**
      * Init метод создает дефолтный отчет о животном,чтобы показать клиенту как должен выглядеть отчет
      */
@@ -70,6 +71,7 @@ public class ReportService {
         addReportToDB(report);
     }
 
+
     /**
      * Метод получает массив байт из картинки
      *
@@ -88,6 +90,7 @@ public class ReportService {
         }
     }
 
+
     /**
      * Метод получает тестовый отчет о животном из БД, тестовый отчет добавляется со скриптов liquibase (cm.report-scripts.sql)
      *
@@ -97,6 +100,7 @@ public class ReportService {
         return reportRepository.findById(1L).get();
     }
 
+
     /**
      * Метод получает сообщение клиента и создает отчет-report в БД
      *
@@ -105,7 +109,6 @@ public class ReportService {
      * @throws UsersNotFoundException если пользователь отправивший отчет отсутствует в БД,
      *                                MessageInReportUncorrectException если пользователь передал не корректное сообщение
      */
-
     public Report addReport(Update update) {
         log.debug("Вызван метод ReportService.addReport");
         Long chatId = update.message().chat().id();
@@ -124,6 +127,8 @@ public class ReportService {
         }
         throw new MessageInReportUncorrectException("Не удалось привести сообщение к виду регулярного выражения");
     }
+
+
 
     /**
      * Метод добавляет переданный Report в базу данных
@@ -151,6 +156,8 @@ public class ReportService {
         GetFile getFile = new GetFile(photoSize.fileId());
         return telegramBot.getFileContent(telegramBot.execute(getFile).file());
     }
+
+
 
     /**
      * Метод получает список отчетов о питомцах присланных сегодня
