@@ -245,29 +245,29 @@ public class AnswerProducer<T extends AbstractSendRequest> {
 
     }
 
-    /**
-     * Метод формирует список текущих репортов по приюту указанного типа
-     *
-     * @param animalType - тип животных в приюте
-     * @return List<SendPhoto>-возвращает пустой список если нет волонтеров
-     */
-    public List<SendPhoto> getCurrentReports(String animalType) {
-        log.debug("Вызван метод SсhedulerService.sendReportsByAnimalType");
-        List<Report> reports = reportService.findAllTodayReports();
-        List<Volunteer> volunteers = volunteerService.findVolunteerByAnimalType(animalType);
-        if (volunteers.isEmpty())
-            return List.of();
-        return reports.stream()
-                .filter(report -> report.getId() != 1L)//пропускаем образец отчета,чтобы его никому не отправлять
-                .filter(report -> report.getUser().getAnimal().getType().equals(animalType))
-                .map(report -> sendReport(volunteers.stream()
-                                .findAny()
-                                .get()
-                                .getChatId(),
-                        report,
-                        report.getFood() + "\n" + report.getHealth() + "\n" + report.getBehaviour()))
-                .toList();
-    }
+//    /**
+//     * Метод формирует список текущих репортов по приюту указанного типа
+//     *
+//     * @param animalType - тип животных в приюте
+//     * @return List<SendPhoto>-возвращает пустой список если нет волонтеров
+//     */
+//    public List<SendPhoto> getCurrentReports(String animalType) {
+//        log.debug("Вызван метод SсhedulerService.sendReportsByAnimalType");
+//        List<Report> reports = reportService.findAllTodayReports();
+//        List<Volunteer> volunteers = volunteerService.findVolunteerByAnimalType(animalType);
+//        if (volunteers.isEmpty())
+//            return List.of();
+//        return reports.stream()
+//                .filter(report -> report.getId() != 1L)//пропускаем образец отчета,чтобы его никому не отправлять
+//                .filter(report -> report.getUser().getAnimal().getType().equals(animalType))
+//                .map(report -> sendReport(volunteers.stream()
+//                                .findAny()
+//                                .get()
+//                                .getChatId(),
+//                        report,
+//                        report.getFood() + "\n" + report.getHealth() + "\n" + report.getBehaviour()))
+//                .toList();
+//    }
 
     /**
      * Метод формирует ответы должникам по отчетам о животных

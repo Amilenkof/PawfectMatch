@@ -45,4 +45,9 @@ public class VolunteerService {
                 .filter(volunteer -> volunteer.getShelter().getAnimalType().equals(animalType))
                 .collect(Collectors.toList());
     }
+    public Optional<Volunteer> findVolunteer(String animalType){
+        return findVolunteerByAnimalType(animalType).stream().findAny();
+    }
+
+
 }

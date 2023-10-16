@@ -1,14 +1,16 @@
 package pro.sky.telegrambot.service.sheduler;
 
-import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.model.Report;
+import pro.sky.telegrambot.model.Volunteer;
 import pro.sky.telegrambot.service.AnswerProducer;
+import pro.sky.telegrambot.service.ReportService;
+import pro.sky.telegrambot.service.VolunteerService;
 import pro.sky.telegrambot.service.keyboards.KeyBoardService;
 
 import java.util.ArrayList;
@@ -16,23 +18,30 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * Класс реализует отправку сообщений по расписанию
  */
 @Service
 @Slf4j
 public class SсhedulerService {
+
     @Getter
-    private List<SendPhoto> currentReports;
+    private List<Report> currentReports;
     @Getter
-    private  SendPhoto lastReport;
+    private Report lastReport;
     private final KeyBoardService keyBoardService;
+    private final ReportService reportService;
+    private final VolunteerService volunteerService;
 
 
     private final AnswerProducer<SendPhoto> answerProducer;
 
 
-    public SсhedulerService(KeyBoardService keyBoardService, AnswerProducer<SendPhoto> answerProducer) {
+    public SсhedulerService(KeyBoardService keyBoardService, ReportService reportService, VolunteerService volunteerService, AnswerProducer<SendPhoto> answerProducer) {
+        this.reportService = reportService;
+        this.volunteerService = volunteerService;
         this.currentReports = new ArrayList<>();
         this.keyBoardService = keyBoardService;
         this.answerProducer = answerProducer;
@@ -40,20 +49,33 @@ public class SсhedulerService {
 
     }
 
-    /**
-     * Метод формирует список всех текущих репортов и сохраняет их в List поле currentReports
-     */
 
-    @Scheduled(cron = "0 0/1 * * * *")//каждую минуту
-//    @Scheduled(cron = "0 0 21 * *?")//21 00 каждый день
-    public void sendCurrentReports() {
-        log.debug("Вызван метод по расписанию ShedulerService.sendCurrentReports");
-        var reportResponse = new ArrayList<SendPhoto>();
-        reportResponse.addAll(answerProducer.getCurrentReports("cat"));
-        reportResponse.addAll(answerProducer.getCurrentReports("dog"));
-        log.debug("К отправке волонтерам {} отчетов", reportResponse.size());
-        currentReports = reportResponse;
+
+    /**
+     * Метод получает текущий репорт, формирует из него SENDPHOTO по типу волонтера
+     */
+    public Optional<?> getCurrentReportToSend() {
+        log.debug("Вызван метод по расписанию ShedulerService.getCurrentReportToSend");
+        currentReports = reportService.findAllTodayReports();
+        return currentReports.stream()
+                .filter(report -> report.getId() != 1L)//пропускаем образец отчета,чтобы его никому не отправлять
+                .limit(1)
+                .map(report -> lastReport = report)
+                .map(report -> {
+                    String type = report.getUser().getAnimal().getType();
+                    Optional<Volunteer> optionalVolunteer = volunteerService.findVolunteer(type);
+                    if (optionalVolunteer.isPresent()) {
+                        SendPhoto sendPhoto = answerProducer.sendReport(optionalVolunteer.get().getChatId(),
+                                report,
+                                report.getFood() + "\n" + report.getHealth() + "\n" + report.getBehaviour())
+                                .replyMarkup(keyBoardService.reportDecision());
+                        return Optional.of(sendPhoto);
+                    }
+                    return Optional.empty();
+                }).toList().get(0);
+
     }
+
 
     /**
      * Метод формирует список всех сообщений для отправки должникам по отчетам
@@ -65,17 +87,7 @@ public class SсhedulerService {
         return messages;
     }
 
-    /**
-     * Метод получает один репорт из списка текущих репортов к отправке, добавляет в него клавиатуру для выбора действия
-     */
-    public Optional<SendPhoto> getNextReport() {
-        log.debug("Вызван метод ShedulerService.getNextReport к отправке волонтерам {} отчетов",currentReports.size());
-        Optional<SendPhoto> currentReport = currentReports.stream().filter(Objects::nonNull).findFirst();
-        currentReport.ifPresent(sendPhoto -> currentReports.remove(sendPhoto));
-        Optional<SendPhoto> reportToSend = currentReport.map(sendPhoto -> sendPhoto.replyMarkup(keyBoardService.reportDecision()));
-        reportToSend.ifPresent(report -> lastReport = report);
-        return reportToSend;
-    }
+
 
 
 }

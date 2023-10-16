@@ -64,14 +64,14 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
     }
 
 
-    @SneakyThrows
     @Scheduled(cron = "0 0/1 * * * *")//каждую минуту
 //    @Scheduled(cron = "0 0 21 * *?")//21 00 каждый день
-    public void sendAllReportsToVolunteer() {
-        if (sсhedulerService.getCurrentReports().size() > 0) {
-            log.debug("Вызван TelegramBotUpdatesListener.sendAllReportsToVolunteer отправляем отчеты");
-            sсhedulerService.getNextReport().ifPresent(telegramBot::execute);
-        }
+    public void sendReportToVolunteer() {
+        sсhedulerService.getCurrentReportToSend().ifPresent(report -> {
+            telegramBot.execute((SendPhoto) report);
+            log.debug("Отчет отправлен волонтеру на проверку");
+        });
+
     }
 
 
