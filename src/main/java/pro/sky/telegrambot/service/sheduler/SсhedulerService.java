@@ -4,21 +4,19 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.model.Report;
+import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.model.Volunteer;
 import pro.sky.telegrambot.service.AnswerProducer;
 import pro.sky.telegrambot.service.ReportService;
+import pro.sky.telegrambot.service.ShelterService;
 import pro.sky.telegrambot.service.VolunteerService;
 import pro.sky.telegrambot.service.keyboards.KeyBoardService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Класс реализует отправку сообщений по расписанию
@@ -34,14 +32,17 @@ public class SсhedulerService {
     private final KeyBoardService keyBoardService;
     private final ReportService reportService;
     private final VolunteerService volunteerService;
+    private final ShelterService shelterService;
+
 
 
     private final AnswerProducer<SendPhoto> answerProducer;
 
 
-    public SсhedulerService(KeyBoardService keyBoardService, ReportService reportService, VolunteerService volunteerService, AnswerProducer<SendPhoto> answerProducer) {
+    public SсhedulerService(KeyBoardService keyBoardService, ReportService reportService, VolunteerService volunteerService, ShelterService shelterService, AnswerProducer<SendPhoto> answerProducer) {
         this.reportService = reportService;
         this.volunteerService = volunteerService;
+        this.shelterService = shelterService;
         this.currentReports = new ArrayList<>();
         this.keyBoardService = keyBoardService;
         this.answerProducer = answerProducer;
@@ -63,7 +64,8 @@ public class SсhedulerService {
                 .map(report -> lastReport = report)
                 .map(report -> {
                     String type = report.getUser().getAnimal().getType();
-                    Optional<Volunteer> optionalVolunteer = volunteerService.findVolunteer(type);
+                    Shelter shelter = shelterService.findShelterByAnimalType(type).get();//сноска. тк ни report, ни животные не могу существовать без SHELTER- могу себе позволить выдернуть обьект через гет
+                    Optional<Volunteer> optionalVolunteer = volunteerService.callVolunteer(shelter);
                     if (optionalVolunteer.isPresent()) {
                         SendPhoto sendPhoto = answerProducer.sendReport(optionalVolunteer.get().getChatId(),
                                 report,

@@ -1,4 +1,4 @@
-package pro.sky.telegrambot.serviceTest.keyboardTests;
+package pro.sky.telegrambot.serviceTest;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pro.sky.telegrambot.exceptions.ShelterForThisAnimalTypeAlreadyHaveException;
 import pro.sky.telegrambot.model.DTO.ShelterDTOIN;
 import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.repository.ShelterRepository;
@@ -75,4 +76,20 @@ public class ShelterServiceTests {
         verify(shelterRepository).findShelterByAnimalType(type);
         verify(shelterRepository).save(shelter);
     }
+    @Test
+    public void testCheckshelterThrowException(){
+        String decription = "description";
+        String address = "address";
+        String timing= "timing";
+        String contacts= "contacts";
+        String safety= "safety";
+        String type = "cat";
+        Shelter shelter = new Shelter(decription, address, timing, contacts, safety, type);
+        ShelterDTOIN dtoin = new ShelterDTOIN(decription,address,timing,contacts,safety,type);
+        when(shelterRepository.findShelterByAnimalType(type)).thenReturn(Optional.of(shelter));
+        when(shelterMapper.toEntity(dtoin)).thenReturn(shelter);
+        assertThatThrownBy(()->shelterService.createShelter(dtoin)).isInstanceOf(ShelterForThisAnimalTypeAlreadyHaveException.class);
+    }
+
+
 }

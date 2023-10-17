@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 public class VolunteerService {
 
     private final VolunteerRepository volunteerRepository;
-    private final ShelterRepository shelterRepository;
 
-    public VolunteerService(VolunteerRepository volunteerRepository, ShelterRepository shelterRepository) {
+
+    public VolunteerService(VolunteerRepository volunteerRepository) {
         this.volunteerRepository = volunteerRepository;
-        this.shelterRepository = shelterRepository;
+
     }
 
 
@@ -31,26 +31,10 @@ public class VolunteerService {
      * Return = Optional<Volunteer>
      */
     @Transactional(readOnly = true)
-    public Optional<Volunteer> callVolunteer(Update update, Shelter shelter) {
+    public Optional<Volunteer> callVolunteer(Shelter shelter) {
         return volunteerRepository.findAll().stream()
                 .filter(volunteer -> volunteer.getShelter().getAnimalType().equals(shelter.getAnimalType()))
                 .findFirst();
-    }
-
-
-    /**Метод получает из БД список волонтеров по указанному типу животных
-     * @param animalType
-     * @return List<Volunteer>*/
-    @Transactional(readOnly = true)
-    public List<Volunteer> findVolunteerByAnimalType(String animalType){
-      return   volunteerRepository.findVolunteerByAnimalType().stream()
-                .filter(volunteer -> volunteer.getShelter().getAnimalType().equals(animalType))
-                .collect(Collectors.toList());
-    }
-
-
-    public Optional<Volunteer> findVolunteer(String animalType){
-        return findVolunteerByAnimalType(animalType).stream().findAny();
     }
 
 

@@ -62,7 +62,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     public List<AbstractSendRequest<? extends AbstractSendRequest<?>>> callVolunteer(Update update, String animalType) {
         Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType(animalType);
         Shelter shelter = optionalShelter.orElse(new Shelter());
-        Optional<Volunteer> optionalVolunteer = volunteerService.callVolunteer(update, shelter);
+        Optional<Volunteer> optionalVolunteer = volunteerService.callVolunteer(shelter);
         if (optionalVolunteer.isEmpty()) {
             return List.of(new SendMessage(update.message().chat().id(), "Извините,сейчас нет доступных волонтеров"));
         }
