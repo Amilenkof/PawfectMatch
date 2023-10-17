@@ -7,7 +7,7 @@ import pro.sky.telegrambot.exceptions.ShelterNotFoundException;
 import pro.sky.telegrambot.model.Animal;
 import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.repository.AnimalRepository;
-import pro.sky.telegrambot.service.mapper.AnimalMapper;
+
 
 import java.util.Optional;
 
@@ -15,12 +15,12 @@ import java.util.Optional;
 @Slf4j
 public class AnimalService {
     private final AnimalRepository animalRepository;
-    private final AnimalMapper animalMapper;
+
     private final ShelterService shelterService;
 
-    public AnimalService(AnimalRepository animalRepository, AnimalMapper animalMapper, ShelterService shelterService) {
+    public AnimalService(AnimalRepository animalRepository, ShelterService shelterService) {
         this.animalRepository = animalRepository;
-        this.animalMapper = animalMapper;
+
         this.shelterService = shelterService;
     }
 

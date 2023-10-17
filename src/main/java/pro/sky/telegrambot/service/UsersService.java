@@ -1,6 +1,6 @@
 package pro.sky.telegrambot.service;
 
-import lombok.Value;
+import com.pengrad.telegrambot.request.SendMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,8 +53,27 @@ public class UsersService {
     public List<Users> findAllByDaysLostCounterIsAfter (){
         List<Users> allUsers = usersRepository.findAllByDaysLostCounterIsAfter(0L);
         allUsers.forEach(user -> user.setDaysLostCounter(user.getDaysLostCounter() + 1));
-        List<Users> userWithLostForReports = usersRepository.findAllByDaysLostCounterIsAfter(2L);
-        return userWithLostForReports;
+        return usersRepository.findAllByDaysLostCounterIsAfter(2L);
     }
+/**Метод получает сообщение волонтера по отчету пользователя, вносит правки в параметры пользователя, сохраняет изменения в бд и возвращает один из вариантов ответа
+ * @param user
+ * @param data
+ * @return SendMessage*/
+    public SendMessage setReportResult(Users user, String data) {
+        if (data.equals("Принять отчет")) {
+            user.setDaysLostCounter(0L);
+            Integer durationCounter = user.getDurationCounter();
+            if (durationCounter == 0) {
+                user.getAnimal().setStatus(false);
+                usersRepository.save(user);
+                return new SendMessage(user.getChatId(), "Отличная работа!! Питомец стал полноправным членом Вашей семьи!");
+            }
+            user.setDurationCounter(durationCounter - 1);
+            usersRepository.save(user);
+            return new SendMessage(user.getChatId(), "Отчет проверен");
+        } else
+            return new SendMessage(user.getChatId(), "Отчет не прошел проверку, пожалуйста заполняйте отчет подробнее, если у Вас возникли вопросы воспользуйтесь формой Позвать Волонтера");
+    }
+
 
 }

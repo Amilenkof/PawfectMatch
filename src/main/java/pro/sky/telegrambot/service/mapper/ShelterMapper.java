@@ -12,10 +12,9 @@ import java.util.List;
 @Service
 @Slf4j
 public class ShelterMapper {
-    private final VolunteerService volunteerService;
 
-    public ShelterMapper(VolunteerService volunteerService) {
-        this.volunteerService = volunteerService;
+
+    public ShelterMapper() {
     }
 
 

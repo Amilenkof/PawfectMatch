@@ -54,7 +54,7 @@ public class SсhedulerService {
     /**
      * Метод получает текущий репорт, формирует из него SENDPHOTO по типу волонтера
      */
-    public Optional<?> getCurrentReportToSend() {
+    public Optional<SendPhoto> getCurrentReportToSend() {
         log.debug("Вызван метод по расписанию ShedulerService.getCurrentReportToSend");
         currentReports = reportService.findAllTodayReports();
         return currentReports.stream()
@@ -69,10 +69,11 @@ public class SсhedulerService {
                                 report,
                                 report.getFood() + "\n" + report.getHealth() + "\n" + report.getBehaviour())
                                 .replyMarkup(keyBoardService.reportDecision());
-                        return Optional.of(sendPhoto);
+                        return sendPhoto;
                     }
-                    return Optional.empty();
-                }).toList().get(0);
+                    return new SendPhoto(1L, "photo");//todo
+                })
+                .findFirst();
 
     }
 
@@ -83,7 +84,6 @@ public class SсhedulerService {
     public List<SendMessage> sendMessagesLostReport() {
         log.debug("Вызван метод по расписанию ShedulerService.sendMessagesLostReport");
         List<SendMessage> messages = answerProducer.getListMessagesForReportLostUsers();
-
         log.debug("К отправке  {} писем должникам по  отчетам", messages.size());
         return messages;
     }

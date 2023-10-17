@@ -71,8 +71,10 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
 //@Scheduled(cron = "* 21 * * *")
     public void sendReportToVolunteer() {
         sсhedulerService.getCurrentReportToSend().ifPresent(report -> {
-            telegramBot.execute((SendPhoto) report);
-            log.debug("Отчет отправлен волонтеру на проверку");
+            if (!report.equals(new SendPhoto(1L, "photo"))) {//todo
+                telegramBot.execute(report);
+                log.debug("Отчет отправлен волонтеру на проверку");
+            }
         });
 
     }
