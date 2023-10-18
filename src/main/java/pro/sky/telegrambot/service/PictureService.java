@@ -26,8 +26,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 public class PictureService {
     private final PictureRepository pictureRepository;
     private final ShelterRepository shelterRepository;
-    @Value("${path.to.schemas.folder}")
-    private String path;
+//    @Value("${path.to.schemas.folder}")//todo как тестить с вынесенными переменными?
+//    private String path;
 
 
     public PictureService(PictureRepository pictureRepository, ShelterRepository shelterRepository) {
@@ -54,7 +54,7 @@ public class PictureService {
             log.debug("Не найден указанный приют");
             throw new ShelterNotFoundException("Не удается загрузить схема проезда к приюту, тк указанный приют не найден");
         }
-        Path pathToFile = Path.of(path, shelterId + "." + getExtensions((file.getOriginalFilename())));
+        Path pathToFile = Path.of("/src/main/resources/defaultReportPicture.jpg", shelterId + "." + getExtensions((file.getOriginalFilename())));
         log.debug("pathToFile={}", pathToFile);
         Files.createDirectories(pathToFile.getParent());
         Files.deleteIfExists(pathToFile);

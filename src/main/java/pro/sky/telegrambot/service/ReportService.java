@@ -77,7 +77,7 @@ public class ReportService {
      *
      * @return byte[]
      */
-    private byte[] getbytes() throws IOException {
+    public byte[] getbytes() throws IOException {
         Path from = Path.of(defaultReportPicture);
         try (InputStream inputStream = Files.newInputStream(from);
              ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();) {
@@ -150,7 +150,7 @@ public class ReportService {
      * @throws PhotoInReportNotFoundException если не передана фотография животного в отчете
      */
     @SneakyThrows
-    private byte[] getPhoto(Update update) {
+    public byte[] getPhoto(Update update) {
         PhotoSize[] photo = update.message().photo();
         PhotoSize photoSize = photo[photo.length - 1];
         GetFile getFile = new GetFile(photoSize.fileId());

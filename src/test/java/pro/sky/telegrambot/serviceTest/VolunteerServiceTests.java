@@ -46,21 +46,3 @@ public class VolunteerServiceTests {
 
 
 }
-//
-//    /**Метод получает из БД список волонтеров по указанному типу животных
-//     * @param animalType
-//     * @return List<Volunteer>*/
-//    @Transactional(readOnly = true)
-//    public List<Volunteer> findVolunteerByAnimalType(String animalType){
-//      return   volunteerRepository.findVolunteerByAnimalType().stream()
-//                .filter(volunteer -> volunteer.getShelter().getAnimalType().equals(animalType))
-//                .collect(Collectors.toList());
-//    }
-//
-//
-//    public Optional<Volunteer> findVolunteer(String animalType){
-//        return findVolunteerByAnimalType(animalType).stream().findAny();
-//    }
-//
-//
-//}

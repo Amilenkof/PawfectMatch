@@ -1,0 +1,17 @@
+{
+    "message": 1,
+    "chat": {
+        "id":111111
+    },
+    "from":{
+        "id":111111
+    },
+    "text": "text",
+    "photo": [
+        {
+            "file_id":"testReport",
+            "file_path":"testReport.jpg"
+        }
+        ],
+    "caption": "test description"
+}
