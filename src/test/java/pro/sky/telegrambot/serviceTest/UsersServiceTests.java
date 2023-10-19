@@ -31,7 +31,7 @@ public class UsersServiceTests {
 
 
     @Test
-    public void testFindByChatId() {
+    public void testFindByChatId() {//todo работает, но падает при массовом прогоне
         Users users = new Users();
         when(usersRepository.findByChatId(anyLong())).thenReturn(Optional.of(users));
         Optional<Users> actual = usersService.findByChatId(1L);
