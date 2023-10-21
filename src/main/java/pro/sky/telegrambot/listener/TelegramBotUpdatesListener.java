@@ -1,5 +1,10 @@
 package pro.sky.telegrambot.listener;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
@@ -18,6 +23,10 @@ import pro.sky.telegrambot.service.keyboards.KeyBoardService;
 import pro.sky.telegrambot.service.sheduler.SсhedulerService;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,14 +54,12 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
     @Override
 
     public int process(List<Update> updates) {
-
         updates.forEach(update -> {
             log.info("Processing update: {}", update);
             var messages = messageSupplier.executeResponse(update);
             messages.stream()
                     .peek(m -> log.info("message = {}", m.toString()))
                     .forEach(telegramBot::execute);
-
             if (messages.size() > 0) {
                 log.info("Метод TelegramBotUpdatesListener.process отправил клиенту {} сообщение/я", messages.size());
             } else {

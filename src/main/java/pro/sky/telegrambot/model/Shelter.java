@@ -38,7 +38,7 @@ public class Shelter {
 
     private String safety;
 
-    @OneToMany(mappedBy = "shelter")
+    @OneToMany(fetch =FetchType.EAGER,mappedBy = "shelter")
     private List<Volunteer> volunteer;
     @Setter
     private String animalType;
