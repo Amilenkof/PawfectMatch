@@ -136,8 +136,70 @@ public class AnswerProducerTests {
     }
     @Test
     public void testCheckSchema(){
+        Shelter shelter = mock(Shelter.class);
+        Picture picture = mock(Picture.class);
+        when(shelterService.findShelterByAnimalType(anyString())).thenReturn(Optional.ofNullable(shelter));
+        when(pictureService.findByShelter_id(anyLong())).thenReturn(Optional.of(picture));
+        assertThat(answerProducer.checkSchema(anyString())).isFalse();
+    }
+
+    @Test
+    public void testGetContactsSecurityShelter() {
+        Update update = mock(Update.class);
+        Message message = mock(Message.class);
+        Chat chat = mock(Chat.class);
+        when(update.message()).thenReturn(message);
+        when(message.chat()).thenReturn(chat);
+        when(chat.id()).thenReturn(1L);
         when(shelterService.findShelterByAnimalType(anyString())).thenReturn(Optional.of(new Shelter()));
-        when(pictureService.findByShelter_id(anyLong())).thenReturn(Optional.of(new Picture()));
+        var actual = answerProducer.getContactsSecurityShelter(update, "cat");
+        var parameters = actual.getParameters();
+        boolean chatId = parameters.get("chat_id").equals(1L);
+        assertThat(chatId).isTrue();
+    }
+
+    @Test
+    public void testGetSafetyByShelter() {
+        Update update = mock(Update.class);
+        Message message = mock(Message.class);
+        Chat chat = mock(Chat.class);
+        when(update.message()).thenReturn(message);
+        when(message.chat()).thenReturn(chat);
+        when(chat.id()).thenReturn(1L);
+        when(shelterService.findShelterByAnimalType(anyString())).thenReturn(Optional.of(new Shelter()));
+        var actual = answerProducer.getSafetyByShelter(update, "cat");
+        var parameters = actual.getParameters();
+        boolean chatId = parameters.get("chat_id").equals(1L);
+        assertThat(chatId).isTrue();
+    }
+
+    @Test
+    public void testFindRecommendation() {
+        Update update = mock(Update.class);
+        Message message = mock(Message.class);
+        Chat chat = mock(Chat.class);
+        when(update.message()).thenReturn(message);
+        when(message.chat()).thenReturn(chat);
+        when(chat.id()).thenReturn(1L);
+        when(recommendationService.getFirstByTitle(anyString(), anyString())).thenReturn(Optional.of("test"));
+        var actual = answerProducer.findRecommendation(update, "test", "cat");
+        var parameters = actual.getParameters();
+        boolean chatId = parameters.get("chat_id").equals(1L);
+        assertThat(chatId).isTrue();
+    }
+
+    @Test
+    public void testSendFeedbackForm() {
+        Update update = mock(Update.class);
+        Message message = mock(Message.class);
+        Chat chat = mock(Chat.class);
+        when(update.message()).thenReturn(message);
+        when(message.chat()).thenReturn(chat);
+        when(chat.id()).thenReturn(1L);
+        var actual = answerProducer.sendFeedbackForm(update);
+        var parameters = actual.getParameters();
+        boolean chatId = parameters.get("chat_id").equals(1L);
+        assertThat(chatId).isTrue();
     }
 
 //        public boolean checkSchema(String animalType) {
