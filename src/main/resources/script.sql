@@ -1,7 +1,3 @@
--- liquebase formatted sql
-
-
---changeset aMilenkov:1
 CREATE TABLE animal
 (
     id         bigserial primary key,
@@ -13,9 +9,9 @@ CREATE TABLE animal
     status     boolean     not null,
     FOREIGN KEY (shelter_id) REFERENCES shelter (id)
 );
---changeset aMilenkov:2
+
 INSERT INTO animal (type, name, is_sick, is_little, shelter_id, status)
-VALUES ('Test',
+VALUES ('testtype',
         'testname',
         'false',
         'false',

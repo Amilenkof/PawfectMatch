@@ -12,6 +12,7 @@ import java.util.List;
 public interface VolunteerRepository extends JpaRepository<Volunteer, Long> {
 
 
-    @Query(nativeQuery = true, value = "SELECT * FROM volunteer")
+    //    @Query(nativeQuery = true, value = "SELECT * FROM volunteer")
+    @Query("FROM Volunteer as v JOIN FETCH Shelter as s on s.id=v.shelter.id")
     List<Volunteer> findVolunteerByAnimalType();
 }

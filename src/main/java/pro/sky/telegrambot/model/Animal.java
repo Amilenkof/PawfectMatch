@@ -26,7 +26,7 @@ public class Animal {
 
     private boolean status;//true- в приюте, false -усыновлен
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Shelter shelter;
 
     public Animal(String type, String name, boolean isSick, boolean isLittle, boolean status, Shelter shelter) {

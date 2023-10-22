@@ -27,4 +27,13 @@ public class ShelterMapper {
                 dtoIn.animalType().toLowerCase());
 
     }
+
+    public ShelterDTOIN toDtoIn(Shelter shelter){
+        return new ShelterDTOIN(shelter.getDescription(),
+                shelter.getAddress(),
+                shelter.getTiming(),
+                shelter.getContractsSecurity(),
+                shelter.getSafety(),
+                shelter.getAnimalType());
+    }
 }

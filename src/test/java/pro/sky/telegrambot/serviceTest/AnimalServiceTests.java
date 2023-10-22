@@ -8,10 +8,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.telegrambot.model.Animal;
+import pro.sky.telegrambot.model.DTO.AnimalDTO;
+import pro.sky.telegrambot.model.DTO.ShelterDTOIN;
 import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.repository.AnimalRepository;
 import pro.sky.telegrambot.service.AnimalService;
 import pro.sky.telegrambot.service.ShelterService;
+import pro.sky.telegrambot.service.mapper.AnimalMapper;
 
 import java.util.Optional;
 
@@ -25,6 +28,8 @@ public class AnimalServiceTests {
     private ShelterService shelterService;
     @InjectMocks
     private AnimalService animalService;
+    @Mock
+    private AnimalMapper animalMapper;
 
     @Test
     public void testAddAnimal() {
@@ -32,7 +37,11 @@ public class AnimalServiceTests {
         when(shelterService.findShelterByAnimalType(anyString())).thenReturn(Optional.of(shelter));
         Animal animal = new Animal("type", "name", false, false, false, shelter);
         when(animalRepository.save(any(Animal.class))).thenReturn(animal);
-        Assertions.assertThat(animalService.addAnimal("type", "name", false, false, false).equals(animal)).isTrue();
+        ShelterDTOIN shelterDTOIN = new ShelterDTOIN("description", "address", "1", "contacts", "safety", "cat");
+        AnimalDTO expected = new AnimalDTO("type", "name", false, false, shelterDTOIN, false);
+        when(animalMapper.toDto(any(Animal.class))).thenReturn(expected);
+        AnimalDTO animalDTO = animalService.addAnimal("type", "name", false, false, false);
+        Assertions.assertThat(animalDTO.equals(expected)).isTrue();
         verify(animalRepository).save(any(Animal.class));
     }
 

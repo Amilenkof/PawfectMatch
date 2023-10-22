@@ -24,7 +24,7 @@ public class Volunteer {
     private String lastName;
     @Column(name = "chat_id")
     private Long chatId;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Shelter shelter;
 
 
