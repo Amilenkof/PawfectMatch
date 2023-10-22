@@ -1,19 +1,14 @@
 package pro.sky.telegrambot.service;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.request.GetFile;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.exceptions.MessageInReportUncorrectException;
-import pro.sky.telegrambot.exceptions.PhotoInReportNotFoundException;
 import pro.sky.telegrambot.exceptions.UsersNotFoundException;
 import pro.sky.telegrambot.model.Report;
 import pro.sky.telegrambot.model.Users;
@@ -40,14 +35,16 @@ public class ReportService {
     @Value("${path.to.defaultReportPicture}")
     private String defaultReportPicture;
     private final String regex = "^(.*?)\n(.*?)\n(.*?)$";
+    private final DataGetter dataGetter;
 
 
     private final TelegramBot telegramBot;
     private final Pattern pattern = Pattern.compile(regex);
 
-    public ReportService(ReportRepository reportRepository, UsersService usersService, TelegramBot telegramBot) {
+    public ReportService(ReportRepository reportRepository, UsersService usersService, DataGetter dataGetter, TelegramBot telegramBot) {
         this.reportRepository = reportRepository;
         this.usersService = usersService;
+        this.dataGetter = dataGetter;
         this.telegramBot = telegramBot;
     }
 
@@ -121,9 +118,9 @@ public class ReportService {
             String food = matcher.group(1);
             String health = matcher.group(2);
             String behavior = matcher.group(3);
-            Report report = new Report(getPhoto(update), food, health, behavior, LocalDateTime.now(), users);
-            addReportToDB(report);
-            return report;
+
+           return addReportToDB(new Report(dataGetter.getPhoto(update), food, health, behavior, LocalDateTime.now(), users));
+
         }
         throw new MessageInReportUncorrectException("Не удалось привести сообщение к виду регулярного выражения");
     }
@@ -142,20 +139,6 @@ public class ReportService {
         return reportRepository.save(report);
     }
 
-    /**
-     * Метод из сообщения пользователя извлекает файл с фото и получает из него массив байт
-     *
-     * @param update
-     * @return byte[]
-     * @throws PhotoInReportNotFoundException если не передана фотография животного в отчете
-     */
-    @SneakyThrows
-    public byte[] getPhoto(Update update) {
-        PhotoSize[] photo = update.message().photo();
-        PhotoSize photoSize = photo[photo.length - 1];
-        GetFile getFile = new GetFile(photoSize.fileId());
-        return telegramBot.getFileContent(telegramBot.execute(getFile).file());
-    }
 
 
 

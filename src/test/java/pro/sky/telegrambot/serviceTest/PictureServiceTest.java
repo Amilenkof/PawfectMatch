@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.telegrambot.exceptions.ShelterForThisAnimalTypeAlreadyHaveException;
 import pro.sky.telegrambot.exceptions.ShelterNotFoundException;
@@ -20,12 +21,15 @@ import pro.sky.telegrambot.service.PictureService;
 import pro.sky.telegrambot.service.ReportService;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
@@ -61,18 +65,25 @@ public class PictureServiceTest {
     @Test
     public void TestAddSchemaPositive() throws IOException {
         Shelter shelter = new Shelter("description", "address", "timing", "contacts", "safety", "type");
+        Picture expected = new Picture(1L, getbytes(), "/src/main/resources/defaultReportPicture.jpg/1.jpg", 56707L, "jpg", shelter);
         when(shelterRepository.findById(anyLong())).thenReturn(Optional.of(shelter));
-        MultipartFile multipartFile = new MockMultipartFile("name", getbytes());
-        pictureService.addSchema(multipartFile, 1L);
+        when(pictureRepository.save(any(Picture.class))).thenReturn(expected);
+        MultipartFile multipartFile = new MockMultipartFile("testFile","testFile.jpg","jpg", new FileInputStream("src/main/resources/defaultReportPicture.jpg"));
+        Picture actual = pictureService.addSchema(multipartFile, 1L);
+        assertThat(Arrays.equals(actual.getData(), expected.getData()) &&
+                              actual.getFileSize().equals(expected.getFileSize()) &&
+                              actual.getFilePath().equals(expected.getFilePath()) &&
+                              actual.getMediaType().equals(expected.getMediaType())).isTrue();
         verify(pictureRepository).save(any(Picture.class));
     }
+
 
     @Test
     public void testFindById(){
         Picture picture = new Picture();
         when(pictureRepository.findById(anyLong())).thenReturn(Optional.of(picture));
         Optional<Picture> actual = pictureService.findById(anyLong());
-        Assertions.assertThat(actual.equals(Optional.of(picture))).isTrue();
+        assertThat(actual.equals(Optional.of(picture))).isTrue();
         verify(pictureRepository).findById(anyLong());
     }
 
@@ -84,7 +95,7 @@ public class PictureServiceTest {
 
         when(pictureRepository.findSchemaByShelter_Id(anyLong())).thenReturn(Optional.of(picture));
         Optional<Picture> actual = pictureService.findByShelter_id(anyLong());
-        Assertions.assertThat(actual.equals(Optional.of(picture))).isTrue();
+        assertThat(actual.equals(Optional.of(picture))).isTrue();
         verify(pictureRepository).findSchemaByShelter_Id(anyLong());
     }
 

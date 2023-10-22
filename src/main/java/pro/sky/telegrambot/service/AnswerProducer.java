@@ -79,11 +79,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
      */
     public boolean checkShelter(String animalType) {
         log.debug("Вызван метод AnswerProducer.checkShelter , animalType={}", animalType);
-        Optional<Shelter> optionalShelter = shelterService.findShelterByAnimalType(animalType);
-        if (optionalShelter.isEmpty()) {
-            log.debug("Приют не найден, клиенту будет направлен wrongMessage");
-        }
-        return optionalShelter.isEmpty();
+       return shelterService.findShelterByAnimalType(animalType).isEmpty();
     }
 
 
