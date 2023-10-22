@@ -166,11 +166,14 @@ public class AnswerProducerTests {
         when(update.message()).thenReturn(message);
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(1L);
-        when(shelterService.findShelterByAnimalType(anyString())).thenReturn(Optional.of(new Shelter()));
+        Shelter shelter = new Shelter();
+        shelter.setSafety("bla-bla");
+        when(shelterService.findShelterByAnimalType(anyString())).thenReturn(Optional.of(shelter));
         var actual = answerProducer.getSafetyByShelter(update, "cat");
         var parameters = actual.getParameters();
         boolean chatId = parameters.get("chat_id").equals(1L);
-        assertThat(chatId).isTrue();
+        boolean text = parameters.get("text").equals("bla-bla");
+        assertThat(chatId&&text).isTrue();
     }
 
     @Test
@@ -185,7 +188,8 @@ public class AnswerProducerTests {
         var actual = answerProducer.findRecommendation(update, "test", "cat");
         var parameters = actual.getParameters();
         boolean chatId = parameters.get("chat_id").equals(1L);
-        assertThat(chatId).isTrue();
+        boolean text = parameters.get("text").equals("test");
+        assertThat(chatId&&text).isTrue();
     }
 
     @Test
@@ -199,17 +203,9 @@ public class AnswerProducerTests {
         var actual = answerProducer.sendFeedbackForm(update);
         var parameters = actual.getParameters();
         boolean chatId = parameters.get("chat_id").equals(1L);
-        assertThat(chatId).isTrue();
+        boolean text = parameters.get("text").equals("Пожалуйста пришлите Ваши контакты в форме:Иванов,Иван,mail@mail.ru,+79271234567");
+        assertThat(chatId&&text).isTrue();
     }
 
-//        public boolean checkSchema(String animalType) {
-//        log.debug("Вызван метод AnswerProducer.checkSchema , animalType={}", animalType);
-//        Shelter shelter = shelterService.findShelterByAnimalType(animalType).get();
-//        Optional<Picture> optionalSchema = pictureService.findByShelter_id(shelter.getId());
-//        if (optionalSchema.isEmpty()) {
-//            log.debug("Схема проезда не найдена, клиенту будет направлен wrongMessage");
-//        }
-//        return optionalSchema.isEmpty();
-//    }
 
 }

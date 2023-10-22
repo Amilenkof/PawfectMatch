@@ -1,13 +1,26 @@
 package pro.sky.telegrambot.listener;
 
+import com.pengrad.telegrambot.BotUtils;
+import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.KeyboardButton;
+import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
+import com.pengrad.telegrambot.request.AbstractSendRequest;
+import com.pengrad.telegrambot.request.SendMessage;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.telegrambot.service.AnswerProducer;
 import pro.sky.telegrambot.service.CallBackHandler;
 import pro.sky.telegrambot.service.keyboards.KeyBoardService;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 public class MessageSupplierTests {
@@ -19,9 +32,17 @@ public class MessageSupplierTests {
     private CallBackHandler callBackHandler;
     @InjectMocks
     private MessageSupplier messageSupplier;
+    private final String json = "{\"update_id\":513378858,\"message\":{\"message_id\":3543,\"from\":{\"id\":1107343760,\"is_bot\":false,\"first_name\":\"Aleksandr\",\"last_name\":\"Milenkov\",\"username\":\"Melook94\",\"language_code\":\"ru\"},\"date\":1697737543,\"chat\":{\"id\":9999,\"type\":\"private\",\"username\":\"Melook94\",\"first_name\":\"Aleksandr\",\"last_name\":\"Milenkov\"},\"text\":\"? ??????\"}}";
+    private final Update update = BotUtils.fromJson(json, Update.class);
 
     @Test
-    public void testMessageForTextCommand(){
+    public void testMessageForTextCommand() {
+        List<AbstractSendRequest<?>> abstractSendRequests = messageSupplier.messageForTextCommand("/start", update);
+//        var actual = (SendMessage) abstractSendRequests.get(0);
+        Mockito.verify(keyBoardService).mainMenuKeyboard(any(Update.class));
+
+
+
 
 
     }
