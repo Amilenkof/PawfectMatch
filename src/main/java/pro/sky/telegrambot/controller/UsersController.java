@@ -1,12 +1,9 @@
 package pro.sky.telegrambot.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.telegrambot.exceptions.AnimalNotFoundException;
-import pro.sky.telegrambot.exceptions.ShelterNotFoundException;
-import pro.sky.telegrambot.model.Animal;
 import pro.sky.telegrambot.model.Users;
 import pro.sky.telegrambot.service.UsersService;
 
@@ -30,8 +27,17 @@ public class UsersController {
                                           @RequestParam Long animalID) {
         return ResponseEntity.ok(usersService.addUsers(chatId, firstName, lastName, email, phone, animalID));
     }
+    @GetMapping("/increase")
+    public ResponseEntity<Users> increaseDurationReports(@RequestParam Long userId, @RequestParam int increaseValue) {
+        return ResponseEntity.ok(usersService.increaseDurationCounter(userId, increaseValue));
+    }
     @ExceptionHandler(AnimalNotFoundException.class)
     public ResponseEntity<String> handleException( AnimalNotFoundException exception) {
         return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleException( IllegalArgumentException exception) {
+        return ResponseEntity.status(HttpStatusCode.valueOf(400)).build();
     }
 }
