@@ -24,14 +24,11 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class KeyBoardService {
-    private final VolunteerService volunteerService;
-    private final ShelterService shelterService;
 
 
-    public KeyBoardService(VolunteerService volunteerService, ShelterService shelterService) {
-        this.volunteerService = volunteerService;
-        this.shelterService = shelterService;
-    }
+
+
+
 
 
     /**

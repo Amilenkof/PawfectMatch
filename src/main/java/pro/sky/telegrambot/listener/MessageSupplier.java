@@ -114,7 +114,7 @@ public class MessageSupplier {
                 return messageList;
             }
             case ("О приюте") -> {
-                if (currentAnimal.equals(ANIMAL_DOG))
+                if (currentAnimal.equals(ANIMAL_CAT))
                     messageList.add(keyBoardService.aboutCatShelterKeyboard(update));
                 else messageList.add(keyBoardService.aboutDogShelterKeyboard(update));
                 return messageList;
