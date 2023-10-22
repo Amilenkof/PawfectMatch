@@ -81,16 +81,3 @@ public class ControllerTests {
 
 }
 //    public ResponseEntity<Shelter> createShelter(@RequestParam String description,
-//                                                 @RequestParam String address,
-//                                                 @RequestParam String timing,
-//                                                 @RequestParam String contactsSecurity,
-//                                                 @RequestParam String safety,
-//                                                 @RequestParam String animalType) {
-//        log.info("Вызван метод ShelterController.createShelter String description ={}," +
-//                 "String address ={}," +
-//                 "String timing ={}," +
-//                 "String contactsSecurity ={}," +
-//                 "String animalType ={}", description, address, timing, contactsSecurity, safety, animalType);
-//
-//        return ResponseEntity.ok(shelterService.createShelter(description, address, timing, contactsSecurity, safety, animalType));
-//    }
