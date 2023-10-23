@@ -1,7 +1,7 @@
 <h1 align="left">Описание проекта</h1>
  <p><strong>
 
- ! Находится на стадии разработки !
+
  
 Групповой проект- телеграмм-бот, для поиска и подбора питомцев из приютов. 
 <h1 align="left">Сборка и запуск проекта</h1>
@@ -33,6 +33,7 @@
    <li>Lombok</li>
    <li>Liquibase</li>
 
+
 </ul>
   <p><strong>База данных</strong></p>
 <ul>
@@ -42,6 +43,7 @@
 <ul>
    <li>JUnit</li>
   <li>Mockito</li>
+ <li>DockerTestContainer</li>
 </ul>
 <p><strong>Авторы:</strong></p>
 <ul>
