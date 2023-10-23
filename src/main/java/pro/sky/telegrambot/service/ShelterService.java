@@ -1,9 +1,7 @@
 package pro.sky.telegrambot.service;
 
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pro.sky.telegrambot.exceptions.ShelterForThisAnimalTypeAlreadyHaveException;
 import pro.sky.telegrambot.model.DTO.ShelterDTOIN;
@@ -11,8 +9,6 @@ import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.repository.ShelterRepository;
 import pro.sky.telegrambot.service.mapper.ShelterMapper;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.Optional;
 
 @Service
@@ -55,6 +51,7 @@ public class ShelterService {
         log.debug("В БД записывается,  entity={}", shelterDTOIN);
         return shelterRepository.save(entity);
     }
+
     @Transactional
     public Shelter createShelter(String description, String address, String timing, String contactsSecurity, String safety, String animalType) {
         Shelter entity = new Shelter(description, address, timing, contactsSecurity, safety, animalType.toLowerCase());

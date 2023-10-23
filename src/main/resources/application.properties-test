@@ -1,9 +1,0 @@
-spring.datasource.url=jdbc:h2:mem:liquibaseDB
-spring.datasource.username=sa
-spring.datasource.password=
-spring.h2.console.enabled=true
-
-path.to.schemas.folder=/schemas
-path.to.defaultReportPicture=src/main/resources/defaultReportPicture.jpg
-duration.counter=30
-json={"update_id":513378858,"message":{"message_id":3543,"from":{"id":1107343760,"is_bot":false,"first_name":"Aleksandr","last_name":"Milenkov","username":"Melook94","language_code":"ru"},"date":1697737543,"chat":{"id":9999,"type":"private","username":"Melook94","first_name":"Aleksandr","last_name":"Milenkov"},"text":"? ??????"}}

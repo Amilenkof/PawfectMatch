@@ -1,12 +1,10 @@
 package pro.sky.telegrambot.serviceTest;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.telegrambot.model.Animal;
 import pro.sky.telegrambot.model.Users;
@@ -31,7 +29,7 @@ public class UsersServiceTests {
 
 
     @Test
-    public void testFindByChatId() {//todo работает, но падает при массовом прогоне
+    public void testFindByChatId() {
         Users users = new Users();
         when(usersRepository.findByChatId(anyLong())).thenReturn(Optional.of(users));
         Optional<Users> actual = usersService.findByChatId(1L);

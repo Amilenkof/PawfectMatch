@@ -1,10 +1,5 @@
 package pro.sky.telegrambot.listener;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
@@ -13,22 +8,15 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import pro.sky.telegrambot.service.keyboards.KeyBoardService;
 import pro.sky.telegrambot.service.sheduler.SсhedulerService;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -78,7 +66,7 @@ public class TelegramBotUpdatesListener<T extends AbstractSendRequest<T>> implem
 //@Scheduled(cron = "* 21 * * *")
     public void sendReportToVolunteer() {
         sсhedulerService.getCurrentReportToSend().ifPresent(report -> {
-            if (!report.equals(new SendPhoto(1L, "photo"))) {//todo
+            if (!report.equals(new SendPhoto(1L, "photo"))) {
                 telegramBot.execute(report);
                 log.debug("Отчет отправлен волонтеру на проверку");
             }

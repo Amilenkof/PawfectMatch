@@ -1,11 +1,9 @@
 package pro.sky.telegrambot.serviceTest;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.telegrambot.exceptions.ShelterForThisAnimalTypeAlreadyHaveException;
 import pro.sky.telegrambot.model.DTO.ShelterDTOIN;

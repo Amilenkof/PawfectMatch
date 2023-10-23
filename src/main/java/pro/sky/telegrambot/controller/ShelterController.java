@@ -6,20 +6,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import pro.sky.telegrambot.exceptions.ShelterNotFoundException;
-import pro.sky.telegrambot.model.DTO.AnimalDTO;
 import pro.sky.telegrambot.model.DTO.ShelterDTOIN;
 import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.service.ShelterService;
-
-//todo Как класс будет закончен сделать swagger документацию на api
 
 @RestController
 @RequestMapping("/shelter")

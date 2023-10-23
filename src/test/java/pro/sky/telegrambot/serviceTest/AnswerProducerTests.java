@@ -1,36 +1,20 @@
 package pro.sky.telegrambot.serviceTest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.request.AbstractSendRequest;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.request.SendPhoto;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.model.*;
 import pro.sky.telegrambot.repository.ShelterRepository;
 import pro.sky.telegrambot.service.*;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -75,7 +59,7 @@ public class AnswerProducerTests {
         SendMessage actualMessage = actual.get(0);
         Map<String, Object> parameters = actualMessage.getParameters();
         assertThat(parameters.get("text").equals("Извините,сейчас нет доступных волонтеров") &&
-                parameters.get("chat_id").equals(1L)).isTrue();
+                   parameters.get("chat_id").equals(1L)).isTrue();
     }
 
 
@@ -90,7 +74,6 @@ public class AnswerProducerTests {
     public void testGetSchema() {
         Update update = BotUtils.fromJson(json, Update.class);
         var actual = answerProducer.getSchema(update, "Test");
-//        var expected = new SendMessage(9999L, "Извините,схема проезда не найдена");
         var parameters = actual.getParameters();
         boolean chatId = parameters.get("chat_id").equals(9999L);
         boolean text = parameters.get("text").equals("Извините, схема проезда не найдена");
@@ -105,10 +88,10 @@ public class AnswerProducerTests {
         var parameters = actual.getParameters();
         boolean chatId = parameters.get("chat_id").equals(9999L);
         boolean equals = parameters.get("text").equals("null \n" +
-                "Наш приют находится по адресу: null\n" +
-                "Время работы : null");
+                                                       "Наш приют находится по адресу: null\n" +
+                                                       "Время работы : null");
         assertThat(chatId &&
-                equals).isTrue();
+                   equals).isTrue();
     }
 
     @Test
@@ -123,8 +106,8 @@ public class AnswerProducerTests {
         var actual = answerProducer.getInfoAboutShelter(update, "cat");
         var parameters = actual.getParameters();
         boolean text = parameters.get("text").equals("null \n" +
-                "Наш приют находится по адресу: null\n" +
-                "Время работы : null");
+                                                     "Наш приют находится по адресу: null\n" +
+                                                     "Время работы : null");
         boolean chatId = parameters.get("chat_id").equals(1L);
         assertThat(chatId).isTrue();
 
@@ -234,7 +217,7 @@ public class AnswerProducerTests {
         report.setPhoto(new byte[]{1, 2, 3});
         when(reportService.getTestReport()).thenReturn(report);
         String reportCaption = String.format("Просим прислать отчет о Вашем питомце как в форме ниже: \n%s\n%s\n%s\n \n" +
-                        " Каждый пункт с новой строки, обязательно пришлите фотографию питомца",
+                                             " Каждый пункт с новой строки, обязательно пришлите фотографию питомца",
                 report.getFood(),
                 report.getHealth(),
                 report.getBehaviour());
@@ -259,7 +242,7 @@ public class AnswerProducerTests {
         var parameters = actual.getParameters();
         boolean chatId = parameters.get("chat_id").equals(1L);
         boolean text = parameters.get("text").equals("Пожалуйста,заполните отчет в соответствии с формой.Не забудьте прикрепить " +
-                "фото питомца");
+                                                     "фото питомца");
         assertThat(chatId && text).isTrue();
     }
 

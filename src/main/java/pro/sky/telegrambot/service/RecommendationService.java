@@ -20,7 +20,8 @@ public class RecommendationService {
     public Optional<String> getFirstByTitle(String title, String animalType) {
         return recommendationRepository.getFirstByTitle(title, animalType);
     }
-    public Recommendation addRecommendation(String title,String text,String animalType){
+
+    public Recommendation addRecommendation(String title, String text, String animalType) {
         return recommendationRepository.save(new Recommendation(title, text, animalType));
     }
 

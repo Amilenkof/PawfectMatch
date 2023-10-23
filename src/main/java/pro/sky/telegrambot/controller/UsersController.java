@@ -1,18 +1,15 @@
 package pro.sky.telegrambot.controller;
 
-import com.pengrad.telegrambot.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.telegrambot.exceptions.AnimalNotFoundException;
-import pro.sky.telegrambot.model.DTO.AnimalDTO;
 import pro.sky.telegrambot.model.Users;
 import pro.sky.telegrambot.service.UsersService;
 
@@ -25,7 +22,6 @@ public class UsersController {
     public UsersController(UsersService usersService) {
         this.usersService = usersService;
     }
-
 
     @GetMapping
     @Operation(
@@ -80,13 +76,14 @@ public class UsersController {
                                                          @Parameter(description = "На сколько дней продлить срок подачи отчетов") @RequestParam int increaseValue) {
         return ResponseEntity.ok(usersService.increaseDurationCounter(userId, increaseValue));
     }
+
     @ExceptionHandler(AnimalNotFoundException.class)
-    public ResponseEntity<String> handleException( AnimalNotFoundException exception) {
+    public ResponseEntity<String> handleException(AnimalNotFoundException exception) {
         return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleException( IllegalArgumentException exception) {
+    public ResponseEntity<String> handleException(IllegalArgumentException exception) {
         return ResponseEntity.status(HttpStatusCode.valueOf(400)).build();
     }
 }

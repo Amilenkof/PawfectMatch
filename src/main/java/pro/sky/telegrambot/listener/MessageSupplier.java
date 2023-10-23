@@ -49,7 +49,7 @@ public class MessageSupplier {
             return List.of(callBackHandler.handle(update));
 
         }
-        String command = update.message().text();//todo если переслать сообщение текст будет = null и приложуха ляжет..
+        String command = update.message().text();
         log.debug("Получена команда = {}", command);
 
         if (isFeedback) {
