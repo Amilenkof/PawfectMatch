@@ -1,22 +1,17 @@
 package pro.sky.telegrambot.controller;
 
 import jakarta.annotation.PostConstruct;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.testcontainers.containers.PostgreSQLContainer;
 import pro.sky.telegrambot.model.DTO.AnimalDTO;
 import pro.sky.telegrambot.model.DTO.ShelterDTOIN;
 import pro.sky.telegrambot.model.Recommendation;
 import pro.sky.telegrambot.model.Shelter;
-import pro.sky.telegrambot.model.Users;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -27,8 +22,6 @@ public class ControllerTests {
     private int port;
     @Autowired
     private TestRestTemplate testRestTemplate;
-
-
 
     private static final PostgreSQLContainer<?> POSTGRE_SQL_CONTAINER = new PostgreSQLContainer<>("postgres")
             .withUsername("Bot")
@@ -80,4 +73,3 @@ public class ControllerTests {
 
 
 }
-//    public ResponseEntity<Shelter> createShelter(@RequestParam String description,

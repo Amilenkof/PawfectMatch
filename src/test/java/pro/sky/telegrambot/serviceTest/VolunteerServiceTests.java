@@ -7,8 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.transaction.annotation.Transactional;
-import pro.sky.telegrambot.model.Animal;
 import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.model.Volunteer;
 import pro.sky.telegrambot.repository.ShelterRepository;

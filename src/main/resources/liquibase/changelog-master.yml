@@ -11,8 +11,6 @@ databaseChangeLog:
       file: liquibase/scripts/animal-scripts.sql
   - include:
       file: liquibase/scripts/user-scripts.sql
-#  - include:
-#      file: liquibase/scripts/not_reported-scripts.sql
   - include:
       file: liquibase/scripts/report-scripts.sql
   - include:

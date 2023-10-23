@@ -22,13 +22,14 @@ public class RecommendationServiceTests {
     private RecommendationService recommendationService;
 
     @Test
-    public void testGetFirstByTitle(){
+    public void testGetFirstByTitle() {
         Optional<String> actual = recommendationService.getFirstByTitle("title", "type");
         Mockito.verify(recommendationRepository).getFirstByTitle("title", "type");
 
     }
+
     @Test
-    public void addRecommendation(){
+    public void addRecommendation() {
         Recommendation expected = new Recommendation("title", "text", "type");
         Mockito.when(recommendationRepository.save(Mockito.any(Recommendation.class))).thenReturn(expected);
         Recommendation actual = recommendationService.addRecommendation("title", "text", "type");

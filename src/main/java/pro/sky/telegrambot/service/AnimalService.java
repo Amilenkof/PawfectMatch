@@ -21,7 +21,6 @@ public class AnimalService {
 
     public AnimalService(AnimalRepository animalRepository, ShelterService shelterService, AnimalMapper animalMapper) {
         this.animalRepository = animalRepository;
-
         this.shelterService = shelterService;
         this.animalMapper = animalMapper;
     }
@@ -30,15 +29,15 @@ public class AnimalService {
                                String name,
                                boolean isSick,
                                boolean isLittle,
-                               boolean status){
+                               boolean status) {
         Shelter shelter = shelterService.findShelterByAnimalType(type.toLowerCase()).orElseThrow(() -> new ShelterNotFoundException("Приют для указанного типа животных не найден"));
-        Animal animal = new Animal(type,name,isSick,isLittle,status,shelter);
+        Animal animal = new Animal(type, name, isSick, isLittle, status, shelter);
         animalRepository.save(animal);
         return animalMapper.toDto(animal);
     }
 
 
     public Animal findById(Long animalID) {
-      return animalRepository.findById(animalID).orElseThrow(() -> new AnimalNotFoundException("Животное с указанным Id не найдено"));
+        return animalRepository.findById(animalID).orElseThrow(() -> new AnimalNotFoundException("Животное с указанным Id не найдено"));
     }
 }

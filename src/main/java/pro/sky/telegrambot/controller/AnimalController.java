@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -55,4 +54,5 @@ public class AnimalController {
     public ResponseEntity<String> handleException(ShelterNotFoundException exception) {
         return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
     }
+
 }

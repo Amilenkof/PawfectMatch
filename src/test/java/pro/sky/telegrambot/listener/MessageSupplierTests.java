@@ -2,24 +2,17 @@ package pro.sky.telegrambot.listener;
 
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
-import com.pengrad.telegrambot.request.AbstractSendRequest;
-import com.pengrad.telegrambot.request.SendMessage;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.telegrambot.service.AnswerProducer;
 import pro.sky.telegrambot.service.CallBackHandler;
 import pro.sky.telegrambot.service.keyboards.KeyBoardService;
 
-import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -115,6 +108,7 @@ public class MessageSupplierTests {
                    text &&
                    replyMarkup).isTrue();
     }
+
     @Test
     public void testKeyboardServiceCatShelterKeyboard() {
         messageSupplier.messageForTextCommand("Приют для кошек", update);
@@ -128,20 +122,21 @@ public class MessageSupplierTests {
                    text &&
                    replyMarkup).isTrue();
     }
+
     @Test
-    public void testSendReportCommand(){
+    public void testSendReportCommand() {
         var list = messageSupplier.messageForTextCommand("Отправить отчет", update);
         verify(answerProducer).sendReportForm(update);
     }
 
     @Test
-    public void testSendFeedbackFormCommand(){
+    public void testSendFeedbackFormCommand() {
         var list = messageSupplier.messageForTextCommand("Оставить контакты для связи", update);
         verify(answerProducer).sendFeedbackForm(update);
     }
 
     @Test
-    public void testHowTakeAnimalCatCommand(){
+    public void testHowTakeAnimalCatCommand() {
         messageSupplier.messageForTextCommand("Приют для кошек", update);
         var list = messageSupplier.messageForTextCommand("Как взять животное", update);
         var parameters = list.get(0).getParameters();
@@ -149,8 +144,9 @@ public class MessageSupplierTests {
                    parameters.get("text").equals("Все что нужно знать о том, как взять кошку") &&
                    parameters.get("reply_markup").getClass().equals(ReplyKeyboardMarkup.class)).isTrue();
     }
+
     @Test
-    public void testHowTakeAnimalDogCommand(){
+    public void testHowTakeAnimalDogCommand() {
         messageSupplier.messageForTextCommand("Приют для собак", update);
         var list = messageSupplier.messageForTextCommand("Как взять животное", update);
         var parameters = list.get(0).getParameters();

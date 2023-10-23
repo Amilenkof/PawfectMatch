@@ -17,10 +17,10 @@ public class DataGetter {
     public DataGetter(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
     }
+
     /**
-
      * Метод из сообщения пользователя извлекает файл с фото и получает из него массив байт
-
+     *
      * @param update
      * @return byte[]
      * @throws PhotoInReportNotFoundException если не передана фотография животного в отчете

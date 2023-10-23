@@ -15,17 +15,18 @@ public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
     private final String regex = "^(.*?),(.*?),(.*?),(.*?)$";
     private final Pattern pattern = Pattern.compile(regex);
+
     public FeedbackService(FeedbackRepository feedbackRepository) {
         this.feedbackRepository = feedbackRepository;
     }
 
 
-
-/**Метод получает строку от клиента, обрабатывает ее, если она соответствует шаблону, помещает в БД задание связаться с пользователем
- * Params String message- сообщение пользователя
- * Return Optional<Feedback>-если сообщение успешно обработано и добавлено в БД,
- * Optional.empty- если сообщение не удалось обработать
- * */
+    /**
+     * Метод получает строку от клиента, обрабатывает ее, если она соответствует шаблону, помещает в БД задание связаться с пользователем
+     * Params String message- сообщение пользователя
+     * Return Optional<Feedback>-если сообщение успешно обработано и добавлено в БД,
+     * Optional.empty- если сообщение не удалось обработать
+     */
     public Optional<Feedback> addFeedback(String message) {
         Matcher matcher = pattern.matcher(message);
         if (matcher.find()) {

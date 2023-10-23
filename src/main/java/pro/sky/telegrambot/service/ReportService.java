@@ -118,13 +118,10 @@ public class ReportService {
             String food = matcher.group(1);
             String health = matcher.group(2);
             String behavior = matcher.group(3);
-
-           return addReportToDB(new Report(dataGetter.getPhoto(update), food, health, behavior, LocalDateTime.now(), users));
-
+            return addReportToDB(new Report(dataGetter.getPhoto(update), food, health, behavior, LocalDateTime.now(), users));
         }
         throw new MessageInReportUncorrectException("Не удалось привести сообщение к виду регулярного выражения");
     }
-
 
 
     /**
@@ -138,8 +135,6 @@ public class ReportService {
     private Report addReportToDB(Report report) {
         return reportRepository.save(report);
     }
-
-
 
 
     /**

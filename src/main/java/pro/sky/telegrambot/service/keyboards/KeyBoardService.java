@@ -5,18 +5,9 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
-import com.pengrad.telegrambot.request.AbstractSendRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pro.sky.telegrambot.model.Shelter;
-import pro.sky.telegrambot.model.Volunteer;
-import pro.sky.telegrambot.service.ShelterService;
-import pro.sky.telegrambot.service.VolunteerService;
-
-import java.util.List;
-import java.util.Optional;
-
 
 /**
  * Класс генерирует все необходимые клавиатуры для работы бота
@@ -24,12 +15,6 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class KeyBoardService {
-
-
-
-
-
-
 
     /**
      * Метод формирует клавиатуру для главного меню
@@ -47,7 +32,7 @@ public class KeyBoardService {
      * Метод формирует клавиатуру для принятия решения волонтером по отчету
      */
     public InlineKeyboardMarkup reportDecision() {
-       return new InlineKeyboardMarkup(
+        return new InlineKeyboardMarkup(
                 new InlineKeyboardButton("Принять отчет").callbackData("Принять отчет"),
                 new InlineKeyboardButton("Вернуть отчет").callbackData("Вернуть отчет"));
     }
@@ -132,7 +117,7 @@ public class KeyBoardService {
         KeyboardButton button1 = new KeyboardButton("Знакомство с животным");
         KeyboardButton button2 = new KeyboardButton("Документы для усыновления собаки");
         KeyboardButton button3 = new KeyboardButton("Транспортировка собаки");
-        KeyboardButton button4 = new KeyboardButton("Готовим дом для взрослой собаки");//todo вынести в отдельную клавиатуру дом для щенка и дом для взрослой собаки?
+        KeyboardButton button4 = new KeyboardButton("Готовим дом для взрослой собаки");
         KeyboardButton button5 = new KeyboardButton("Готовим дом для щенка");
         KeyboardButton button6 = new KeyboardButton("Готовим дом для собаки-инвалида");
         KeyboardButton button7 = new KeyboardButton("Советы кинолога");
@@ -161,7 +146,7 @@ public class KeyBoardService {
         KeyboardButton button1 = new KeyboardButton("Знакомство с животным");
         KeyboardButton button2 = new KeyboardButton("Документы для усыновления");
         KeyboardButton button3 = new KeyboardButton("Транспортировка кошки");
-        KeyboardButton button4 = new KeyboardButton("Готовим дом для взрослой кошки");//todo вынести в отдельную клавиатуру дом для кота и котенка?
+        KeyboardButton button4 = new KeyboardButton("Готовим дом для взрослой кошки");
         KeyboardButton button5 = new KeyboardButton("Готовим дом для котенка");
         KeyboardButton button6 = new KeyboardButton("Готовим дом для кошки-инвалида");
         KeyboardButton button7 = new KeyboardButton("Причины для отказа усыновления");
@@ -178,10 +163,5 @@ public class KeyBoardService {
         SendMessage message = new SendMessage(update.message().chat().id(), "Все что нужно знать о том, как взять кошку");
         return message.replyMarkup(replyKeyboardMarkup);
     }
-
-
-
-
-
 
 }

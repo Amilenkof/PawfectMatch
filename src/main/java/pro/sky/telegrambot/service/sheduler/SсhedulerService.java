@@ -34,8 +34,6 @@ public class SсhedulerService {
     private final VolunteerService volunteerService;
     private final ShelterService shelterService;
 
-
-
     private final AnswerProducer<SendPhoto> answerProducer;
 
 
@@ -46,10 +44,7 @@ public class SсhedulerService {
         this.currentReports = new ArrayList<>();
         this.keyBoardService = keyBoardService;
         this.answerProducer = answerProducer;
-
-
     }
-
 
 
     /**
@@ -68,12 +63,12 @@ public class SсhedulerService {
                     Optional<Volunteer> optionalVolunteer = volunteerService.callVolunteer(shelter);
                     if (optionalVolunteer.isPresent()) {
                         SendPhoto sendPhoto = answerProducer.sendReport(optionalVolunteer.get().getChatId(),
-                                report,
-                                report.getFood() + "\n" + report.getHealth() + "\n" + report.getBehaviour())
+                                        report,
+                                        report.getFood() + "\n" + report.getHealth() + "\n" + report.getBehaviour())
                                 .replyMarkup(keyBoardService.reportDecision());
                         return sendPhoto;
                     }
-                    return new SendPhoto(1L, "photo");//todo
+                    return new SendPhoto(1L, "photo");
                 })
                 .findFirst();
 
@@ -89,8 +84,6 @@ public class SсhedulerService {
         log.debug("К отправке  {} писем должникам по  отчетам", messages.size());
         return messages;
     }
-
-
 
 
 }

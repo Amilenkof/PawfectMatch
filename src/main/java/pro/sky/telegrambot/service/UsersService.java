@@ -31,7 +31,6 @@ public class UsersService {
      * @param chatId
      * @return Optional<Users>
      */
-//    @Query(nativeQuery = true, value = "SELECT * FROM users WHERE chat_id=?")
     @Transactional(readOnly = true)
     public Optional<Users> findByChatId(Long chatId) {
         return usersRepository.findByChatId(chatId);
@@ -85,18 +84,17 @@ public class UsersService {
     /**
      * Метод увеличивает значение durationCounter на величину increaseValue у пользователя по переданному ID
      */
-
     public Users increaseDurationCounter(Long userId, int increaseValue) {
         Users user = null;
-        if (increaseValue>0){
+        if (increaseValue > 0) {
             Optional<Users> optionalUser = usersRepository.findById(userId);
-            if (optionalUser.isPresent()){
-                user  = optionalUser.get();
-                user.setDurationCounter(user.getDurationCounter()+increaseValue);
+            if (optionalUser.isPresent()) {
+                user = optionalUser.get();
+                user.setDurationCounter(user.getDurationCounter() + increaseValue);
                 return user;
             }
         }
-            throw new IllegalArgumentException("increaseValue должно быть больше нуля");
+        throw new IllegalArgumentException("increaseValue должно быть больше нуля");
     }
 
 }

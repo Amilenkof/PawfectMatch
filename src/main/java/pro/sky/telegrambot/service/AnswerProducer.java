@@ -12,7 +12,6 @@ import pro.sky.telegrambot.exceptions.MessageInReportUncorrectException;
 import pro.sky.telegrambot.exceptions.UsersNotFoundException;
 import pro.sky.telegrambot.model.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,7 +78,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
      */
     public boolean checkShelter(String animalType) {
         log.debug("Вызван метод AnswerProducer.checkShelter , animalType={}", animalType);
-       return shelterService.findShelterByAnimalType(animalType).isEmpty();
+        return shelterService.findShelterByAnimalType(animalType).isEmpty();
     }
 
 
@@ -108,7 +107,7 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     public AbstractSendRequest<? extends AbstractSendRequest<?>> getSchema(Update update, String animalType) {
         log.debug("Вызван метод AnswerProducer.getSchema,animalType={}", animalType);
         Long chatId = update.message().chat().id();
-        if (checkShelter(animalType) || checkSchema(animalType)) {//todo не нравится, проверки есть и потом приходится опять то же самое делать
+        if (checkShelter(animalType) || checkSchema(animalType)) {
             return new SendMessage(chatId, "Извините, схема проезда не найдена");
         }
         Shelter shelter = shelterService.findShelterByAnimalType(animalType).get();
@@ -199,7 +198,6 @@ public class AnswerProducer<T extends AbstractSendRequest> {
      * @param Update
      * @return new SendMessage
      */
-
     public SendMessage addFeedback(Update update) {
         log.debug("Вызван метод AnswerProducer.addFeedback");
         Long chatId = update.message().chat().id();
@@ -277,7 +275,6 @@ public class AnswerProducer<T extends AbstractSendRequest> {
     public List<SendMessage> getListMessagesForReportLostUsers() {
         List<Long> chatIDs = usersService.findAllByDaysLostCounterIsAfter().stream().map(Users::getChatId).toList();
         return chatIDs.stream().map(chatId -> new SendMessage(chatId, LOST_REPORT_MESSAGE)).collect(Collectors.toList());
-
     }
 
 }

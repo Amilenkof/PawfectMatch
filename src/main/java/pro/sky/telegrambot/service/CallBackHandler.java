@@ -15,8 +15,6 @@ import pro.sky.telegrambot.service.sheduler.SсhedulerService;
 @Service
 @Slf4j
 public class CallBackHandler {
-
-
     private final SсhedulerService sсhedulerService;
     private final UsersService usersService;
 

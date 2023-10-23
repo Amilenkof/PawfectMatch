@@ -1,7 +1,6 @@
 package pro.sky.telegrambot.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,15 +25,12 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 public class PictureService {
     private final PictureRepository pictureRepository;
     private final ShelterRepository shelterRepository;
-//    @Value("${path.to.schemas.folder}")//todo как тестить с вынесенными переменными?
-//    private String path;
 
 
     public PictureService(PictureRepository pictureRepository, ShelterRepository shelterRepository) {
         this.pictureRepository = pictureRepository;
         this.shelterRepository = shelterRepository;
     }
-//todo дописать доку на этот метод добавить ссылки на ошибки
 
     /**
      * Метод реализует логику добавления в БД схемы проезда
@@ -82,7 +78,6 @@ public class PictureService {
      * Метод получает расширение файла
      * PARAMS= String s (название файла)
      */
-
     private String getExtensions(String s) {
         log.info("Вызван метод SchemaService.getExtensions");
         return s.substring(s.lastIndexOf(".") + 1);

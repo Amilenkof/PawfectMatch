@@ -3,13 +3,10 @@ package pro.sky.telegrambot.serviceTest;
 import com.pengrad.telegrambot.model.CallbackQuery;
 
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.User;
-import com.pengrad.telegrambot.request.SendMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.telegrambot.model.Report;
 import pro.sky.telegrambot.model.Users;
@@ -29,7 +26,7 @@ public class CallbackhandlerTests {
     private CallBackHandler callBackHandler;
 
     @Test
-    public void testHandle(){
+    public void testHandle() {
         Update update = mock(Update.class);
         CallbackQuery callbackQuery = mock(CallbackQuery.class);
         when(update.callbackQuery()).thenReturn(callbackQuery);
@@ -39,7 +36,7 @@ public class CallbackhandlerTests {
         report.setUser(user);
         when(sсhedulerService.getLastReport()).thenReturn(report);
         callBackHandler.handle(update);
-        verify(usersService).setReportResult(any(),any());
+        verify(usersService).setReportResult(any(), any());
     }
 }
 
