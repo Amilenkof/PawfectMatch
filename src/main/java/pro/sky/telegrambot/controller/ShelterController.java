@@ -1,13 +1,20 @@
 package pro.sky.telegrambot.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import pro.sky.telegrambot.exceptions.ShelterNotFoundException;
+import pro.sky.telegrambot.model.DTO.AnimalDTO;
 import pro.sky.telegrambot.model.DTO.ShelterDTOIN;
 import pro.sky.telegrambot.model.Shelter;
 import pro.sky.telegrambot.service.ShelterService;
@@ -31,18 +38,56 @@ public class ShelterController {
      * Params= Json Обьект SHELTER
      */
     @PostMapping
-    public ResponseEntity<Shelter> createShelter(@RequestBody ShelterDTOIN shelterDTOIN) {
+    @Operation(
+            summary = "Добавить приют",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Запрос выполнен",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Shelter.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "406",
+                            description = "Такой приют уже есть",
+                            content = @Content(
+                            )
+                    )
+            }
+    )
+    public ResponseEntity<Shelter> createShelter(@Parameter(description = "JSON приюта") @RequestBody ShelterDTOIN shelterDTOIN) {
         log.info("Вызван метод ShelterController.createShelter , получен shelterDTOIN ={}", shelterDTOIN);
         return ResponseEntity.ok(shelterService.createShelter(shelterDTOIN));
     }
 
     @GetMapping
-    public ResponseEntity<Shelter> createShelter(@RequestParam String description,
-                                                 @RequestParam String address,
-                                                 @RequestParam String timing,
-                                                 @RequestParam String contactsSecurity,
-                                                 @RequestParam String safety,
-                                                 @RequestParam String animalType) {
+    @Operation(
+            summary = "Добавить приют",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Запрос выполнен",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Shelter.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "406",
+                            description = "Такой приют уже есть",
+                            content = @Content(
+                            )
+                    )
+            }
+    )
+    public ResponseEntity<Shelter> createShelter(@Parameter(description = "Описание приюта", example = "Приют для кошек") @RequestParam String description,
+                                                 @Parameter(description = "Адрес", example = "ул. Лесная, д.1") @RequestParam String address,
+                                                 @Parameter(description = "Время работы", example = "с 8:00 до 20:00") @RequestParam String timing,
+                                                 @Parameter(description = "Контакты охраны", example = "89871234567") @RequestParam String contactsSecurity,
+                                                 @Parameter(description = "Охрана") @RequestParam String safety,
+                                                 @Parameter(description = "Тип животного", example = "cat") @RequestParam String animalType) {
         log.info("Вызван метод ShelterController.createShelter String description ={}," +
                  "String address ={}," +
                  "String timing ={}," +

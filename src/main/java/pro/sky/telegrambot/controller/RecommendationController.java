@@ -1,5 +1,6 @@
 package pro.sky.telegrambot.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,22 +28,25 @@ public class RecommendationController {
     }
 
     @GetMapping
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Добавление различных рекомендаций, советов",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = Recommendation.class)
+    @Operation(
+            summary = "Добавление различных рекомендаций, советов",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Запрос выполнен",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Recommendation.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Вы передали пустые поля",
+                            content = @Content(
+                            )
                     )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Вы передали пустые поля",
-                    content = @Content(
-                    )
-            )
-    })
+            }
+    )
     public ResponseEntity<Recommendation> addRecommendation(@Parameter(description = "Название команды", example = "Готовим дом для щенка") @RequestParam String title,
                                                             @Parameter(description = "Ответы на команды", example = "Текст о том как приготовиться к появлению дома щенка") @RequestParam String text,
                                                             @Parameter(description = "Тип животного", example = "cat") @RequestParam String animalType) {
