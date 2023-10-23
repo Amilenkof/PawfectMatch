@@ -1,5 +1,6 @@
 package pro.sky.telegrambot.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,22 +24,25 @@ public class AnimalController {
     }
 
     @GetMapping
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Животное успешно добавлено",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = AnimalDTO.class)
+    @Operation(
+            summary = "Добавить животное",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Запрос выполнен",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = AnimalDTO.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Такого приюта нет",
+                            content = @Content(
+                            )
                     )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Такого приюта нет",
-                    content = @Content(
-                    )
-            )
-    })
+            }
+    )
     public ResponseEntity<AnimalDTO> addAnimal(@Parameter(description = "Тип животного", example = "cat") @RequestParam String type,
                                                @Parameter(description = "Имя животного", example = "Vasya") @RequestParam String name,
                                                @Parameter(description = "Если true, то животное больное", example = "true") @RequestParam boolean isSick,

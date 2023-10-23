@@ -1,5 +1,10 @@
 package pro.sky.telegrambot.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.telegrambot.exceptions.ShelterNotFoundException;
+import pro.sky.telegrambot.model.DTO.AnimalDTO;
 import pro.sky.telegrambot.model.Picture;
 import pro.sky.telegrambot.service.PictureService;
 
@@ -35,9 +41,33 @@ public class PictureController {
  * 200- если схема успешно добавлена в БД
  * 500- ошибка на стороне сервера*///PSQLException
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-
-    public ResponseEntity<Picture> addSchema(@RequestBody MultipartFile file,
-                                             @RequestParam Long shelterId) throws IOException {
+    @Operation(
+            summary = "Добавить файл со схемой проезда к приюту",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Запрос выполнен",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Picture.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Переданный файл большой",
+                            content = @Content(
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "422",
+                            description = "В процессе добавления в БД возникли проблемы",
+                            content = @Content(
+                            )
+                    )
+            }
+    )
+    public ResponseEntity<Picture> addSchema(@Parameter(description = "Схема проезда") @RequestBody MultipartFile file,
+                                             @Parameter(description = "ID приюта") @RequestParam Long shelterId) throws IOException {
         Picture picture;
         if (file.getSize()>1024*1000*2){
             return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
